@@ -8,7 +8,7 @@ screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 
 #UU icon for window
-root.wm_iconbitmap('UU_logo.ico')
+root.wm_iconbitmap('images/UU_logo.ico')
 
 #Window size according to computer width and height
 root.geometry(f"{screen_width}x{screen_height}")
@@ -27,6 +27,7 @@ def menu_table():
     https://www.geeksforgeeks.org/python-creating-a-button-in-tkinter/
 
     ROUND BUTTON INSPO: https://stackoverflow.com/questions/42579927/how-to-make-a-rounded-button-tkinter
+    https://www.youtube.com/watch?v=czaqpo_yZwk
     """
     menu_frame = Frame(root, bg='#F0F0F0') 
     
@@ -48,7 +49,7 @@ def menu_table():
 table = menu_table().place(relx=0.5, rely=0.5, anchor="center")  
 
 #Uppsala University logo - WE NEED TO CHANGE IMAGE
-image = PhotoImage(file="uupsala-400-height-1.png")
+image = PhotoImage(file="images/uupsala-400-height-1.png")
 
 #Make image smaler
 width = int(image.width() * 0.5)
