@@ -44,11 +44,40 @@ def round_rectangle(canvas, x1, y1, x2, y2, radius, **kwargs):
               x1, y1]
     return canvas.create_polygon(points, **kwargs, smooth=True)
 
-def create_rounded_button(canvas, x, y, width, height, text):
+def create_rounded_button(canvas, x, y, width, height, text, command):
     """CREATE ROUND BUTTON"""
     button = round_rectangle(canvas, x, y, x + width, y + height, radius=40, fill="white", outline="#800000", width=3)
     text_item = canvas.create_text((x + x+width) // 2, (y + y+height) // 2, text=text, font=("Work Sans", 15, 'bold'), fill="black")
+    
+    def on_hover(event):
+        canvas.itemconfig(button, fill="#800000")  
+        canvas.itemconfig(text_item, fill="white") 
+
+    def off_hover(event):
+        canvas.itemconfig(button, fill="white")  
+        canvas.itemconfig(text_item, fill="black")  
+
+    # Bind hover actions
+    #https://www.geeksforgeeks.org/using-lambda-in-gui-programs-in-python/
+    canvas.tag_bind(button, "<Enter>", on_hover)  
+    canvas.tag_bind(button, "<Leave>", off_hover)  
+
+    canvas.tag_bind(button, "<Button-1>", lambda event: command())
+    
     return button, text_item
+
+#Changing page inspiration: https://www.geeksforgeeks.org/tkinter-application-to-switch-between-different-page-frames/
+def on_start_click():
+    print("WILL BE IMPEMENTED")
+
+def on_user_profile_click():
+    print("WILL BE IMPLEMENTED")
+
+def on_statistics_click():
+    print("WILL BE IMPLEMENTED")
+
+def on_accessibility_click():
+    print("WILL BE IMPLEMENTED")
 
 def menu_table():
     """"
@@ -68,11 +97,11 @@ def menu_table():
     canvas = Canvas(menu_frame, width=400, height=300, bg='#F0F0F0', highlightthickness=0)
     canvas.pack()
 
-    #Create our round buttons
-    create_rounded_button(canvas, 50, 20, 300, 50, "Start")
-    create_rounded_button(canvas, 50, 80, 300, 50, "User Profile")
-    create_rounded_button(canvas, 50, 140, 300, 50, "Statistics")
-    create_rounded_button(canvas, 50, 200, 300, 50, "Accessibility")
+    # Create round buttons with references to the click commands, not function calls
+    create_rounded_button(canvas, 50, 20, 300, 50, "Start", on_start_click)
+    create_rounded_button(canvas, 50, 80, 300, 50, "User Profile", on_user_profile_click)
+    create_rounded_button(canvas, 50, 140, 300, 50, "Statistics", on_statistics_click)
+    create_rounded_button(canvas, 50, 200, 300, 50, "Accessibility", on_accessibility_click)
 
     return menu_frame
 
