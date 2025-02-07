@@ -7,7 +7,7 @@ root.title("Basic Swedish")
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 
-#UU icon for window
+#UU icon for window - CHANGE WHEN TEACHER PROVIDES A BETTER ONE
 root.wm_iconbitmap('images/UU_logo.ico')
 
 #Window size according to computer width and height
