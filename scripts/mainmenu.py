@@ -21,7 +21,7 @@ label.place(relx=0.5, rely=0.15, anchor="center")
 underlabel.place(relx=0.5, rely=0.25, anchor="center")  
 
 def round_rectangle(canvas, x1, y1, x2, y2, radius, **kwargs):
-    """Round triangle buttons. Inspiration from https://stackoverflow.com/a/44100075/15993687"""
+    """Round triangle buttons. This construction was taken from https://stackoverflow.com/a/44100075/15993687"""
     points = [x1+radius, y1,
               x1+radius, y1,
               x2-radius, y1,
@@ -62,10 +62,13 @@ def create_rounded_button(canvas, x, y, width, height, text, command):
     canvas.tag_bind(button, "<Enter>", on_hover)  
     canvas.tag_bind(button, "<Leave>", off_hover)  
 
+    #Changes page when clickin on a button
     canvas.tag_bind(button, "<Button-1>", lambda event: command())
     
     return button, text_item
 
+
+###COMMANDS FOR CHANGING PAGES###
 #Changing page inspiration: https://www.geeksforgeeks.org/tkinter-application-to-switch-between-different-page-frames/
 def on_start_click():
     print("WILL BE IMPEMENTED")
@@ -81,7 +84,7 @@ def on_accessibility_click():
 
 def menu_table():
     """"
-    Inspo taken from: 
+    Inspiration taken from: 
     https://www.geeksforgeeks.org/python-tkinter-frame-widget/ 
     https://www.geeksforgeeks.org/python-grid-method-in-tkinter/
     https://www.tutorialspoint.com/python/tk_button.htm
@@ -105,13 +108,13 @@ def menu_table():
 
     return menu_frame
 
-# Lägg till meny i mitten av fönstret
+#Add menu in the middle of the menu
 table = menu_table().place(relx=0.5, rely=0.5, anchor="center")
 
-# Uppsala University logo
+#Uppsala university logo
 image = PhotoImage(file="images/uupsala-400-height-1.png")
 
-# Skala ner bilden
+#Scale image
 width = int(image.width() * 0.5)
 height = int(image.height() * 0.5)
 image = image.subsample(int(image.width() / width), int(image.height() / height))
