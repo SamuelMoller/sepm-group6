@@ -1,20 +1,20 @@
 from tkinter import *
 from tkinter import PhotoImage
 
-# Main window
+#Main window
 root = Tk()
 root.title("Basic Swedish")
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 
-# UU icon for window
+#UU icon for window
 root.wm_iconbitmap('images/UU_logo.ico')
 
-# Window size
+#Window size
 root.geometry(f"{screen_width}x{screen_height}")
 root.configure(background='#F0F0F0')
 
-# Swedish class label
+#Swedish class label
 label = Label(root, text="Basic Swedish", font=("Work Sans", 50, "underline"), fg='black')
 underlabel = Label(root, text="Learn by playing", font=("Work Sans", 30), fg='black')
 label.place(relx=0.5, rely=0.15, anchor="center")  
@@ -45,7 +45,7 @@ def round_rectangle(canvas, x1, y1, x2, y2, radius, **kwargs):
     return canvas.create_polygon(points, **kwargs, smooth=True)
 
 def create_rounded_button(canvas, x, y, width, height, text, command):
-    """CREATE ROUND BUTTON"""
+    """Create round button based on the round_triangle() feature"""
     button = round_rectangle(canvas, x, y, x + width, y + height, radius=40, fill="white", outline="#800000", width=3)
     text_item = canvas.create_text((x + x+width) // 2, (y + y+height) // 2, text=text, font=("Work Sans", 15, 'bold'), fill="black")
     
