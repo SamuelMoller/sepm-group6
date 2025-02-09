@@ -1,10 +1,16 @@
 from tkinter import *
+from tkinter.font import Font 
+import pyglet
+
+#Font
+my_font = pyglet.font.add_file('fonts\Work_Sans\WorkSans-Italic-VariableFont_wght.ttf')
 
 #Main window
 root = Tk()
 root.title("Basic Swedish")
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
+
 
 #UU icon for window
 root.wm_iconbitmap('images/UU_logo.ico')
@@ -15,15 +21,15 @@ root.configure(background='#F0F0F0')
 
 def main_label():
     """Title on main page"""
-    label = Label(main_frame, text="Basic Swedish", font=("Work Sans", 50, "underline"), fg='black')
-    underlabel = Label(main_frame, text="Learn by playing", font=("Work Sans", 30), fg='black')
+    label = Label(main_frame, text="Basic Swedish", font=(my_font, 50, "underline"), fg='black')
+    underlabel = Label(main_frame, text="Learn by playing", font=(my_font, 30), fg='black')
     label.place(relx=0.5, rely=0.15, anchor="center")  
     underlabel.place(relx=0.5, rely=0.25, anchor="center")  
 
 def start_label():
     """Title on start page"""
-    label = Label(start_frame, text="Select a game", font=("Work Sans", 50), fg='black')
-    label.place(relx=0.5, rely=0.15, anchor="center")  
+    label = Label(start_frame, text="Select a game", font=(my_font, 50), fg='black')
+    label.place(relx=0.5, rely=0.25, anchor="center")  
 
 def round_rectangle(canvas, x1, y1, x2, y2, radius, **kwargs):
     """Round triangle buttons. This construction was taken from https://stackoverflow.com/a/44100075/15993687"""
@@ -33,10 +39,10 @@ def round_rectangle(canvas, x1, y1, x2, y2, radius, **kwargs):
               x1, y2-radius, x1, y2-radius, x1, y1+radius, x1, y1+radius, x1, y1]
     return canvas.create_polygon(points, **kwargs, smooth=True)
 
-def create_rounded_button(canvas, x, y, width, height, text, command):
+def create_rounded_button(canvas, x, y, width, height, text, command, font):
     """Create round button based on the round_rectangle() feature"""
-    button = round_rectangle(canvas, x, y, x + width, y + height, radius=40, fill="white", outline="#800000", width=3)
-    text_item = canvas.create_text((x + x+width) // 2, (y + y+height) // 2, text=text, font=("Work Sans", 15, 'bold'), fill="black")
+    button = round_rectangle(canvas, x, y, x + width, y + height, radius=40, fill="white", outline="#800000", width=6)
+    text_item = canvas.create_text((x + x+width) // 2, (y + y+height) // 2, text=text, font=font, fill="black")
     
     def on_hover(mouse):
         canvas.itemconfig(button, fill="#800000")  
@@ -91,10 +97,10 @@ def main_menu_table():
     canvas.place(relx=0.5, rely=0.5, anchor="center")  
 
     # Skapa rundade knappar med exakta positioner
-    create_rounded_button(canvas, screen_width//2 - 150, screen_height//2 - 150, 300, 50, "Start", on_start_click)
-    create_rounded_button(canvas, screen_width//2 - 150, screen_height//2 - 75, 300, 50, "User Profile", on_user_profile_click)
-    create_rounded_button(canvas, screen_width//2 - 150, screen_height//2 - 0, 300, 50, "Statistics", on_statistics_click)
-    create_rounded_button(canvas, screen_width//2 - 150, screen_height//2 + 75, 300, 50, "Accessibility", on_accessibility_click)
+    create_rounded_button(canvas, screen_width//2 - 200, screen_height//2 - 200, 400, 75, "Start", on_start_click, (my_font, 15))
+    create_rounded_button(canvas, screen_width//2 - 200, screen_height//2 - 100, 400, 75, "User Profile", on_user_profile_click, (my_font, 15))
+    create_rounded_button(canvas, screen_width//2 - 200, screen_height//2 + 0, 400, 75, "Statistics", on_statistics_click, (my_font, 15))
+    create_rounded_button(canvas, screen_width//2 - 200, screen_height//2 + 100, 400, 75, "Accessibility", on_accessibility_click, (my_font, 15))
 
 
     return menu_frame
@@ -107,12 +113,12 @@ def start_menu_table():
     canvas.pack(expand=True, ipadx=50, ipady=50)
 
     #Start menu buttons
-    create_rounded_button(canvas, (screen_width - 220)//2 - 250, screen_height//2 - 200, 220, 150, "Clock Game", on_clock_game_click)
-    create_rounded_button(canvas, (screen_width - 220)//2, screen_height//2 - 200, 220, 150, "Placeholder", on_placeholder_click)
-    create_rounded_button(canvas, (screen_width - 220)//2 + 250, screen_height//2 - 200, 220, 150, "Match the words", on_match_the_words_click)
+    create_rounded_button(canvas, (screen_width - 250)//2 - 300, screen_height//2 - 200, 250, 150, "Clock Game", on_clock_game_click, (my_font, 15))
+    create_rounded_button(canvas, (screen_width - 250)//2, screen_height//2 - 200, 250, 150, "Placeholder", on_placeholder_click, (my_font,15))
+    create_rounded_button(canvas, (screen_width - 250)//2 + 300, screen_height//2 - 200, 250, 150, "Match the words", on_match_the_words_click, (my_font,15))
 
     #Go back button
-    create_rounded_button(canvas, screen_width - (screen_width-50), screen_height - (screen_height - 50), 100, 50, "Go back", go_main_page_click)
+    create_rounded_button(canvas, screen_width - (screen_width-50), screen_height - (screen_height - 50), 100, 50, "Go back", go_main_page_click, (my_font, 10))
 
     return start_frame
 
