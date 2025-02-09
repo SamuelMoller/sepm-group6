@@ -56,10 +56,12 @@ def create_rounded_button(canvas, x, y, width, height, text, command):
 
 #SWITCH BETWEEN PAGES
 def on_start_click():
+    """Switches to start page"""
     main_frame.pack_forget()
     start_frame.pack(fill="both", expand=True)
 
-def go_back_click():
+def go_main_page_click():
+    """Switches to main page"""
     start_frame.pack_forget()
     main_frame.pack(fill="both", expand=True)
 
@@ -110,7 +112,7 @@ def start_menu_table():
     create_rounded_button(canvas, (screen_width - 220)//2 + 250, screen_height//2 - 200, 220, 150, "Match the words", on_match_the_words_click)
 
     #Go back button
-    create_rounded_button(canvas, screen_width - (screen_width-50), screen_height - (screen_height - 50), 100, 50, "Go back", go_back_click)
+    create_rounded_button(canvas, screen_width - (screen_width-50), screen_height - (screen_height - 50), 100, 50, "Go back", go_main_page_click)
 
     return start_frame
 
