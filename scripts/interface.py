@@ -127,4 +127,16 @@ start_label()
 #Show the main menu as default
 main_frame.pack(fill="both", expand=True)
 
+#Uppsala university logo
+image = PhotoImage(file="images/uupsala-400-height-1.png")
+
+#Scale image
+width = int(image.width() * 0.5)
+height = int(image.height() * 0.5)
+image = image.subsample(int(image.width() / width), int(image.height() / height))
+
+#Add image to window - CHANGE WHEN TEACHER PROVIDES A BETTER ONE
+image_label = Label(root, image=image)
+image_label.place(relx=1, rely=1, anchor="se")
+
 root.mainloop()
