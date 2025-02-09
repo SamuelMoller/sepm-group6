@@ -1,33 +1,32 @@
 from tkinter import *
-from tkinter import PhotoImage
 
-# Main window
+#Main window
 root = Tk()
 root.title("Basic Swedish")
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 
-# UU icon for window
+#UU icon for window
 root.wm_iconbitmap('images/UU_logo.ico')
 
-# Window size
+#Window size
 root.geometry(f"{screen_width}x{screen_height}")
 root.configure(background='#F0F0F0')
 
 def main_label():
-    """Swedish class label for main frame"""
+    """Title on main page"""
     label = Label(main_frame, text="Basic Swedish", font=("Work Sans", 50, "underline"), fg='black')
     underlabel = Label(main_frame, text="Learn by playing", font=("Work Sans", 30), fg='black')
     label.place(relx=0.5, rely=0.15, anchor="center")  
     underlabel.place(relx=0.5, rely=0.25, anchor="center")  
 
 def start_label():
-    """Select a game label for start frame"""
+    """Title on start page"""
     label = Label(start_frame, text="Select a game", font=("Work Sans", 50), fg='black')
     label.place(relx=0.5, rely=0.15, anchor="center")  
 
 def round_rectangle(canvas, x1, y1, x2, y2, radius, **kwargs):
-    """Round rectangle buttons."""
+    """Round triangle buttons. This construction was taken from https://stackoverflow.com/a/44100075/15993687"""
     points = [x1+radius, y1, x1+radius, y1, x2-radius, y1, x2-radius, y1, x2, y1,
               x2, y1+radius, x2, y1+radius, x2, y2-radius, x2, y2-radius, x2, y2, 
               x2-radius, y2, x2-radius, y2, x1+radius, y2, x1+radius, y2, x1, y2, 
@@ -39,26 +38,24 @@ def create_rounded_button(canvas, x, y, width, height, text, command):
     button = round_rectangle(canvas, x, y, x + width, y + height, radius=40, fill="white", outline="#800000", width=3)
     text_item = canvas.create_text((x + x+width) // 2, (y + y+height) // 2, text=text, font=("Work Sans", 15, 'bold'), fill="black")
     
-    def on_hover(event):
+    def on_hover(mouse):
         canvas.itemconfig(button, fill="#800000")  
         canvas.itemconfig(text_item, fill="white") 
 
-    def off_hover(event):
+    def off_hover(mouse):
         canvas.itemconfig(button, fill="white")  
         canvas.itemconfig(text_item, fill="black")  
 
-    # Bind hover actions
     canvas.tag_bind(button, "<Enter>", on_hover)  
     canvas.tag_bind(button, "<Leave>", off_hover)  
 
-    # Changes page when clicking on a button
-    canvas.tag_bind(button, "<Button-1>", lambda event: command())
+    #Changes page when clicking on a button
+    canvas.tag_bind(button, "<Button-1>", lambda event: command()) #Command() indicate the selected page function 
     
     return button, text_item
 
-# SWITCH BETWEEN PAGES
+#SWITCH BETWEEN PAGES
 def on_start_click():
-    # Hide main menu and show start menu
     main_frame.pack_forget()
     start_frame.pack(fill="both", expand=True)
 
@@ -85,7 +82,7 @@ def on_match_the_words_click():
     print("WILL BE IMPLEMENTED")
 
 def main_menu_table():
-    """Create the main menu."""
+    """Create main menu"""
     menu_frame = Frame(root, bg='#F0F0F0')
 
     canvas = Canvas(menu_frame, width=screen_width, height=screen_height, bg='#F0F0F0', highlightthickness=0)
@@ -101,7 +98,7 @@ def main_menu_table():
     return menu_frame
 
 def start_menu_table():
-    """Menu with horizontally arranged buttons."""
+    """Create start menu"""
     start_frame = Frame(root, bg='#F0F0F0')
 
     canvas = Canvas(start_frame, width=screen_width, height=screen_height, bg='#F0F0F0', highlightthickness=0)
@@ -117,18 +114,15 @@ def start_menu_table():
 
     return start_frame
 
-# Create frames for different pages
-main_frame = main_menu_table()  # The main menu is created first
-start_frame = start_menu_table()  # The start menu is created but not packed
+#Create frames for different pages
+main_frame = main_menu_table()  
+start_frame = start_menu_table() 
 
-# Call the main label function to add labels to main_frame
+#Call the titles for the different pages
 main_label()
-
-# Call the start label function to add labels to start_frame
 start_label()
 
-# Show the first frame (main menu)
+#Show the main menu as default
 main_frame.pack(fill="both", expand=True)
 
-# Start the Tkinter main loop
 root.mainloop()
