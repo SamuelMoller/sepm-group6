@@ -11,7 +11,6 @@ root.title("Basic Swedish")
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 
-
 #UU icon for window
 root.wm_iconbitmap('images/UU_logo.ico')
 
@@ -97,10 +96,10 @@ def main_menu_table():
     canvas.place(relx=0.5, rely=0.5, anchor="center")  
 
     # Skapa rundade knappar med exakta positioner
-    create_rounded_button(canvas, screen_width//2 - 200, screen_height//2 - 200, 400, 75, "Start", on_start_click, (my_font, 15))
-    create_rounded_button(canvas, screen_width//2 - 200, screen_height//2 - 100, 400, 75, "User Profile", on_user_profile_click, (my_font, 15))
-    create_rounded_button(canvas, screen_width//2 - 200, screen_height//2 + 0, 400, 75, "Statistics", on_statistics_click, (my_font, 15))
-    create_rounded_button(canvas, screen_width//2 - 200, screen_height//2 + 100, 400, 75, "Accessibility", on_accessibility_click, (my_font, 15))
+    create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 - 200, 600, 75, "Start", on_start_click, (my_font, 15))
+    create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 - 100, 600, 75, "User Profile", on_user_profile_click, (my_font, 15))
+    create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 + 0, 600, 75, "Statistics", on_statistics_click, (my_font, 15))
+    create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 + 100, 600, 75, "Accessibility", on_accessibility_click, (my_font, 15))
 
 
     return menu_frame
@@ -113,9 +112,9 @@ def start_menu_table():
     canvas.pack(expand=True, ipadx=50, ipady=50)
 
     #Start menu buttons
-    create_rounded_button(canvas, (screen_width - 250)//2 - 300, screen_height//2 - 200, 250, 150, "Clock Game", on_clock_game_click, (my_font, 15))
-    create_rounded_button(canvas, (screen_width - 250)//2, screen_height//2 - 200, 250, 150, "Placeholder", on_placeholder_click, (my_font,15))
-    create_rounded_button(canvas, (screen_width - 250)//2 + 300, screen_height//2 - 200, 250, 150, "Match the words", on_match_the_words_click, (my_font,15))
+    create_rounded_button(canvas, (screen_width - 250)//2 - 300, screen_height//2 - 200, 250, 250, "Clock Game", on_clock_game_click, (my_font, 15))
+    create_rounded_button(canvas, (screen_width - 250)//2, screen_height//2 - 200, 250, 250, "Placeholder", on_placeholder_click, (my_font,15))
+    create_rounded_button(canvas, (screen_width - 250)//2 + 300, screen_height//2 - 200, 250, 250, "Match the words", on_match_the_words_click, (my_font,15))
 
     #Go back button
     create_rounded_button(canvas, screen_width - (screen_width-50), screen_height - (screen_height - 50), 100, 50, "Go back", go_main_page_click, (my_font, 10))
