@@ -37,6 +37,11 @@ def start_label():
     label = Label(start_frame, text="Select a game", font=(my_font, 50), fg='black')
     label.place(relx=0.5, rely=0.25, anchor="center")  
 
+def profile_label():
+    """Title on start page"""
+    label = Label(profile_frame, text="Current user", font=(my_font, 40), fg='black')
+    label.place(relx=0.5, rely=0.10, anchor="center")  
+
 def round_rectangle(canvas, x1, y1, x2, y2, radius, **kwargs):
     """Round triangle buttons. This construction was taken from https://stackoverflow.com/a/44100075/15993687"""
     points = [x1+radius, y1, x1+radius, y1, x2-radius, y1, x2-radius, y1, x2, y1,
@@ -76,10 +81,12 @@ def on_start_click():
 def go_main_page_click():
     """Switches to main page"""
     start_frame.pack_forget()
+    profile_frame.pack_forget()
     main_frame.pack(fill="both", expand=True)
 
 def on_user_profile_click():
-    print("WILL BE IMPLEMENTED")
+    main_frame.pack_forget()
+    profile_frame.pack(fill="both", expand=True)
 
 def on_statistics_click():
     print("WILL BE IMPLEMENTED")
@@ -96,6 +103,9 @@ def on_placeholder_click():
 def on_match_the_words_click():
     print("WILL BE IMPLEMENTED")
 
+def on_admin_control_click():
+    print("WILL BE IMPLEMENTED")
+
 def main_menu_table():
     """Create main menu"""
     menu_frame = Frame(root, bg='#F0F0F0')
@@ -103,12 +113,11 @@ def main_menu_table():
     canvas = Canvas(menu_frame, width=screen_width, height=screen_height, bg='#F0F0F0', highlightthickness=0)
     canvas.place(relx=0.5, rely=0.5, anchor="center")  
 
-    # Skapa rundade knappar med exakta positioner
+    #Round buttons with exact positions
     create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 - 200, 600, 75, "Start", on_start_click, (my_font, 15))
     create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 - 100, 600, 75, "User Profile", on_user_profile_click, (my_font, 15))
     create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 + 0, 600, 75, "Statistics", on_statistics_click, (my_font, 15))
     create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 + 100, 600, 75, "Accessibility", on_accessibility_click, (my_font, 15))
-
 
     return menu_frame
 
@@ -125,17 +134,59 @@ def start_menu_table():
     create_rounded_button(canvas, (screen_width - 250)//2 + 300, screen_height//2 - 200, 250, 250, "Match the words", on_match_the_words_click, (my_font,15))
 
     #Go back button
-    create_rounded_button(canvas, screen_width - (screen_width-50), screen_height - (screen_height - 50), 100, 50, "Go back", go_main_page_click, (my_font, 10))
+    create_rounded_button(canvas, screen_width - (screen_width-60), screen_height - (screen_height - 60), 100, 50, "Go back", go_main_page_click, (my_font, 10))
 
     return start_frame
+
+
+def profile_menu_table():
+    """Profile page"""
+    profile_frame = Frame(root, bg='#F0F0F0')
+
+    canvas = Canvas(profile_frame, width=screen_width, height=screen_height, bg='#F0F0F0', highlightthickness=0)
+    canvas.place(relx=0.5, rely=0.5, anchor="center")
+
+    #Rectangle for user info
+    round_rectangle(canvas, (screen_width - 500) // 2 - 200,  (screen_height // 2) - 350, (screen_width - 500) // 2 + 700, (screen_height // 2) - 50, 20, fill="white", outline="darkred", width=4)
+
+    #Add user icon - this can be replaced by the actual user image later
+    user_icon_img = PhotoImage(file=join(images_dir, 'profile_logo.png'))
+    #Resize image
+    width = int(user_icon_img.width() * 0.4)
+    height = int(user_icon_img.height() * 0.4)
+    user_icon_img = user_icon_img.subsample(int(user_icon_img.width() / width), int(user_icon_img.height() / height))
+    profile_frame.user_icon_img = user_icon_img
+    canvas.create_image((screen_width - 600) // 2 - 25, (screen_height // 2) - 205, image=user_icon_img, anchor="center")
+
+    #User information
+    canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 300, 
+                       text="Name: Your name", font=(my_font, 16, "bold"), anchor="w", fill="black")
+    canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 250, 
+                       text="Age: 25", font=(my_font, 16, "bold"), anchor="w", fill="black")
+    canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 200, 
+                       text="Country: Sweden", font=(my_font, 16, "bold"), anchor="w", fill="black")
+    canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 140, 
+                       text="Type of User: Exchange Student", font=(my_font, 16, "bold"), anchor="w", fill="black")
+
+
+    #Statistics and admin button
+    create_rounded_button(canvas, (screen_width - 500) // 2 - 200, screen_height // 2, 900, 75, "My Statistics", on_statistics_click, (my_font, 15))
+    create_rounded_button(canvas, (screen_width - 500) // 2 - 200, screen_height // 2 + 100, 900, 75, "Admin Controls", on_admin_control_click, (my_font, 15))
+
+    #Go back button
+    create_rounded_button(canvas, screen_width - (screen_width-50), screen_height - (screen_height - 50), 100, 50, "Go back", go_main_page_click, (my_font, 10))
+
+    return profile_frame
 
 # Create frames for different pages
 main_frame = main_menu_table()  
 start_frame = start_menu_table() 
+profile_frame = profile_menu_table()
 
 # Call the titles for the different pages
 main_label()
 start_label()
+profile_label()
 
 # Show the main menu as default
 main_frame.pack(fill="both", expand=True)
