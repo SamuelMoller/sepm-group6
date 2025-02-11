@@ -1,20 +1,27 @@
 from tkinter import *
 from tkinter.font import Font 
 import pyglet
+from os.path import join, dirname, normpath
 
-#Font
-my_font = pyglet.font.add_file('fonts\Work_Sans\WorkSans-Italic-VariableFont_wght.ttf')
 
-#Main window
+# File paths
+root = dirname(__file__)
+fonts_dir = normpath(join(root, '..', 'fonts'))
+images_dir = normpath(join(root, '..', 'images'))
+
+# Font
+my_font = pyglet.font.add_file(join(fonts_dir, 'Work_Sans', 'WorkSans-Italic-VariableFont_wght.ttf'))
+
+# Main window
 root = Tk()
 root.title("Basic Swedish")
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 
-#UU icon for window
+# UU icon for window
 root.wm_iconbitmap('images/UU_logo.ico')
 
-#Window size
+# Window size
 root.geometry(f"{screen_width}x{screen_height}")
 root.configure(background='#F0F0F0')
 
@@ -60,7 +67,7 @@ def create_rounded_button(canvas, x, y, width, height, text, command, font):
 
     return button, text_item
 
-#SWITCH BETWEEN PAGES
+# SWITCH BETWEEN PAGES
 def on_start_click():
     """Switches to start page"""
     main_frame.pack_forget()
@@ -81,7 +88,7 @@ def on_accessibility_click():
     print("WILL BE IMPLEMENTED")
 
 def on_clock_game_click():
-    print("WILL BE IMPEMENTED")
+    print("WILL BE IMPLEMENTED")
 
 def on_placeholder_click():
     print("WILL BE IMPLEMENTED")
@@ -122,26 +129,26 @@ def start_menu_table():
 
     return start_frame
 
-#Create frames for different pages
+# Create frames for different pages
 main_frame = main_menu_table()  
 start_frame = start_menu_table() 
 
-#Call the titles for the different pages
+# Call the titles for the different pages
 main_label()
 start_label()
 
-#Show the main menu as default
+# Show the main menu as default
 main_frame.pack(fill="both", expand=True)
 
-#Uppsala university logo
-image = PhotoImage(file="images/uupsala-400-height-1.png")
+# Uppsala university logo
+image = PhotoImage(file=join(images_dir, 'uupsala-400-height-1.png'))
 
-#Scale image
+# Scale image
 width = int(image.width() * 0.5)
 height = int(image.height() * 0.5)
 image = image.subsample(int(image.width() / width), int(image.height() / height))
 
-#Add image to window - CHANGE WHEN TEACHER PROVIDES A BETTER ONE
+# Add image to window - CHANGE WHEN TEACHER PROVIDES A BETTER ONE
 image_label = Label(root, image=image)
 image_label.place(relx=1, rely=1, anchor="se")
 
