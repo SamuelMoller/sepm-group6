@@ -1,6 +1,8 @@
 from tkinter import *
 from tkinter.font import Font 
 import pyglet
+from ..backend import user
+
 
 #Font
 my_font = pyglet.font.add_file('fonts\Work_Sans\WorkSans-Italic-VariableFont_wght.ttf')
@@ -73,9 +75,12 @@ def go_main_page_click():
 
 def on_user_profile_click():
     print("WILL BE IMPLEMENTED")
+    user_profile = user.get_user_profile()
+    print("User profile ", user_profile)
 
 def on_statistics_click():
     print("WILL BE IMPLEMENTED")
+    stats = user.get_user_stats()
 
 def on_accessibility_click():
     print("WILL BE IMPLEMENTED")
