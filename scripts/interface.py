@@ -159,14 +159,15 @@ def profile_menu_table():
     user_icon_img = user_icon_img.subsample(int(user_icon_img.width() / width), int(user_icon_img.height() / height))
     profile_frame.user_icon_img = user_icon_img
     canvas.create_image((screen_width - 600) // 2 - 25, (screen_height // 2) - 205, image=user_icon_img, anchor="center")
-
+    user_info = user.get_user_profile()
     #User information
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 300, 
-                       text="Name: Your name", font=(my_font, 16, "bold"), anchor="w", fill="black")
+                       text=("Name: ", user_info.first_name, " ", user_info.last_name), font=(my_font, 16, "bold"), anchor="w", fill="black")
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 250, 
-                       text="Age: 25", font=(my_font, 16, "bold"), anchor="w", fill="black")
+                       text=("Age: ", user_info.age), font=(my_font, 16, "bold"), anchor="w", fill="black")
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 200, 
-                       text="Country: Sweden", font=(my_font, 16, "bold"), anchor="w", fill="black")
+                       text=("Country: ", user_info.country), font=(my_font, 16, "bold"), anchor="w", fill="black")
+    # THIS INFO IS NOT AVAILABLE RIGHT NOW
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 140, 
                        text="Type of User: Exchange Student", font=(my_font, 16, "bold"), anchor="w", fill="black")
 
