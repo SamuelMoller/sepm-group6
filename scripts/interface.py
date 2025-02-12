@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter.font import Font 
 import pyglet
+from ..backend import user
 from os.path import join, dirname, normpath
 
 
@@ -90,6 +91,7 @@ def on_user_profile_click():
 
 def on_statistics_click():
     print("WILL BE IMPLEMENTED")
+    stats = user.get_user_stats()
 
 def on_accessibility_click():
     print("WILL BE IMPLEMENTED")
