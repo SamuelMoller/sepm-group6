@@ -1,8 +1,8 @@
 from tkinter import *
 from tkinter.font import Font 
 import pyglet
-from ..backend import user
 from os.path import join, dirname, normpath
+from backend import user
 
 
 # File paths
