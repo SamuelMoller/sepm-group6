@@ -124,7 +124,7 @@ def login_page():
     login_frame = Frame(root, bg='#F0F0F0')
 
     canvas = Canvas(login_frame, width=screen_width, height=screen_height, bg='#F0F0F0', highlightthickness=0)
-    canvas.pack(expand=True, ipadx=50, ipady=50)
+    canvas.place(relx=0.5, rely=0.5, anchor="center") 
 
     #Email and password input
     email_entry = Entry(canvas, font=(my_font, 16), width=30, bg="white")
@@ -179,7 +179,7 @@ def login_page():
         go_main_page_click() 
 
     #Login button
-    create_rounded_button(canvas, screen_width//2 - 50, screen_height//2 + 10, 100, 75, "Log In", handle_login, (my_font, 16))
+    create_rounded_button(canvas, screen_width//2 - 50, screen_height//2 + 20, 100, 75, "Log In", handle_login, (my_font, 16))
 
     return login_frame
 

@@ -25,6 +25,13 @@ root.wm_iconbitmap('images/UU_logo.ico')
 root.geometry(f"{screen_width}x{screen_height}")
 root.configure(background='#F0F0F0')
 
+def login_label():
+    """Title on login page"""
+    label = Label(login_frame, text="Basic Swedish", font=(my_font, 50, "underline"), fg='black')
+    underlabel = Label(login_frame, text="Learn by playing", font=(my_font, 30), fg='black')
+    label.place(relx=0.5, rely=0.15, anchor="center")  
+    underlabel.place(relx=0.5, rely=0.25, anchor="center")  
+
 def main_label():
     """Title on main page"""
     label = Label(main_frame, text="Basic Swedish", font=(my_font, 50, "underline"), fg='black')
@@ -106,6 +113,32 @@ def on_match_the_words_click():
 def on_admin_control_click():
     print("WILL BE IMPLEMENTED")
 
+def on_login_click():
+    #CHANGE TO ACTUAL USER INPUT LATER
+    login_frame.pack_forget()
+    main_frame.pack(fill="both", expand=True)
+
+def on_register_click():
+    print("WILL BE IMPLEMENTED")
+
+def on_log_out_click():
+    main_frame.pack_forget()
+    login_frame.pack(fill="both", expand=True)
+
+
+def log_in_session():
+    """Create main menu"""
+    login_frame = Frame(root, bg='#F0F0F0')
+
+    canvas = Canvas(login_frame, width=screen_width, height=screen_height, bg='#F0F0F0', highlightthickness=0)
+    canvas.place(relx=0.5, rely=0.5, anchor="center")  
+
+    #Round buttons with exact positions
+    create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 - 200, 600, 200, "Login to session", on_login_click, (my_font, 15))
+    create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 + 50, 600, 200, "Create a new user", on_register_click, (my_font, 15))
+
+    return login_frame
+
 def main_menu_table():
     """Create main menu"""
     menu_frame = Frame(root, bg='#F0F0F0')
@@ -118,6 +151,8 @@ def main_menu_table():
     create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 - 100, 600, 75, "User Profile", on_user_profile_click, (my_font, 15))
     create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 + 0, 600, 75, "Statistics", on_statistics_click, (my_font, 15))
     create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 + 100, 600, 75, "Accessibility", on_accessibility_click, (my_font, 15))
+
+    create_rounded_button(canvas, screen_width - 160, screen_height - (screen_height - 60), 100, 50, "Log out", on_log_out_click, (my_font, 10))
 
     return menu_frame
 
@@ -182,14 +217,17 @@ def profile_menu_table():
 main_frame = main_menu_table()  
 start_frame = start_menu_table() 
 profile_frame = profile_menu_table()
+login_frame = log_in_session()
 
 # Call the titles for the different pages
 main_label()
 start_label()
 profile_label()
+login_label()
 
 # Show the main menu as default
-main_frame.pack(fill="both", expand=True)
+login_frame.pack(fill="both", expand=True)
+#main_frame.pack(fill="both", expand=True)
 
 # Uppsala university logo
 image = PhotoImage(file=join(images_dir, 'uupsala-400-height-1.png'))
