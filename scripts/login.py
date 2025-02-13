@@ -2,20 +2,12 @@ from tkinter import *
 from tkinter.font import Font 
 import pyglet
 from os.path import join, dirname, normpath
-from backend import user
-import sys
-import os
 
 
 # File paths
-base_dir = sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'backend')))
-
-fonts_dir = normpath(join(base_dir, '..', 'fonts'))
-images_dir = normpath(join(base_dir, '..', 'images'))
-
-print(f"Base Directory: {base_dir}")
-print(f"Fonts Directory: {fonts_dir}")
-print(f"Images Directory: {images_dir}")
+app_root = dirname(__file__)
+fonts_dir = normpath(join(app_root, '..', 'fonts'))
+images_dir = normpath(join(app_root, '..', 'images'))
 
 # Font
 my_font = pyglet.font.add_file(join(fonts_dir, 'Work_Sans', 'WorkSans-Italic-VariableFont_wght.ttf'))
@@ -27,11 +19,17 @@ screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 
 # UU icon for window
-root.wm_iconbitmap(join(images_dir, 'UU_logo.ico'))
+root.wm_iconbitmap('images/UU_logo.ico')
 
 # Window size
 root.geometry(f"{screen_width}x{screen_height}")
 root.configure(background='#F0F0F0')
+
+
+def login_label():
+    """Title on login page"""
+    label = Label(login_frame, text="Login", font=(my_font, 50), fg='black')
+    label.place(relx=0.5, rely=0.15, anchor="center")  
 
 def main_label():
     """Title on main page"""
@@ -98,7 +96,6 @@ def on_user_profile_click():
 
 def on_statistics_click():
     print("WILL BE IMPLEMENTED")
-    stats = user.get_user_stats()
 
 def on_accessibility_click():
     print("WILL BE IMPLEMENTED")
@@ -115,6 +112,77 @@ def on_match_the_words_click():
 def on_admin_control_click():
     print("WILL BE IMPLEMENTED")
 
+def log_out_page_click():
+    main_frame.pack_forget()  
+    start_frame.pack_forget() 
+    profile_frame.pack_forget()
+
+    login_frame.pack(fill="both", expand=True)
+
+def login_page():
+    """Login page with email and password fields"""
+    login_frame = Frame(root, bg='#F0F0F0')
+
+    canvas = Canvas(login_frame, width=screen_width, height=screen_height, bg='#F0F0F0', highlightthickness=0)
+    canvas.pack(expand=True, ipadx=50, ipady=50)
+
+    #Email and password input
+    email_entry = Entry(canvas, font=(my_font, 16), width=30, bg="white")
+    email_entry.place(relx=0.5, rely=0.3, anchor="center")
+    password_entry = Entry(canvas, font=(my_font, 16), width=30, show="*", bg="white") 
+    password_entry.place(relx=0.5, rely=0.45, anchor="center")
+
+    #Error message label
+    email_error_label = Label(canvas, text="", font=(my_font, 10), fg="red", bg='#F0F0F0')
+    email_error_label.place(relx=0.5, rely=0.35, anchor="center")
+    password_error_label = Label(canvas, text="", font=(my_font, 10), fg="red", bg='#F0F0F0')
+    password_error_label.place(relx=0.5, rely=0.50, anchor="center")
+
+    #Login and password text
+    login_text = Label(canvas, text="Login", font=(my_font, 14), fg="black", bg='#F0F0F0')
+    login_text.place(relx=0.5, rely=0.25, anchor="center")
+    password_text = Label(canvas, text="Password", font=(my_font, 14), fg="black", bg='#F0F0F0')
+    password_text.place(relx=0.5, rely=0.4, anchor="center")
+
+    def handle_login():
+        email = email_entry.get()
+        password = password_entry.get()
+
+        email_error_label.config(text="")
+        password_error_label.config(text="")
+
+        #Validate email
+        if '@' not in email:
+            email_error_label.config(text="Incorrect e-mail format")
+            return
+
+        #Validate password
+        if len(password) < 6:
+            password_error_label.config(text="Password needs to be at least 6 characters long!")
+            return
+
+        if not any(char.isdigit() for char in password):
+            password_error_label.config(text="The password must contain a number!")
+            return
+
+        if not any(char.isupper() for char in password):
+            password_error_label.config(text="The password must contain an upper letter!")
+            return
+
+        if not any(char in "!@$" for char in password):
+            password_error_label.config(text="The password must include a special sign (!, @, $)")
+            return
+
+        #If no errors, proceed with login
+        #OBS: HERE WE ALSO NEED TO CHECK THAT THE EMAIL AND PASSWORD ARE IN THE SYSTEM 
+        login_frame.pack_forget() 
+        go_main_page_click() 
+
+    #Login button
+    create_rounded_button(canvas, screen_width//2 - 50, screen_height//2 + 10, 100, 75, "Log In", handle_login, (my_font, 16))
+
+    return login_frame
+
 def main_menu_table():
     """Create main menu"""
     menu_frame = Frame(root, bg='#F0F0F0')
@@ -127,6 +195,8 @@ def main_menu_table():
     create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 - 100, 600, 75, "User Profile", on_user_profile_click, (my_font, 15))
     create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 + 0, 600, 75, "Statistics", on_statistics_click, (my_font, 15))
     create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 + 100, 600, 75, "Accessibility", on_accessibility_click, (my_font, 15))
+
+    create_rounded_button(canvas, screen_width - 160, 100, 100, 50, "Log out", log_out_page_click, (my_font, 10))
 
     return menu_frame
 
@@ -143,7 +213,8 @@ def start_menu_table():
     create_rounded_button(canvas, (screen_width - 250)//2 + 300, screen_height//2 - 200, 250, 250, "Match the words", on_match_the_words_click, (my_font,15))
 
     #Go back button
-    create_rounded_button(canvas, screen_width - (screen_width-60), screen_height - (screen_height - 60), 100, 50, "Go back", go_main_page_click, (my_font, 10))
+    create_rounded_button(canvas, screen_width -60, screen_height - 60, 100, 50, "Go back", go_main_page_click, (my_font, 10))
+    create_rounded_button(canvas, screen_width - 160, 20, 100, 50, "Log out", log_out_page_click, (my_font, 10))
 
     return start_frame
 
@@ -166,15 +237,14 @@ def profile_menu_table():
     user_icon_img = user_icon_img.subsample(int(user_icon_img.width() / width), int(user_icon_img.height() / height))
     profile_frame.user_icon_img = user_icon_img
     canvas.create_image((screen_width - 600) // 2 - 25, (screen_height // 2) - 205, image=user_icon_img, anchor="center")
-    user_info = user.get_user_profile()
+
     #User information
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 300, 
-                       text=("Name: ", user_info.first_name, " ", user_info.last_name), font=(my_font, 16, "bold"), anchor="w", fill="black")
+                       text="Name: Your name", font=(my_font, 16, "bold"), anchor="w", fill="black")
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 250, 
-                       text=("Age: ", user_info.age), font=(my_font, 16, "bold"), anchor="w", fill="black")
+                       text="Age: 25", font=(my_font, 16, "bold"), anchor="w", fill="black")
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 200, 
-                       text=("Country: ", user_info.country), font=(my_font, 16, "bold"), anchor="w", fill="black")
-    # THIS INFO IS NOT AVAILABLE RIGHT NOW
+                       text="Country: Sweden", font=(my_font, 16, "bold"), anchor="w", fill="black")
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 140, 
                        text="Type of User: Exchange Student", font=(my_font, 16, "bold"), anchor="w", fill="black")
 
@@ -192,11 +262,14 @@ def profile_menu_table():
 main_frame = main_menu_table()  
 start_frame = start_menu_table() 
 profile_frame = profile_menu_table()
+login_frame = login_page()
+
 
 # Call the titles for the different pages
 main_label()
 start_label()
 profile_label()
+login_label()
 
 # Show the main menu as default
 main_frame.pack(fill="both", expand=True)
