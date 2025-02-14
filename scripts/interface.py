@@ -35,7 +35,9 @@ def login_label():
 def statistics_label():
     """Title on statistics page"""
     label = Label(statistics_frame, text="Statistics", font=(my_font, 50), fg='black')
+    underlabel = Label(statistics_frame, text="Latest game session", font=(my_font, 30), fg='black')
     label.place(relx=0.5, rely=0.15, anchor="center")  
+    underlabel.place(relx=0.5, rely=0.25, anchor="center")
 
 def main_label():
     """Title on main page"""
@@ -229,20 +231,29 @@ def statistics_menu_table():
     canvas = Canvas(statistics_frame, width=screen_width, height=screen_height, bg='#F0F0F0', highlightthickness=0)
     canvas.pack(expand=True, ipadx=50, ipady=50)
 
-    #Information rectangle
-    round_rectangle(canvas, (screen_width - 500) // 2 - 200,  (screen_height // 2) - 350, (screen_width - 500) // 2 + 700, (screen_height // 2) - 50, 20, fill="white", outline="darkred", width=4)
-        #User information
-    canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 300, 
-                       text="Name: Your name", font=(my_font, 16, "bold"), anchor="w", fill="black")
-    canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 250, 
-                       text="Age: 25", font=(my_font, 16, "bold"), anchor="w", fill="black")
-    canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 200, 
-                       text="Country: Sweden", font=(my_font, 16, "bold"), anchor="w", fill="black")
-    canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 140, 
-                       text="Type of User: Exchange Student", font=(my_font, 16, "bold"), anchor="w", fill="black")
+    #Statistics for first game
+    round_rectangle(canvas, (screen_width - 1000) // 2, (screen_height - 500) // 2, (screen_width - 1000) // 2 + 300, (screen_height - 500) // 2 + 250, 20, fill="white", outline="darkred", width=4)
+    canvas.create_text((screen_width - 1000) // 2 + 150, (screen_height - 250) // 2 - 50, text="Time played:", font=(my_font, 16, "bold"), anchor="center", fill="black")
+    canvas.create_text((screen_width - 1000) // 2 + 150, (screen_height - 250) // 2 + 50, text="Correct answers:", font=(my_font, 16, "bold"), anchor="center", fill="black")
 
+    #Statistics for second game
+    round_rectangle(canvas, (screen_width - 1000) // 2 + 350, (screen_height - 500) // 2, (screen_width - 1000) // 2 + 650, (screen_height - 500) // 2 + 250, 20, fill="white", outline="darkred", width=4)
+    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 250) // 2 - 50, text="Time played:", font=(my_font, 16, "bold"), anchor="center", fill="black")
+    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 250) // 2 + 50, text="Matched items:", font=(my_font, 16, "bold"), anchor="center", fill="black")
+
+    #Statistics for third game
+    round_rectangle(canvas, (screen_width - 1000) // 2 + 700, (screen_height - 500) // 2, (screen_width - 1000) // 2 + 1000, (screen_height - 500) // 2 + 250, 20, fill="white", outline="darkred", width=4)
+    canvas.create_text((screen_width - 1000) // 2 + 850, (screen_height - 250) // 2 - 50, text="Time played:", font=(my_font, 16, "bold"), anchor="center", fill="black")
+    canvas.create_text((screen_width - 1000) // 2 + 850, (screen_height - 250) // 2 + 50, text="Puzzle solved:", font=(my_font, 16, "bold"), anchor="center", fill="black")
+
+    #General statistics
+    round_rectangle(canvas, (screen_width - 1000) // 2, (screen_height - 500) // 2 + 270, (screen_width - 1000) // 2 + 1000, (screen_height - 500) // 2 + 520, 20, fill="white", outline="darkred", width=4)
+    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 500) // 2 + 320, text="Lifetime statistics:", font=(my_font, 16, "bold"), anchor="center", fill="black")
+    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 500) // 2 + 370, text="Total time spent learning:", font=(my_font, 16, "bold"), anchor="center", fill="black")
+    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 500) // 2 + 420, text="Words learned:", font=(my_font, 16, "bold"), anchor="center", fill="black")
+    
     #Go back button
-    create_rounded_button(canvas, screen_width - (screen_width-60), screen_height - (screen_height - 60), 100, 50, "Go back", go_main_page_click, (my_font, 10))
+    create_rounded_button(canvas, screen_width - (screen_width - 60), screen_height - (screen_height - 60), 100, 50, "Go back", go_main_page_click, (my_font, 10))
 
     return statistics_frame
     
