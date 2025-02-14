@@ -86,7 +86,7 @@ def create_rounded_button(canvas, x, y, width, height, text, command, font):
 
     return button, text_item
 
-# SWITCH BETWEEN PAGES
+#SWITCH BETWEEN PAGES
 def on_start_click():
     """Switches to start page"""
     main_frame.pack_forget()
