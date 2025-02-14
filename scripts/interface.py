@@ -32,6 +32,11 @@ def login_label():
     label.place(relx=0.5, rely=0.15, anchor="center")  
     underlabel.place(relx=0.5, rely=0.25, anchor="center")  
 
+def statistics_label():
+    """Title on statistics page"""
+    label = Label(statistics_frame, text="Statistics", font=(my_font, 50), fg='black')
+    label.place(relx=0.5, rely=0.15, anchor="center")  
+
 def main_label():
     """Title on main page"""
     label = Label(main_frame, text="Basic Swedish", font=(my_font, 50, "underline"), fg='black')
@@ -89,6 +94,7 @@ def go_main_page_click():
     """Switches to main page"""
     start_frame.pack_forget()
     profile_frame.pack_forget()
+    statistics_frame.pack_forget()
     main_frame.pack(fill="both", expand=True)
 
 def on_user_profile_click():
@@ -96,7 +102,10 @@ def on_user_profile_click():
     profile_frame.pack(fill="both", expand=True)
 
 def on_statistics_click():
-    print("WILL BE IMPLEMENTED")
+    main_frame.pack_forget()
+    start_frame.pack_forget()
+    profile_frame.pack_forget()
+    statistics_frame.pack(fill="both", expand=True)
 
 def on_accessibility_click():
     print("WILL BE IMPLEMENTED")
@@ -213,17 +222,43 @@ def profile_menu_table():
 
     return profile_frame
 
+def statistics_menu_table():
+    """Create statistics page"""
+    statistics_frame = Frame(root, bg='#F0F0F0')
+
+    canvas = Canvas(statistics_frame, width=screen_width, height=screen_height, bg='#F0F0F0', highlightthickness=0)
+    canvas.pack(expand=True, ipadx=50, ipady=50)
+
+    #Information rectangle
+    round_rectangle(canvas, (screen_width - 500) // 2 - 200,  (screen_height // 2) - 350, (screen_width - 500) // 2 + 700, (screen_height // 2) - 50, 20, fill="white", outline="darkred", width=4)
+        #User information
+    canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 300, 
+                       text="Name: Your name", font=(my_font, 16, "bold"), anchor="w", fill="black")
+    canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 250, 
+                       text="Age: 25", font=(my_font, 16, "bold"), anchor="w", fill="black")
+    canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 200, 
+                       text="Country: Sweden", font=(my_font, 16, "bold"), anchor="w", fill="black")
+    canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 140, 
+                       text="Type of User: Exchange Student", font=(my_font, 16, "bold"), anchor="w", fill="black")
+
+    #Go back button
+    create_rounded_button(canvas, screen_width - (screen_width-60), screen_height - (screen_height - 60), 100, 50, "Go back", go_main_page_click, (my_font, 10))
+
+    return statistics_frame
+    
 # Create frames for different pages
 main_frame = main_menu_table()  
 start_frame = start_menu_table() 
 profile_frame = profile_menu_table()
 login_frame = log_in_session()
+statistics_frame = statistics_menu_table()
 
 # Call the titles for the different pages
 main_label()
 start_label()
 profile_label()
 login_label()
+statistics_label()
 
 # Show the main menu as default
 login_frame.pack(fill="both", expand=True)
