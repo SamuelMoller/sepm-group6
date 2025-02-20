@@ -257,9 +257,11 @@ def statistics_menu_table():
     canvas = Canvas(statistics_frame, width=screen_width, height=screen_height, bg='#F0F0F0', highlightthickness=0)
     canvas.pack(expand=True, ipadx=50, ipady=50)
 
+    stats = user.get_user_stats() # will update integration when we know what the stats are
+
     # Statistics for first game
     round_rectangle(canvas, (screen_width - 1000) // 2, (screen_height - 500) // 2, (screen_width - 1000) // 2 + 300, (screen_height - 500) // 2 + 250, 20, fill="white", outline="darkred", width=4)
-    canvas.create_text((screen_width - 1000) // 2 + 150, (screen_height - 250) // 2 - 50, text="Time played:", font=(my_font, 16, "bold"), anchor="center", fill="black")
+    canvas.create_text((screen_width - 1000) // 2 + 150, (screen_height - 250) // 2 - 50, text="Time played: ", font=(my_font, 16, "bold"), anchor="center", fill="black")
     canvas.create_text((screen_width - 1000) // 2 + 150, (screen_height - 250) // 2 + 50, text="Correct answers:", font=(my_font, 16, "bold"), anchor="center", fill="black")
     canvas.create_text((screen_width - 1000) // 2 + 150, (screen_height - 250) // 2 + 150, text="Clock game", font=(my_font, 14, "bold"), anchor="center", fill="black")
 

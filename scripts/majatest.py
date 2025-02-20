@@ -1,6 +1,5 @@
 from tkinter import *
 from tkinter.font import Font
-import pyglet
 from os.path import join, dirname, normpath
 
 from sys import path as syspath
