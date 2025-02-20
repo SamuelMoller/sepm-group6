@@ -309,7 +309,7 @@ def statistics_menu_table() -> tuple[Frame, Canvas]:
 
 
 def accessibility_menu_table() -> tuple[Frame, Canvas]:
-    """Accessibility page"""
+    """Initializes the accessibility page."""
     accessibility_frame = Frame(root, bg='#F0F0F0')
 
     canvas = Canvas(accessibility_frame,
@@ -320,6 +320,7 @@ def accessibility_menu_table() -> tuple[Frame, Canvas]:
                  anchor="center")
 
     # Settings
+    DEBUG = 0
     center = {'x': screen_width // 2,
               'y': screen_height // 2}
 
@@ -407,14 +408,15 @@ def accessibility_menu_table() -> tuple[Frame, Canvas]:
                           font=(my_font, 10))
 
     # DEBUG: CenterX, CenterY
-    round_rectangle(canvas,
-                    center['x'] - 1, 0,
-                    center['x'] + 1, screen_height,
-                    1, fill='red', outline='red', width=1)
-    round_rectangle(canvas,
-                    0, center['y'] - 1,
-                    screen_width, center['y'] + 1,
-                    1, fill='red', outline='red', width=1)
+    if DEBUG:
+        round_rectangle(canvas,
+                        center['x'] - 1, 0,
+                        center['x'] + 1, screen_height,
+                        1, fill='red', outline='red', width=1)
+        round_rectangle(canvas,
+                        0, center['y'] - 1,
+                        screen_width, center['y'] + 1,
+                        1, fill='red', outline='red', width=1)
 
     return (accessibility_frame, canvas)
 
