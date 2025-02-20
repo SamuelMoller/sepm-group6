@@ -15,6 +15,7 @@ images_dir = normpath(join(root, '..', 'images'))
 
 # Font
 my_font = pyglet.font.add_file(join(fonts_dir, 'Work_Sans', 'WorkSans-Italic-VariableFont_wght.ttf'))
+font_size = int(15)
 
 # Main window
 root = Tk()
@@ -32,37 +33,37 @@ root.configure(background='#F0F0F0')
 
 def login_label():
     """Title on login page"""
-    label = Label(login_frame, text="Basic Swedish", font=(my_font, 50, "underline"), fg='black')
-    underlabel = Label(login_frame, text="Learn by playing", font=(my_font, 30), fg='black')
+    label = Label(login_frame[0], text="Basic Swedish", font=(my_font, 50, "underline"), fg='black')
+    underlabel = Label(login_frame[0], text="Learn by playing", font=(my_font, 30), fg='black')
     label.place(relx=0.5, rely=0.15, anchor="center")
     underlabel.place(relx=0.5, rely=0.25, anchor="center")
 
 
 def statistics_label():
     """Title on statistics page"""
-    label = Label(statistics_frame, text="Statistics", font=(my_font, 50), fg='black')
-    underlabel = Label(statistics_frame, text="Latest game session", font=(my_font, 30), fg='black')
+    label = Label(statistics_frame[0], text="Statistics", font=(my_font, 50), fg='black')
+    underlabel = Label(statistics_frame[0], text="Latest game session", font=(my_font, 30), fg='black')
     label.place(relx=0.5, rely=0.15, anchor="center")
     underlabel.place(relx=0.5, rely=0.25, anchor="center")
 
 
 def main_label():
     """Title on main page"""
-    label = Label(main_frame, text="Basic Swedish", font=(my_font, 50, "underline"), fg='black')
-    underlabel = Label(main_frame, text="Learn by playing", font=(my_font, 30), fg='black')
+    label = Label(main_frame[0], text="Basic Swedish", font=(my_font, 50, "underline"), fg='black')
+    underlabel = Label(main_frame[0], text="Learn by playing", font=(my_font, 30), fg='black')
     label.place(relx=0.5, rely=0.15, anchor="center")
     underlabel.place(relx=0.5, rely=0.25, anchor="center")
 
 
 def start_label():
     """Title on start page"""
-    label = Label(start_frame, text="Select a game", font=(my_font, 50), fg='black')
+    label = Label(start_frame[0], text="Select a game", font=(my_font, 50), fg='black')
     label.place(relx=0.5, rely=0.25, anchor="center")
 
 
 def profile_label():
     """Title on start page"""
-    label = Label(profile_frame, text="Current user", font=(my_font, 40), fg='black')
+    label = Label(profile_frame[0], text="Current user", font=(my_font, 40), fg='black')
     label.place(relx=0.5, rely=0.10, anchor="center")
 
 
@@ -99,39 +100,54 @@ def create_rounded_button(canvas, x, y, width, height, text, command, font):
     return button, text_item
 
 
+def update_font_size(val: int):
+    for _canvas in [main_frame[1], start_frame[1],
+                    profile_frame[1], login_frame[1],
+                    statistics_frame[1], accessibility_frame[1]]:
+        for item in _canvas.find_all():
+            if _canvas.type(item) == 'text':
+                obj = _canvas.itemcget(item, 'font').split()
+                if len(obj) == 3:
+                    _canvas.itemconfig(item, font=(obj[0], val, obj[2]))
+                elif len(obj) == 2:
+                    _canvas.itemconfig(item, font=(obj[0], val))
+                else:
+                    _canvas.itemconfig(item, font=(obj[0], val))
+
+
 # SWITCH BETWEEN PAGES
 def on_start_click():
     """Switches to start page"""
-    main_frame.pack_forget()
-    start_frame.pack(fill="both", expand=True)
+    main_frame[0].pack_forget()
+    start_frame[0].pack(fill="both", expand=True)
 
 
 def go_main_page_click():
     """Switches to main page"""
-    start_frame.pack_forget()
-    profile_frame.pack_forget()
-    statistics_frame.pack_forget()
-    accessibility_frame.pack_forget()
-    main_frame.pack(fill="both", expand=True)
+    start_frame[0].pack_forget()
+    profile_frame[0].pack_forget()
+    statistics_frame[0].pack_forget()
+    accessibility_frame[0].pack_forget()
+    main_frame[0].pack(fill="both", expand=True)
 
 
 def on_user_profile_click():
-    main_frame.pack_forget()
-    profile_frame.pack(fill="both", expand=True)
+    main_frame[0].pack_forget()
+    profile_frame[0].pack(fill="both", expand=True)
 
 
 def on_statistics_click():
-    main_frame.pack_forget()
-    start_frame.pack_forget()
-    profile_frame.pack_forget()
-    statistics_frame.pack(fill="both", expand=True)
+    main_frame[0].pack_forget()
+    start_frame[0].pack_forget()
+    profile_frame[0].pack_forget()
+    statistics_frame[0].pack(fill="both", expand=True)
 
 
 def on_accessibility_click():
-    main_frame.pack_forget()
-    start_frame.pack_forget()
-    profile_frame.pack_forget()
-    accessibility_frame.pack(fill="both", expand=True)
+    main_frame[0].pack_forget()
+    start_frame[0].pack_forget()
+    profile_frame[0].pack_forget()
+    accessibility_frame[0].pack(fill="both", expand=True)
 
 
 def on_clock_game_click():
@@ -152,8 +168,8 @@ def on_admin_control_click():
 
 def on_login_click():
     # CHANGE TO ACTUAL USER INPUT LATER
-    login_frame.pack_forget()
-    main_frame.pack(fill="both", expand=True)
+    login_frame[0].pack_forget()
+    main_frame[0].pack(fill="both", expand=True)
 
 
 def on_register_click():
@@ -161,11 +177,11 @@ def on_register_click():
 
 
 def on_log_out_click():
-    main_frame.pack_forget()
-    login_frame.pack(fill="both", expand=True)
+    main_frame[0].pack_forget()
+    login_frame[0].pack(fill="both", expand=True)
 
 
-def log_in_session():
+def log_in_session() -> tuple[Frame, Canvas]:
     """Create main menu"""
     login_frame = Frame(root, bg='#F0F0F0')
 
@@ -176,10 +192,10 @@ def log_in_session():
     create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 - 200, 600, 200, "Login to session", on_login_click, (my_font, 15))
     create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 + 50, 600, 200, "Create a new user", on_register_click, (my_font, 15))
 
-    return login_frame
+    return (login_frame, canvas)
 
 
-def main_menu_table():
+def main_menu_table() -> tuple[Frame, Canvas]:
     """Create main menu"""
     menu_frame = Frame(root, bg='#F0F0F0')
 
@@ -194,10 +210,10 @@ def main_menu_table():
 
     create_rounded_button(canvas, screen_width - 160, screen_height - (screen_height - 60), 100, 50, "Log out", on_log_out_click, (my_font, 10))
 
-    return menu_frame
+    return (menu_frame, canvas)
 
 
-def start_menu_table():
+def start_menu_table() -> tuple[Frame, Canvas]:
     """Create start menu"""
     start_frame = Frame(root, bg='#F0F0F0')
 
@@ -212,10 +228,10 @@ def start_menu_table():
     # Go back button
     create_rounded_button(canvas, screen_width - (screen_width-60), screen_height - (screen_height - 60), 100, 50, "Go back", go_main_page_click, (my_font, 10))
 
-    return start_frame
+    return (start_frame, canvas)
 
 
-def profile_menu_table():
+def profile_menu_table() -> tuple[Frame, Canvas]:
     """Profile page"""
     profile_frame = Frame(root, bg='#F0F0F0')
 
@@ -251,10 +267,10 @@ def profile_menu_table():
     # Go back button
     create_rounded_button(canvas, screen_width - (screen_width-100), screen_height - (screen_height - 100), 100, 50, "Go back", go_main_page_click, (my_font, 10))
 
-    return profile_frame
+    return (profile_frame, canvas)
 
 
-def statistics_menu_table():
+def statistics_menu_table() -> tuple[Frame, Canvas]:
     """Create statistics page"""
     statistics_frame = Frame(root, bg='#F0F0F0')
 
@@ -288,10 +304,10 @@ def statistics_menu_table():
     # Go back button
     create_rounded_button(canvas, screen_width - (screen_width - 60), screen_height - (screen_height - 60), 100, 50, "Go back", go_main_page_click, (my_font, 10))
 
-    return statistics_frame
+    return (statistics_frame, canvas)
 
 
-def accessibility_menu_table():
+def accessibility_menu_table() -> tuple[Frame, Canvas]:
     """Accessibility page"""
     accessibility_frame = Frame(root, bg='#F0F0F0')
 
@@ -314,42 +330,37 @@ def accessibility_menu_table():
                     center['x'] + 700, center['y'] - 50,
                     20, fill="white", outline="darkred", width=4)
     canvas.create_text(center['x'], center['y'] - 300,
-                       text="Change Language", font=(my_font, 24, "bold"),
+                       text="Change Language", font=(my_font, int(font_size * 1.6), "bold"),
                        anchor="center", fill="black")
     create_rounded_button(canvas,
                           center['x'] - 350, center['y'] - 250,
                           width=330, height=75,
                           text="Swedish", command="",
-                          font=(my_font, 15))
+                          font=(my_font, font_size))
     create_rounded_button(canvas,
                           center['x'] + 20, center['y'] - 250,
                           width=330, height=75,
                           text="Danish", command="",
-                          font=(my_font, 15))
+                          font=(my_font, font_size))
     create_rounded_button(canvas,
                           center['x'] - 350, center['y'] - 150,
                           width=330, height=75,
                           text="English", command="",
-                          font=(my_font, 15))
+                          font=(my_font, font_size))
     create_rounded_button(canvas,
                           center['x'] + 20, center['y'] - 150,
                           width=330, height=75,
                           text="Norwegian", command="",
-                          font=(my_font, 15))
+                          font=(my_font, font_size))
 
     # Resize font
-    # - Font size selection (slider, integer input?)
     round_rectangle(canvas,
                     center['x'] - 700, center['y'] + 50,
                     center['x'] - 50, center['y'] + 350,
                     20, fill="white", outline="darkred", width=4)
     canvas.create_text(center['x'] - 380, center['y'] + 100,
-                       text="Resize Font", font=(my_font, 24, "bold"),
+                       text="Resize Font", font=(my_font, int(font_size * 1.6), "bold"),
                        anchor="center", fill="black")
-
-    # Slider
-    # Note: Not very pretty,
-    # but it's what we've got outside of custom modules.
     font_size_slider = Scale(canvas,
                              from_=12, to=42,
                              orient=HORIZONTAL,
@@ -359,8 +370,8 @@ def accessibility_menu_table():
                              background='white',
                              highlightbackground='white',
                              troughcolor='#F0F0F0',
-                             command=lambda val: print(val))
-    font_size_slider.set(24)
+                             command=lambda val: update_font_size(val))
+    font_size_slider.set(font_size)
     font_size_slider.place(x=center['x'] - 600,
                            y=center['y'] + 150)
 
@@ -371,8 +382,21 @@ def accessibility_menu_table():
                     center['x'] + 700, center['y'] + 350,
                     20, fill="white", outline="darkred", width=4)
     canvas.create_text(center['x'] + 380, center['y'] + 100,
-                       text="Contrast", font=(my_font, 24, "bold"),
+                       text="Contrast", font=(my_font, int(font_size * 1.6), "bold"),
                        anchor="center", fill="black")
+    contrast_slider = Scale(canvas,
+                            from_=0, to=100,
+                            orient=HORIZONTAL,
+                            width=35,
+                            length=450, label="",
+                            font=(my_font, int(font_size * 1.6), "bold"),
+                            background='white',
+                            highlightbackground='white',
+                            troughcolor='#F0F0F0',
+                            command=lambda val: print('contrast:', val))
+    contrast_slider.set(50)
+    contrast_slider.place(x=center['x'] + 150,
+                          y=center['y'] + 150)
 
     # Backwards navigation
     create_rounded_button(canvas,
@@ -391,7 +415,7 @@ def accessibility_menu_table():
                     screen_width, center['y'] + 1,
                     1, fill='red', outline='red', width=1)
 
-    return accessibility_frame
+    return (accessibility_frame, canvas)
 
 
 # Create frames for different pages
@@ -410,8 +434,8 @@ login_label()
 statistics_label()
 
 # Show the main menu as default
-login_frame.pack(fill="both", expand=True)
-# main_frame.pack(fill="both", expand=True)
+login_frame[0].pack(fill="both", expand=True)
+# main_frame[0].pack(fill="both", expand=True)
 
 # Uppsala university logo
 image = PhotoImage(file=join(images_dir, 'uupsala-400-height-1.png'))
