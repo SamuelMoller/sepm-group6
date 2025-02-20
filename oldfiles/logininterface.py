@@ -5,9 +5,9 @@ from os.path import join, dirname, normpath
 
 
 # File paths
-root = dirname(__file__)
-fonts_dir = normpath(join(root, '..', 'fonts'))
-images_dir = normpath(join(root, '..', 'images'))
+app_root = dirname(__file__)
+fonts_dir = normpath(join(app_root, '..', 'fonts'))
+images_dir = normpath(join(app_root, '..', 'images'))
 
 # Font
 my_font = pyglet.font.add_file(join(fonts_dir, 'Work_Sans', 'WorkSans-Italic-VariableFont_wght.ttf'))
@@ -25,19 +25,11 @@ root.wm_iconbitmap('images/UU_logo.ico')
 root.geometry(f"{screen_width}x{screen_height}")
 root.configure(background='#F0F0F0')
 
+
 def login_label():
     """Title on login page"""
-    label = Label(login_frame, text="Basic Swedish", font=(my_font, 50, "underline"), fg='black')
-    underlabel = Label(login_frame, text="Learn by playing", font=(my_font, 30), fg='black')
+    label = Label(login_frame, text="Login", font=(my_font, 50), fg='black')
     label.place(relx=0.5, rely=0.15, anchor="center")  
-    underlabel.place(relx=0.5, rely=0.25, anchor="center")  
-
-def statistics_label():
-    """Title on statistics page"""
-    label = Label(statistics_frame, text="Statistics", font=(my_font, 50), fg='black')
-    underlabel = Label(statistics_frame, text="Latest game session", font=(my_font, 30), fg='black')
-    label.place(relx=0.5, rely=0.15, anchor="center")  
-    underlabel.place(relx=0.5, rely=0.25, anchor="center")
 
 def main_label():
     """Title on main page"""
@@ -96,7 +88,6 @@ def go_main_page_click():
     """Switches to main page"""
     start_frame.pack_forget()
     profile_frame.pack_forget()
-    statistics_frame.pack_forget()
     main_frame.pack(fill="both", expand=True)
 
 def on_user_profile_click():
@@ -104,10 +95,7 @@ def on_user_profile_click():
     profile_frame.pack(fill="both", expand=True)
 
 def on_statistics_click():
-    main_frame.pack_forget()
-    start_frame.pack_forget()
-    profile_frame.pack_forget()
-    statistics_frame.pack(fill="both", expand=True)
+    print("WILL BE IMPLEMENTED")
 
 def on_accessibility_click():
     print("WILL BE IMPLEMENTED")
@@ -124,29 +112,74 @@ def on_match_the_words_click():
 def on_admin_control_click():
     print("WILL BE IMPLEMENTED")
 
-def on_login_click():
-    #CHANGE TO ACTUAL USER INPUT LATER
-    login_frame.pack_forget()
-    main_frame.pack(fill="both", expand=True)
+def log_out_page_click():
+    main_frame.pack_forget()  
+    start_frame.pack_forget() 
+    profile_frame.pack_forget()
 
-def on_register_click():
-    print("WILL BE IMPLEMENTED")
-
-def on_log_out_click():
-    main_frame.pack_forget()
     login_frame.pack(fill="both", expand=True)
 
-
-def log_in_session():
-    """Create main menu"""
+def login_page():
+    """Login page with email and password fields"""
     login_frame = Frame(root, bg='#F0F0F0')
 
     canvas = Canvas(login_frame, width=screen_width, height=screen_height, bg='#F0F0F0', highlightthickness=0)
-    canvas.place(relx=0.5, rely=0.5, anchor="center")  
+    canvas.place(relx=0.5, rely=0.5, anchor="center") 
 
-    #Round buttons with exact positions
-    create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 - 200, 600, 200, "Login to session", on_login_click, (my_font, 15))
-    create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 + 50, 600, 200, "Create a new user", on_register_click, (my_font, 15))
+    #Email and password input
+    email_entry = Entry(canvas, font=(my_font, 16), width=30, bg="white")
+    email_entry.place(relx=0.5, rely=0.3, anchor="center")
+    password_entry = Entry(canvas, font=(my_font, 16), width=30, show="*", bg="white") 
+    password_entry.place(relx=0.5, rely=0.45, anchor="center")
+
+    #Error message label
+    email_error_label = Label(canvas, text="", font=(my_font, 10), fg="red", bg='#F0F0F0')
+    email_error_label.place(relx=0.5, rely=0.35, anchor="center")
+    password_error_label = Label(canvas, text="", font=(my_font, 10), fg="red", bg='#F0F0F0')
+    password_error_label.place(relx=0.5, rely=0.50, anchor="center")
+
+    #Login and password text
+    login_text = Label(canvas, text="Login", font=(my_font, 14), fg="black", bg='#F0F0F0')
+    login_text.place(relx=0.5, rely=0.25, anchor="center")
+    password_text = Label(canvas, text="Password", font=(my_font, 14), fg="black", bg='#F0F0F0')
+    password_text.place(relx=0.5, rely=0.4, anchor="center")
+
+    def handle_login():
+        email = email_entry.get()
+        password = password_entry.get()
+
+        email_error_label.config(text="")
+        password_error_label.config(text="")
+
+        #Validate email
+        if '@' not in email:
+            email_error_label.config(text="Incorrect e-mail format")
+            return
+
+        #Validate password
+        if len(password) < 6:
+            password_error_label.config(text="Password needs to be at least 6 characters long!")
+            return
+
+        if not any(char.isdigit() for char in password):
+            password_error_label.config(text="The password must contain a number!")
+            return
+
+        if not any(char.isupper() for char in password):
+            password_error_label.config(text="The password must contain an upper letter!")
+            return
+
+        if not any(char in "!@$" for char in password):
+            password_error_label.config(text="The password must include a special sign (!, @, $)")
+            return
+
+        #If no errors, proceed with login
+        #OBS: HERE WE ALSO NEED TO CHECK THAT THE EMAIL AND PASSWORD ARE IN THE SYSTEM 
+        login_frame.pack_forget() 
+        go_main_page_click() 
+
+    #Login button
+    create_rounded_button(canvas, screen_width//2 - 50, screen_height//2 + 20, 100, 75, "Log In", handle_login, (my_font, 16))
 
     return login_frame
 
@@ -163,7 +196,7 @@ def main_menu_table():
     create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 + 0, 600, 75, "Statistics", on_statistics_click, (my_font, 15))
     create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 + 100, 600, 75, "Accessibility", on_accessibility_click, (my_font, 15))
 
-    create_rounded_button(canvas, screen_width - 160, screen_height - (screen_height - 60), 100, 50, "Log out", on_log_out_click, (my_font, 10))
+    create_rounded_button(canvas, screen_width - 160, 100, 100, 50, "Log out", log_out_page_click, (my_font, 10))
 
     return menu_frame
 
@@ -180,7 +213,8 @@ def start_menu_table():
     create_rounded_button(canvas, (screen_width - 250)//2 + 300, screen_height//2 - 200, 250, 250, "Match the words", on_match_the_words_click, (my_font,15))
 
     #Go back button
-    create_rounded_button(canvas, screen_width - (screen_width-60), screen_height - (screen_height - 60), 100, 50, "Go back", go_main_page_click, (my_font, 10))
+    create_rounded_button(canvas, screen_width -60, screen_height - 60, 100, 50, "Go back", go_main_page_click, (my_font, 10))
+    create_rounded_button(canvas, screen_width - 160, 20, 100, 50, "Log out", log_out_page_click, (my_font, 10))
 
     return start_frame
 
@@ -224,59 +258,21 @@ def profile_menu_table():
 
     return profile_frame
 
-def statistics_menu_table():
-    """Create statistics page"""
-    statistics_frame = Frame(root, bg='#F0F0F0')
-
-    canvas = Canvas(statistics_frame, width=screen_width, height=screen_height, bg='#F0F0F0', highlightthickness=0)
-    canvas.pack(expand=True, ipadx=50, ipady=50)
-
-    #Statistics for first game
-    round_rectangle(canvas, (screen_width - 1000) // 2, (screen_height - 500) // 2, (screen_width - 1000) // 2 + 300, (screen_height - 500) // 2 + 250, 20, fill="white", outline="darkred", width=4)
-    canvas.create_text((screen_width - 1000) // 2 + 150, (screen_height - 250) // 2 - 50, text="Time played:", font=(my_font, 16, "bold"), anchor="center", fill="black")
-    canvas.create_text((screen_width - 1000) // 2 + 150, (screen_height - 250) // 2 + 50, text="Correct answers:", font=(my_font, 16, "bold"), anchor="center", fill="black")
-    canvas.create_text((screen_width - 1000) // 2 + 150, (screen_height - 250) // 2 + 150, text="Clock game", font=(my_font, 14, "bold"), anchor="center", fill="black")
-
-    #Statistics for second game
-    round_rectangle(canvas, (screen_width - 1000) // 2 + 350, (screen_height - 500) // 2, (screen_width - 1000) // 2 + 650, (screen_height - 500) // 2 + 250, 20, fill="white", outline="darkred", width=4)
-    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 250) // 2 - 50, text="Time played:", font=(my_font, 16, "bold"), anchor="center", fill="black")
-    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 250) // 2 + 50, text="Matched items:", font=(my_font, 16, "bold"), anchor="center", fill="black")
-    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 250) // 2 + 150, text="Furniture game", font=(my_font, 14, "bold"), anchor="center", fill="black")
-
-    #Statistics for third game
-    round_rectangle(canvas, (screen_width - 1000) // 2 + 700, (screen_height - 500) // 2, (screen_width - 1000) // 2 + 1000, (screen_height - 500) // 2 + 250, 20, fill="white", outline="darkred", width=4)
-    canvas.create_text((screen_width - 1000) // 2 + 850, (screen_height - 250) // 2 - 50, text="Time played:", font=(my_font, 16, "bold"), anchor="center", fill="black")
-    canvas.create_text((screen_width - 1000) // 2 + 850, (screen_height - 250) // 2 + 50, text="Puzzle solved:", font=(my_font, 16, "bold"), anchor="center", fill="black")
-    canvas.create_text((screen_width - 1000) // 2 + 850, (screen_height - 250) // 2 + 150, text="Puzzle game", font=(my_font, 14, "bold"), anchor="center", fill="black")
-
-    #General statistics
-    round_rectangle(canvas, (screen_width - 1000) // 2, (screen_height - 500) // 2 + 370, (screen_width - 1000) // 2 + 1000, (screen_height - 500) // 2 + 620, 20, fill="white", outline="darkred", width=4)
-    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 500) // 2 + 420, text="Lifetime statistics:", font=(my_font, 16, "bold"), anchor="center", fill="black")
-    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 500) // 2 + 470, text="Total time spent learning:", font=(my_font, 16, "bold"), anchor="center", fill="black")
-    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 500) // 2 + 520, text="Words learned:", font=(my_font, 16, "bold"), anchor="center", fill="black")
-
-    #Go back button
-    create_rounded_button(canvas, screen_width - (screen_width - 60), screen_height - (screen_height - 60), 100, 50, "Go back", go_main_page_click, (my_font, 10))
-
-    return statistics_frame
-    
 # Create frames for different pages
 main_frame = main_menu_table()  
 start_frame = start_menu_table() 
 profile_frame = profile_menu_table()
-login_frame = log_in_session()
-statistics_frame = statistics_menu_table()
+login_frame = login_page()
+
 
 # Call the titles for the different pages
 main_label()
 start_label()
 profile_label()
 login_label()
-statistics_label()
 
 # Show the main menu as default
-login_frame.pack(fill="both", expand=True)
-#main_frame.pack(fill="both", expand=True)
+main_frame.pack(fill="both", expand=True)
 
 # Uppsala university logo
 image = PhotoImage(file=join(images_dir, 'uupsala-400-height-1.png'))
