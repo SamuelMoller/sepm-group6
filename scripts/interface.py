@@ -126,7 +126,10 @@ def on_statistics_click():
 
 
 def on_accessibility_click():
-    print("WILL BE IMPLEMENTED")
+    main_frame.pack_forget()
+    start_frame.pack_forget()
+    profile_frame.pack_forget()
+    accessibility_frame.pack(fill="both", expand=True)
 
 
 def on_clock_game_click():
@@ -286,12 +289,33 @@ def statistics_menu_table():
     return statistics_frame
 
 
+def accessibility_menu_table():
+    """Profile page"""
+    accessibility_frame = Frame(root, bg='#F0F0F0')
+
+    canvas = Canvas(accessibility_frame, width=screen_width, height=screen_height, bg='#F0F0F0', highlightthickness=0)
+    canvas.place(relx=0.5, rely=0.5, anchor="center")
+
+    # Change language
+    # - List of languages
+    # - Button functionality
+
+    # Resize font
+    # - Font size selection (slider, integer input?)
+
+    # Contrast
+    # - Slider
+
+    return accessibility_frame
+
+
 # Create frames for different pages
 main_frame = main_menu_table()
 start_frame = start_menu_table()
 profile_frame = profile_menu_table()
 login_frame = log_in_session()
 statistics_frame = statistics_menu_table()
+accessibility_frame = accessibility_menu_table()
 
 # Call the titles for the different pages
 main_label()
