@@ -231,16 +231,14 @@ def profile_menu_table():
     user_icon_img = user_icon_img.subsample(int(user_icon_img.width() / width), int(user_icon_img.height() / height))
     profile_frame.user_icon_img = user_icon_img
     canvas.create_image((screen_width - 600) // 2 - 25, (screen_height // 2) - 205, image=user_icon_img, anchor="center")
-
+    user_profile = user.get_user_profile()
     # User information
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 300,
-                       text="Name: Your name", font=(my_font, 16, "bold"), anchor="w", fill="black")
+                       text=f"Name: {user_profile['first_name']} {user_profile["last_name"]}", font=(my_font, 16, "bold"), anchor="w", fill="black")
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 250,
-                       text="Age: 25", font=(my_font, 16, "bold"), anchor="w", fill="black")
+                       text=f"Age: {user_profile["age"]}", font=(my_font, 16, "bold"), anchor="w", fill="black")
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 200,
-                       text="Country: Sweden", font=(my_font, 16, "bold"), anchor="w", fill="black")
-    canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 140,
-                       text="Type of User: Exchange Student", font=(my_font, 16, "bold"), anchor="w", fill="black")
+                       text=f"Country: {user_profile["country"]}", font=(my_font, 16, "bold"), anchor="w", fill="black")
 
     # Statistics and admin button
     create_rounded_button(canvas, (screen_width - 500) // 2 - 200, screen_height // 2, 900, 75, "My Statistics", on_statistics_click, (my_font, 15))
