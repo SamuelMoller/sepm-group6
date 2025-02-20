@@ -28,7 +28,7 @@ screen_height = root.winfo_screenheight()
 
 # Window size
 root.geometry(f"{screen_width}x{screen_height}")
-root.configure(background='#F0F0F0')
+root.configure(background='white')
 
 
 def login_label():
@@ -114,6 +114,16 @@ def update_font_size(val: int):
                     _canvas.itemconfig(item, font=(obj[0], val))
                 else:
                     _canvas.itemconfig(item, font=(obj[0], val))
+
+
+def create_back_button(master: Canvas, x: int, y: int):
+    back_image = PhotoImage(
+        file=join(images_dir, 'back.png')
+    ).subsample(3)  # 1/3rd of original image size.
+    back_button = Label(master, image=back_image, border=0)
+    back_button.image = back_image  # Keep a reference to avoid garbage collection
+    back_button.place(x=x, y=y, anchor="nw")
+    back_button.bind("<Button-1>", lambda event: go_main_page_click())
 
 
 # SWITCH BETWEEN PAGES
@@ -227,7 +237,7 @@ def start_menu_table() -> tuple[Frame, Canvas]:
     create_rounded_button(canvas, (screen_width - 250)//2 + 300, screen_height//2 - 200, 250, 250, "Match the words", on_match_the_words_click, (my_font, 15))
 
     # Go back button
-    create_rounded_button(canvas, screen_width - (screen_width-60), screen_height - (screen_height - 60), 100, 50, "Go back", go_main_page_click, (my_font, 10))
+    create_back_button(canvas, 15, 15)
 
     return (start_frame, canvas)
 
@@ -237,7 +247,7 @@ def profile_menu_table() -> tuple[Frame, Canvas]:
     profile_frame = Frame(root, bg='#F0F0F0')
 
     canvas = Canvas(profile_frame, width=screen_width, height=screen_height, bg='#F0F0F0', highlightthickness=0)
-    canvas.place(relx=0.5, rely=0.5, anchor="center")
+    canvas.pack(expand=True, ipadx=50, ipady=50)
 
     # Rectangle for user info
     round_rectangle(canvas, (screen_width - 500) // 2 - 200, (screen_height // 2) - 350, (screen_width - 500) // 2 + 700, (screen_height // 2) - 50, 20, fill="white", outline="darkred", width=4)
@@ -266,7 +276,7 @@ def profile_menu_table() -> tuple[Frame, Canvas]:
     create_rounded_button(canvas, (screen_width - 500) // 2 - 200, screen_height // 2 + 100, 900, 75, "Admin Controls", on_admin_control_click, (my_font, 15))
 
     # Go back button
-    create_rounded_button(canvas, screen_width - (screen_width-100), screen_height - (screen_height - 100), 100, 50, "Go back", go_main_page_click, (my_font, 10))
+    create_back_button(canvas, 15, 15)
 
     return (profile_frame, canvas)
 
@@ -303,7 +313,7 @@ def statistics_menu_table() -> tuple[Frame, Canvas]:
     canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 500) // 2 + 520, text="Words learned:", font=(my_font, 16, "bold"), anchor="center", fill="black")
 
     # Go back button
-    create_rounded_button(canvas, screen_width - (screen_width - 60), screen_height - (screen_height - 60), 100, 50, "Go back", go_main_page_click, (my_font, 10))
+    create_back_button(canvas, 15, 15)
 
     return (statistics_frame, canvas)
 
@@ -315,9 +325,7 @@ def accessibility_menu_table() -> tuple[Frame, Canvas]:
     canvas = Canvas(accessibility_frame,
                     width=screen_width, height=screen_height,
                     bg='#F0F0F0', highlightthickness=0)
-    canvas.place(relx=0.5,
-                 rely=0.5,
-                 anchor="center")
+    canvas.pack(expand=True, ipadx=50, ipady=50)
 
     # Settings
     DEBUG = 0
@@ -401,11 +409,7 @@ def accessibility_menu_table() -> tuple[Frame, Canvas]:
                           y=center['y'] + 150)
 
     # Backwards navigation
-    create_rounded_button(canvas,
-                          screen_width - (screen_width - 60), screen_height - (screen_height - 60),
-                          width=100, height=50,
-                          text="Go back", command=go_main_page_click,
-                          font=(my_font, 10))
+    create_back_button(canvas, 15, 15)
 
     # DEBUG: CenterX, CenterY
     if DEBUG:
