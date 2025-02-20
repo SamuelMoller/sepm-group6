@@ -137,6 +137,10 @@ def on_match_the_words_click():
 def on_admin_control_click():
     print("WILL BE IMPLEMENTED")
 
+def on_log_out_click():
+    main_frame.pack_forget()
+    login_frame.pack(fill="both", expand=True)
+
 def log_in_session():
     """Create main menu"""
     login_frame = Frame(root, bg='#F0F0F0')
@@ -163,7 +167,10 @@ def main_menu_table():
     create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 + 0, 600, 75, "Statistics", on_statistics_click, (my_font, 15))
     create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 + 100, 600, 75, "Accessibility", on_accessibility_click, (my_font, 15))
 
+    create_rounded_button(canvas, screen_width - 160, screen_height - (screen_height - 60), 100, 50, "Log out", on_log_out_click, (my_font, 10))
+
     return menu_frame
+
 
 def start_menu_table():
     """Create start menu"""
