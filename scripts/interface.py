@@ -123,14 +123,6 @@ def on_clock_game_click():
 def on_placeholder_click():
     print("WILL BE IMPLEMENTED")
 
-def on_login_click():
-    #CHANGE TO ACTUAL USER INPUT LATER
-    login_frame.pack_forget()
-    main_frame.pack(fill="both", expand=True)
-
-def on_register_click():
-    print("WILL BE IMPLEMENTED")
-
 def on_match_the_words_click():
     print("WILL BE IMPLEMENTED")
 
