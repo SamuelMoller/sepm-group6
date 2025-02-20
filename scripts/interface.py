@@ -3,6 +3,10 @@ from tkinter.font import Font
 import pyglet
 from os.path import join, dirname, normpath
 
+from sys import path as syspath
+syspath.append(normpath(join(dirname(__file__), '../')))
+from backend import user
+
 
 # File paths
 root = dirname(__file__)
@@ -19,7 +23,7 @@ screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 
 # UU icon for window
-root.wm_iconbitmap('images/UU_logo.ico')
+# root.wm_iconbitmap('images/UU_logo.ico')  # DEBUG: Linux compatibility
 
 # Window size
 root.geometry(f"{screen_width}x{screen_height}")
