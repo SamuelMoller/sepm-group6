@@ -92,6 +92,7 @@ def create_rounded_button(canvas, x, y, width, height, text, command, font):
     canvas.tag_bind(button, "<Enter>", on_hover)
     canvas.tag_bind(text_item, "<Enter>", on_hover)
     canvas.tag_bind(button, "<Leave>", off_hover)
+    canvas.tag_bind(text_item, "<Leave>", off_hover)
 
     # Changes page when clicking on a button (+ text in the button)
     canvas.tag_bind(button, "<Button-1>", lambda event: command())  # Command() indicate the selected page function
