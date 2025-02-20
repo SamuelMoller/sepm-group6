@@ -154,6 +154,71 @@ def log_in_session():
 
     return login_frame
 
+def on_login_click():
+    """Pop-up window for user login"""
+    popup = Toplevel(root)
+    popup.title("Login")
+    popup_width = 500
+    popup_height = 400
+
+    #Center the pop up window
+    x_cordinate = int((screen_width / 2) - (popup_width / 2))
+    y_cordinate = int((screen_height / 2) - (popup_height / 2))
+
+    popup.geometry(f"{popup_width}x{popup_height}+{x_cordinate}+{y_cordinate}")
+    popup.configure(bg='#F0F0F0')
+    popup.grab_set()  #Focus on popup window until closed
+
+    #Username label and entry field
+    username_label = Label(popup, text="Username:", font=(my_font, 16), bg='#F0F0F0')
+    username_label.place(relx=0.5, rely=0.3, anchor="center")
+    username_entry = Entry(popup, font=(my_font, 14), width=25)
+    username_entry.place(relx=0.5, rely=0.4, anchor="center")
+
+    #Login button inside the popup
+    def login_user():
+        username = username_entry.get()
+        if username:   #CHANGE FOR THE INTEGRATION
+            print(f"User '{username}' logged in.")
+            popup.destroy()
+            login_frame.pack_forget()
+            main_frame.pack(fill="both", expand=True)
+        else:
+            username_label.config(text="Username (Required):", fg="red")
+
+    login_btn = Button(popup, text="Login", font=(my_font, 14), command=login_user, bg="#800000", fg="white")
+    login_btn.place(relx=0.5, rely=0.55, anchor="center")
+
+
+def on_register_click():
+    """Pop-up window for user register"""
+    popup = Toplevel(root)
+    popup.title("Register")
+    popup_width = 500
+    popup_height = 400
+
+    #Center the pop up window
+    x_cordinate = int((screen_width / 2) - (popup_width / 2))
+    y_cordinate = int((screen_height / 2) - (popup_height / 2))
+
+    popup.geometry(f"{popup_width}x{popup_height}+{x_cordinate}+{y_cordinate}")
+    popup.configure(bg='#F0F0F0')
+    popup.grab_set()  #Focus on popup window until closed
+
+    #Username label and entry field
+    username_label = Label(popup, text="Write a username:", font=(my_font, 16), bg='#F0F0F0')
+    username_label.place(relx=0.5, rely=0.3, anchor="center")
+    username_entry = Entry(popup, font=(my_font, 14), width=25)
+    username_entry.place(relx=0.5, rely=0.4, anchor="center")
+
+    #Login button inside the popup
+    def register_user():
+        #IMPLEMENT IN THE INTEGRATION
+        pass
+
+    login_btn = Button(popup, text="Login", font=(my_font, 14), command=register_user, bg="#800000", fg="white")
+    login_btn.place(relx=0.5, rely=0.55, anchor="center")
+
 def main_menu_table():
     """Create main menu"""
     menu_frame = Frame(root, bg='#F0F0F0')
