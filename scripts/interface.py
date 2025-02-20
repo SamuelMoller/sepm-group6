@@ -179,12 +179,11 @@ def on_login_click():
     def login_user():
         username = username_entry.get()
         if username:   #CHANGE FOR THE INTEGRATION
-            print(f"User '{username}' logged in.")
             popup.destroy()
             login_frame.pack_forget()
             main_frame.pack(fill="both", expand=True)
         else:
-            username_label.config(text="Username (Required):", fg="red")
+            username_label.config(text="Username is required:", fg="#800000")
 
     login_btn = Button(popup, text="Login", font=(my_font, 14), command=login_user, bg="#800000", fg="white")
     login_btn.place(relx=0.5, rely=0.55, anchor="center")
