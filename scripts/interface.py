@@ -89,6 +89,7 @@ def create_rounded_button(canvas, x, y, width, height, text, command, font):
         canvas.itemconfig(text_item, fill="black")
 
     canvas.tag_bind(button, "<Enter>", on_hover)
+    canvas.tag_bind(text_item, "<Enter>", on_hover)
     canvas.tag_bind(button, "<Leave>", off_hover)
 
     # Changes page when clicking on a button (+ text in the button)
@@ -110,6 +111,7 @@ def go_main_page_click():
     start_frame.pack_forget()
     profile_frame.pack_forget()
     statistics_frame.pack_forget()
+    accessibility_frame.pack_forget()
     main_frame.pack(fill="both", expand=True)
 
 
@@ -290,21 +292,87 @@ def statistics_menu_table():
 
 
 def accessibility_menu_table():
-    """Profile page"""
+    """Accessibility page"""
     accessibility_frame = Frame(root, bg='#F0F0F0')
 
-    canvas = Canvas(accessibility_frame, width=screen_width, height=screen_height, bg='#F0F0F0', highlightthickness=0)
-    canvas.place(relx=0.5, rely=0.5, anchor="center")
+    canvas = Canvas(accessibility_frame,
+                    width=screen_width, height=screen_height,
+                    bg='#F0F0F0', highlightthickness=0)
+    canvas.place(relx=0.5,
+                 rely=0.5,
+                 anchor="center")
+
+    # Settings
+    center = {'x': screen_width // 2,
+              'y': screen_height // 2}
 
     # Change language
     # - List of languages
     # - Button functionality
+    round_rectangle(canvas,
+                    center['x'] - 700, center['y'] - 350,
+                    center['x'] + 700, center['y'] - 50,
+                    20, fill="white", outline="darkred", width=4)
+    canvas.create_text(center['x'], center['y'] - 300,
+                       text="Change Language", font=(my_font, 24, "bold"),
+                       anchor="center", fill="black")
+    create_rounded_button(canvas,
+                          center['x'] - 350, center['y'] - 250,
+                          width=330, height=75,
+                          text="Swedish", command="",
+                          font=(my_font, 15))
+    create_rounded_button(canvas,
+                          center['x'] + 20, center['y'] - 250,
+                          width=330, height=75,
+                          text="Danish", command="",
+                          font=(my_font, 15))
+    create_rounded_button(canvas,
+                          center['x'] - 350, center['y'] - 150,
+                          width=330, height=75,
+                          text="English", command="",
+                          font=(my_font, 15))
+    create_rounded_button(canvas,
+                          center['x'] + 20, center['y'] - 150,
+                          width=330, height=75,
+                          text="Norwegian", command="",
+                          font=(my_font, 15))
 
     # Resize font
     # - Font size selection (slider, integer input?)
+    round_rectangle(canvas,
+                    center['x'] - 700, center['y'] + 50,
+                    center['x'] - 50, center['y'] + 350,
+                    20, fill="white", outline="darkred", width=4)
+    canvas.create_text(center['x'] - 380, center['y'] + 100,
+                       text="Resize Font", font=(my_font, 24, "bold"),
+                       anchor="center", fill="black")
 
     # Contrast
     # - Slider
+    round_rectangle(canvas,
+                    center['x'] + 50, center['y'] + 50,
+                    center['x'] + 700, center['y'] + 350,
+                    20, fill="white", outline="darkred", width=4)
+    canvas.create_text(center['x'] + 380, center['y'] + 100,
+                       text="Contrast", font=(my_font, 24, "bold"),
+                       anchor="center", fill="black")
+
+    # Backwards navigation
+    create_rounded_button(canvas,
+                          screen_width - (screen_width - 60), screen_height - (screen_height - 60),
+                          width=100, height=50,
+                          text="Go back", command=go_main_page_click,
+                          font=(my_font, 10))
+
+    # DEBUG: CenterX, CenterY
+    round_rectangle(canvas,
+                    center['x'] - 1, 0,
+                    center['x'] + 1, screen_height,
+                    1, fill='red', outline='red', width=1)
+    round_rectangle(canvas,
+                    0, center['y'] - 1,
+                    screen_width, center['y'] + 1,
+                    1, fill='red', outline='red', width=1)
 
     return accessibility_frame
 
