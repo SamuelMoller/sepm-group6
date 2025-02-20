@@ -1,11 +1,11 @@
 from tkinter import *
-from tkinter.font import Font
+# from tkinter.font import Font
 import pyglet
 from os.path import join, dirname, normpath
 
 from sys import path as syspath
 syspath.append(normpath(join(dirname(__file__), '../')))
-from backend import user
+# from backend import user
 
 
 # File paths
@@ -346,6 +346,23 @@ def accessibility_menu_table():
     canvas.create_text(center['x'] - 380, center['y'] + 100,
                        text="Resize Font", font=(my_font, 24, "bold"),
                        anchor="center", fill="black")
+
+    # Slider
+    # Note: Not very pretty,
+    # but it's what we've got outside of custom modules.
+    font_size_slider = Scale(canvas,
+                             from_=12, to=42,
+                             orient=HORIZONTAL,
+                             width=35,
+                             length=450, label="",
+                             font=(my_font, 24, "bold"),
+                             background='white',
+                             highlightbackground='white',
+                             troughcolor='#F0F0F0',
+                             command=lambda val: print(val))
+    font_size_slider.set(24)
+    font_size_slider.place(x=center['x'] - 600,
+                           y=center['y'] + 150)
 
     # Contrast
     # - Slider
