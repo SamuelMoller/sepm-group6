@@ -22,7 +22,7 @@ screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 
 # UU icon for window
-#root.wm_iconbitmap('images/UU_logo.ico')
+root.wm_iconbitmap('images/UU_logo.ico')
 
 # Window size
 root.geometry(f"{screen_width}x{screen_height}")
