@@ -30,33 +30,33 @@ root.configure(background='#F0F0F0')
 
 def login_label():
     """Title on login page"""
-    label = Label(login_frame, text="Basic Swedish", font=(my_font, 50, "underline"), fg='black')
-    underlabel = Label(login_frame, text="Learn by playing", font=(my_font, 30), fg='black')
+    label = Label(login_frame, text="Basic Swedish", font=(my_font, 50, "underline"), fg='black', bg=root.cget("bg"))
+    underlabel = Label(login_frame, text="Learn by playing", font=(my_font, 30), fg='black', bg=root.cget("bg"))
     label.place(relx=0.5, rely=0.15, anchor="center")  
     underlabel.place(relx=0.5, rely=0.25, anchor="center")  
 
 def statistics_label():
     """Title on statistics page"""
-    label = Label(statistics_frame, text="Statistics", font=(my_font, 50), fg='black')
-    underlabel = Label(statistics_frame, text="Latest game session", font=(my_font, 30), fg='black')
+    label = Label(statistics_frame, text="Statistics", font=(my_font, 50), fg='black', bg=root.cget("bg"))
+    underlabel = Label(statistics_frame, text="Latest game session", font=(my_font, 30), fg='black', bg=root.cget("bg"))
     label.place(relx=0.5, rely=0.15, anchor="center")  
     underlabel.place(relx=0.5, rely=0.25, anchor="center")
 
 def main_label():
     """Title on main page"""
-    label = Label(main_frame, text="Basic Swedish", font=(my_font, 50, "underline"), fg='black')
-    underlabel = Label(main_frame, text="Learn by playing", font=(my_font, 30), fg='black')
+    label = Label(main_frame, text="Basic Swedish", font=(my_font, 50, "underline"), fg='black', bg=root.cget("bg"))
+    underlabel = Label(main_frame, text="Learn by playing", font=(my_font, 30), fg='black', bg=root.cget("bg"))
     label.place(relx=0.5, rely=0.15, anchor="center")  
     underlabel.place(relx=0.5, rely=0.25, anchor="center")  
 
 def start_label():
     """Title on start page"""
-    label = Label(start_frame, text="Select a game", font=(my_font, 50), fg='black')
+    label = Label(start_frame, text="Select a game", font=(my_font, 50), fg='black', bg=root.cget("bg"))
     label.place(relx=0.5, rely=0.25, anchor="center")  
 
 def profile_label():
     """Title on start page"""
-    label = Label(profile_frame, text="Current user", font=(my_font, 40), fg='black')
+    label = Label(profile_frame, text="Current user", font=(my_font, 40), fg='black', bg=root.cget("bg"))
     label.place(relx=0.5, rely=0.10, anchor="center")  
 
 def round_rectangle(canvas, x1, y1, x2, y2, radius, **kwargs):
@@ -186,9 +186,9 @@ def on_register_click():
     popup = Toplevel(root)
     popup.title("Register")
     popup_width = 500
-    popup_height = 400
+    popup_height = 450  
 
-    #Center the pop up window
+    #Center the pop-up window
     x_cordinate = int((screen_width / 2) - (popup_width / 2))
     y_cordinate = int((screen_height / 2) - (popup_height / 2))
 
@@ -196,19 +196,39 @@ def on_register_click():
     popup.configure(bg='#F0F0F0')
     popup.grab_set()  #Focus on popup window until closed
 
-    #Username label and entry field
-    username_label = Label(popup, text="Write a username:", font=(my_font, 16), bg='#F0F0F0')
-    username_label.place(relx=0.5, rely=0.3, anchor="center")
+    #Input fields
+    username_label = Label(popup, text="Write a username:", font=(my_font, 10))
+    username_label.place(relx=0.5, rely=0.06, anchor="center")  
     username_entry = Entry(popup, font=(my_font, 14), width=25)
-    username_entry.place(relx=0.5, rely=0.4, anchor="center")
+    username_entry.place(relx=0.5, rely=0.15, anchor="center")  
 
-    #Login button inside the popup
+    name_label = Label(popup, text="Write your name:", font=(my_font, 10))  
+    name_label.place(relx=0.5, rely=0.22, anchor="center")  
+    name_entry = Entry(popup, font=(my_font, 14), width=25)
+    name_entry.place(relx=0.5, rely=0.3, anchor="center")  
+
+    surname_label = Label(popup, text="Write your surname:", font=(my_font, 10))  
+    surname_label.place(relx=0.5, rely=0.37, anchor="center")  
+    surname_entry = Entry(popup, font=(my_font, 14), width=25)
+    surname_entry.place(relx=0.5, rely=0.45, anchor="center")  
+
+    country_label = Label(popup, text="Write your country:", font=(my_font, 10))  
+    country_label.place(relx=0.5, rely=0.52, anchor="center")  
+    country_entry = Entry(popup, font=(my_font, 14), width=25)
+    country_entry.place(relx=0.5, rely=0.6, anchor="center")  
+
+    age_label = Label(popup, text="Write your age:", font=(my_font, 10)) 
+    age_label.place(relx=0.5, rely=0.67, anchor="center") 
+    age_entry = Entry(popup, font=(my_font, 14), width=25)
+    age_entry.place(relx=0.5, rely=0.75, anchor="center")  
+
+    #Register button inside the popup
     def register_user():
-        #IMPLEMENT IN THE INTEGRATION
+        # IMPLEMENT IN THE INTEGRATION
         pass
 
-    login_btn = Button(popup, text="Login", font=(my_font, 14), command=register_user, bg="#800000", fg="white")
-    login_btn.place(relx=0.5, rely=0.55, anchor="center")
+    login_btn = Button(popup, text="Register", font=(my_font, 12), command=register_user, bg="#800000", fg="white")
+    login_btn.place(relx=0.5, rely=0.85, anchor="center")
 
 def main_menu_table():
     """Create main menu"""
