@@ -22,7 +22,7 @@ screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 
 # UU icon for window
-root.wm_iconbitmap('images/UU_logo.ico')
+#root.wm_iconbitmap('images/UU_logo.ico')
 
 # Window size
 root.geometry(f"{screen_width}x{screen_height}")
@@ -159,6 +159,7 @@ def on_login_click():
 
     popup.geometry(f"{popup_width}x{popup_height}+{x_cordinate}+{y_cordinate}")
     popup.configure(bg='#F0F0F0')
+    popup.wait_visibility()
     popup.grab_set()  #Focus on popup window until closed
 
     #Username label and entry field
@@ -194,6 +195,7 @@ def on_register_click():
 
     popup.geometry(f"{popup_width}x{popup_height}+{x_cordinate}+{y_cordinate}")
     popup.configure(bg='#F0F0F0')
+    popup.wait_visibility()
     popup.grab_set()  #Focus on popup window until closed
 
     #Username label and entry field
@@ -267,11 +269,11 @@ def profile_menu_table():
     user_profile = user.get_user_profile()
     # User information
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 300,
-                       text=f"Name: {user_profile['first_name']} {user_profile["last_name"]}", font=(my_font, 16, "bold"), anchor="w", fill="black")
+                       text=f"Name: {user_profile['first_name']} {user_profile['last_name']}", font=(my_font, 16, "bold"), anchor="w", fill="black")
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 250,
-                       text=f"Age: {user_profile["age"]}", font=(my_font, 16, "bold"), anchor="w", fill="black")
+                       text=f"Age: {user_profile['age']}", font=(my_font, 16, "bold"), anchor="w", fill="black")
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 200,
-                       text=f"Country: {user_profile["country"]}", font=(my_font, 16, "bold"), anchor="w", fill="black")
+                       text=f"Country: {user_profile['country']}", font=(my_font, 16, "bold"), anchor="w", fill="black")
 
     # Statistics and admin button
     create_rounded_button(canvas, (screen_width - 500) // 2 - 200, screen_height // 2, 900, 75, "My Statistics", on_statistics_click, (my_font, 15))
