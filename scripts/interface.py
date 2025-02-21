@@ -30,33 +30,33 @@ root.configure(background='#F0F0F0')
 
 def login_label():
     """Title on login page"""
-    label = Label(login_frame, text="Basic Swedish", font=(my_font, 50, "underline"), fg='black', bg=root.cget("bg"))
-    underlabel = Label(login_frame, text="Learn by playing", font=(my_font, 30), fg='black', bg=root.cget("bg"))
+    label = Label(login_frame, text="Basic Swedish", font=(my_font, 50, "underline"), bg='#F0F0F0', fg='black')
+    underlabel = Label(login_frame, text="Learn by playing", font=(my_font, 30), bg='#F0F0F0', fg='black')
     label.place(relx=0.5, rely=0.15, anchor="center")  
     underlabel.place(relx=0.5, rely=0.25, anchor="center")  
 
 def statistics_label():
     """Title on statistics page"""
-    label = Label(statistics_frame, text="Statistics", font=(my_font, 50), fg='black', bg=root.cget("bg"))
-    underlabel = Label(statistics_frame, text="Latest game session", font=(my_font, 30), fg='black', bg=root.cget("bg"))
+    label = Label(statistics_frame, text="Statistics", font=(my_font, 50), bg='#F0F0F0', fg='black')
+    underlabel = Label(statistics_frame, text="Latest game session", font=(my_font, 30), bg='#F0F0F0', fg='black')
     label.place(relx=0.5, rely=0.15, anchor="center")  
-    underlabel.place(relx=0.5, rely=0.25, anchor="center")
+    underlabel.place(relx=0.5, rely=0.21, anchor="center")
 
 def main_label():
     """Title on main page"""
-    label = Label(main_frame, text="Basic Swedish", font=(my_font, 50, "underline"), fg='black', bg=root.cget("bg"))
-    underlabel = Label(main_frame, text="Learn by playing", font=(my_font, 30), fg='black', bg=root.cget("bg"))
+    label = Label(main_frame, text="Basic Swedish", font=(my_font, 50, "underline"), bg='#F0F0F0', fg='black')
+    underlabel = Label(main_frame, text="Learn by playing", font=(my_font, 30), bg='#F0F0F0', fg='black')
     label.place(relx=0.5, rely=0.15, anchor="center")  
     underlabel.place(relx=0.5, rely=0.25, anchor="center")  
 
 def start_label():
     """Title on start page"""
-    label = Label(start_frame, text="Select a game", font=(my_font, 50), fg='black', bg=root.cget("bg"))
+    label = Label(start_frame, text="Select a game", font=(my_font, 50), bg='#F0F0F0', fg='black')
     label.place(relx=0.5, rely=0.25, anchor="center")  
 
 def profile_label():
     """Title on start page"""
-    label = Label(profile_frame, text="Current user", font=(my_font, 40), fg='black', bg=root.cget("bg"))
+    label = Label(profile_frame, text="Current user", font=(my_font, 40), bg='#F0F0F0', fg='black')
     label.place(relx=0.5, rely=0.10, anchor="center")  
 
 def round_rectangle(canvas, x1, y1, x2, y2, radius, **kwargs):
@@ -159,6 +159,7 @@ def on_login_click():
 
     popup.geometry(f"{popup_width}x{popup_height}+{x_cordinate}+{y_cordinate}")
     popup.configure(bg='#F0F0F0')
+    popup.wait_visibility()
     popup.grab_set()  #Focus on popup window until closed
 
     #Username label and entry field
@@ -194,6 +195,7 @@ def on_register_click():
 
     popup.geometry(f"{popup_width}x{popup_height}+{x_cordinate}+{y_cordinate}")
     popup.configure(bg='#F0F0F0')
+    popup.wait_visibility()
     popup.grab_set()  #Focus on popup window until closed
 
     #Input fields
@@ -287,11 +289,11 @@ def profile_menu_table():
     user_profile = user.get_user_profile()
     # User information
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 300,
-                       text=f"Name: {user_profile['first_name']} {user_profile["last_name"]}", font=(my_font, 16, "bold"), anchor="w", fill="black")
+                       text=f"Name: {user_profile['first_name']} {user_profile['last_name']}", font=(my_font, 16, "bold"), anchor="w", fill="black")
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 250,
-                       text=f"Age: {user_profile["age"]}", font=(my_font, 16, "bold"), anchor="w", fill="black")
+                       text=f"Age: {user_profile['age']}", font=(my_font, 16, "bold"), anchor="w", fill="black")
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 200,
-                       text=f"Country: {user_profile["country"]}", font=(my_font, 16, "bold"), anchor="w", fill="black")
+                       text=f"Country: {user_profile['country']}", font=(my_font, 16, "bold"), anchor="w", fill="black")
 
     # Statistics and admin button
     create_rounded_button(canvas, (screen_width - 500) // 2 - 200, screen_height // 2, 900, 75, "My Statistics", on_statistics_click, (my_font, 15))
@@ -364,7 +366,7 @@ height = int(image.height() * 0.5)
 image = image.subsample(int(image.width() / width), int(image.height() / height))
 
 # Add image to window - CHANGE WHEN TEACHER PROVIDES A BETTER ONE
-image_label = Label(root, image=image)
+image_label = Label(root, image=image, bg='#F0F0F0')
 image_label.place(relx=1, rely=1, anchor="se")
 
 root.mainloop()
