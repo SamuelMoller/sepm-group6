@@ -30,33 +30,33 @@ root.configure(background='#F0F0F0')
 
 def login_label():
     """Title on login page"""
-    label = Label(login_frame, text="Basic Swedish", font=(my_font, 50, "underline"), fg='black')
-    underlabel = Label(login_frame, text="Learn by playing", font=(my_font, 30), fg='black')
+    label = Label(login_frame, text="Basic Swedish", font=(my_font, 50, "underline"), bg='#F0F0F0', fg='black')
+    underlabel = Label(login_frame, text="Learn by playing", font=(my_font, 30), bg='#F0F0F0', fg='black')
     label.place(relx=0.5, rely=0.15, anchor="center")  
     underlabel.place(relx=0.5, rely=0.25, anchor="center")  
 
 def statistics_label():
     """Title on statistics page"""
-    label = Label(statistics_frame, text="Statistics", font=(my_font, 50), fg='black')
-    underlabel = Label(statistics_frame, text="Latest game session", font=(my_font, 30), fg='black')
+    label = Label(statistics_frame, text="Statistics", font=(my_font, 50), bg='#F0F0F0', fg='black')
+    underlabel = Label(statistics_frame, text="Latest game session", font=(my_font, 30), bg='#F0F0F0', fg='black')
     label.place(relx=0.5, rely=0.15, anchor="center")  
-    underlabel.place(relx=0.5, rely=0.25, anchor="center")
+    underlabel.place(relx=0.5, rely=0.21, anchor="center")
 
 def main_label():
     """Title on main page"""
-    label = Label(main_frame, text="Basic Swedish", font=(my_font, 50, "underline"), fg='black')
-    underlabel = Label(main_frame, text="Learn by playing", font=(my_font, 30), fg='black')
+    label = Label(main_frame, text="Basic Swedish", font=(my_font, 50, "underline"), bg='#F0F0F0', fg='black')
+    underlabel = Label(main_frame, text="Learn by playing", font=(my_font, 30), bg='#F0F0F0', fg='black')
     label.place(relx=0.5, rely=0.15, anchor="center")  
     underlabel.place(relx=0.5, rely=0.25, anchor="center")  
 
 def start_label():
     """Title on start page"""
-    label = Label(start_frame, text="Select a game", font=(my_font, 50), fg='black')
+    label = Label(start_frame, text="Select a game", font=(my_font, 50), bg='#F0F0F0', fg='black')
     label.place(relx=0.5, rely=0.25, anchor="center")  
 
 def profile_label():
     """Title on start page"""
-    label = Label(profile_frame, text="Current user", font=(my_font, 40), fg='black')
+    label = Label(profile_frame, text="Current user", font=(my_font, 40), bg='#F0F0F0', fg='black')
     label.place(relx=0.5, rely=0.10, anchor="center")  
 
 def round_rectangle(canvas, x1, y1, x2, y2, radius, **kwargs):
@@ -346,7 +346,7 @@ height = int(image.height() * 0.5)
 image = image.subsample(int(image.width() / width), int(image.height() / height))
 
 # Add image to window - CHANGE WHEN TEACHER PROVIDES A BETTER ONE
-image_label = Label(root, image=image)
+image_label = Label(root, image=image, bg='#F0F0F0')
 image_label.place(relx=1, rely=1, anchor="se")
 
 root.mainloop()
