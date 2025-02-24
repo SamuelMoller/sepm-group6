@@ -4,6 +4,7 @@ def get_user_profile():
     :return: A dictionary containing key-value pairs. Example: { "first_name": "Alex", "last_name": "Smith", "age": 25 }
     """
     return {
+        "username": "alexsmith",
         "first_name": "Alex",
         "last_name": "Smith",
         "age": 25,
