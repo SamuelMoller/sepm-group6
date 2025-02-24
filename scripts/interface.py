@@ -229,8 +229,23 @@ def on_register_click():
     #Register button inside the popup
     def register_user():
         # IMPLEMENT IN THE INTEGRATION
-        pass
+        username = username_entry.get()
+        first_name = name_entry.get()
+        last_name = surname_entry.get()
+        country = country_entry.get()
+        age = age_entry.get()
 
+        # Creating a profile for the new user
+        user_profile_data = {
+            "username": username,
+            "first_name": first_name,
+            "last_name": last_name,
+            "country": country,
+            "age": int(age) 
+        }
+
+        user.add_user_profile(user_profile_data)
+        popup.destroy()
     login_btn = Button(popup, text="Register", font=(my_font, 12), command=register_user, bg="#800000", fg="white")
     login_btn.place(relx=0.5, rely=0.85, anchor="center")
 
