@@ -19,6 +19,7 @@ font_scale = float(1)
 FONT_SMALL = int(12)
 FONT_NORMAL = int(24)
 FONT_LARGE = int(36)
+FONT_EXTRA_LARGE = int(50)
 
 # Main window
 root = Tk()
@@ -36,37 +37,37 @@ root.configure(background='white')
 
 def login_label():
     """Title on login page"""
-    label = Label(login_frame[0], text="Basic Swedish", font=(my_font, 50, "underline"), fg='black')
-    underlabel = Label(login_frame[0], text="Learn by playing", font=(my_font, 30), fg='black')
+    label = Label(login_frame[0], text="Basic Swedish", font=(my_font, FONT_EXTRA_LARGE, "underline"), fg='black')
+    underlabel = Label(login_frame[0], text="Learn by playing", font=(my_font, FONT_LARGE), fg='black')
     label.place(relx=0.5, rely=0.15, anchor="center")
     underlabel.place(relx=0.5, rely=0.25, anchor="center")
 
 
 def statistics_label():
     """Title on statistics page"""
-    label = Label(statistics_frame[0], text="Statistics", font=(my_font, 50), fg='black')
-    underlabel = Label(statistics_frame[0], text="Latest game session", font=(my_font, 30), fg='black')
+    label = Label(statistics_frame[0], text="Statistics", font=(my_font, FONT_EXTRA_LARGE), fg='black')
+    underlabel = Label(statistics_frame[0], text="Latest game session", font=(my_font, FONT_LARGE), fg='black')
     label.place(relx=0.5, rely=0.15, anchor="center")
     underlabel.place(relx=0.5, rely=0.25, anchor="center")
 
 
 def main_label():
     """Title on main page"""
-    label = Label(main_frame[0], text="Basic Swedish", font=(my_font, 50, "underline"), fg='black')
-    underlabel = Label(main_frame[0], text="Learn by playing", font=(my_font, 30), fg='black')
+    label = Label(main_frame[0], text="Basic Swedish", font=(my_font, FONT_EXTRA_LARGE, "underline"), fg='black')
+    underlabel = Label(main_frame[0], text="Learn by playing", font=(my_font, FONT_LARGE), fg='black')
     label.place(relx=0.5, rely=0.15, anchor="center")
     underlabel.place(relx=0.5, rely=0.25, anchor="center")
 
 
 def start_label():
     """Title on start page"""
-    label = Label(start_frame[0], text="Select a game", font=(my_font, 50), fg='black')
+    label = Label(start_frame[0], text="Select a game", font=(my_font, FONT_EXTRA_LARGE), fg='black')
     label.place(relx=0.5, rely=0.25, anchor="center")
 
 
 def profile_label():
     """Title on start page"""
-    label = Label(profile_frame[0], text="Current user", font=(my_font, 40), fg='black')
+    label = Label(profile_frame[0], text="Current user", font=(my_font, FONT_LARGE), fg='black')
     label.place(relx=0.5, rely=0.10, anchor="center")
 
 
@@ -110,6 +111,7 @@ def scale_font_size(val: str) -> None:
 
         old_font_scale = font_scale
         font_scale = mod
+        print(f"Old scale: {old_font_scale}\nNew scale: {font_scale}")
         for _canvas in [main_frame[1], start_frame[1],
                         profile_frame[1], login_frame[1],
                         statistics_frame[1], accessibility_frame[1]]:
@@ -118,11 +120,11 @@ def scale_font_size(val: str) -> None:
                     font = _canvas.itemcget(item, 'font').split()
                     font_size = int(((int(font[1]) / old_font_scale) * font_scale))
 
-                    if len(font) == 3:
+                    if len(font) == 3:  # Bold fonts
                         _canvas.itemconfig(item, font=(font[0], font_size, font[2]))
-                    elif len(font) == 2:
+                    elif len(font) == 2:    # Normal fonts
                         _canvas.itemconfig(item, font=(font[0], font_size))
-                    else:
+                    else:   # Error handling
                         _canvas.itemconfig(item, font=(font[0], font_size))
 
     match val:
@@ -284,13 +286,13 @@ def profile_menu_table() -> tuple[Frame, Canvas]:
 
     # User information
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 300,
-                       text="Name: Your name", font=(my_font, 16, "bold"), anchor="w", fill="black")
+                       text="Name: Your name", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill="black")
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 250,
-                       text="Age: 25", font=(my_font, 16, "bold"), anchor="w", fill="black")
+                       text="Age: 25", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill="black")
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 200,
-                       text="Country: Sweden", font=(my_font, 16, "bold"), anchor="w", fill="black")
+                       text="Country: Sweden", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill="black")
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 140,
-                       text="Type of User: Exchange Student", font=(my_font, 16, "bold"), anchor="w", fill="black")
+                       text="Type of User: Exchange Student", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill="black")
 
     # Statistics and admin button
     create_rounded_button(canvas, (screen_width - 500) // 2 - 200, screen_height // 2, 900, 75, "My Statistics", on_statistics_click, (my_font, 15))
@@ -311,27 +313,27 @@ def statistics_menu_table() -> tuple[Frame, Canvas]:
 
     # Statistics for first game
     round_rectangle(canvas, (screen_width - 1000) // 2, (screen_height - 500) // 2, (screen_width - 1000) // 2 + 300, (screen_height - 500) // 2 + 250, 20, fill="white", outline="darkred", width=4)
-    canvas.create_text((screen_width - 1000) // 2 + 150, (screen_height - 250) // 2 - 50, text="Time played:", font=(my_font, 16, "bold"), anchor="center", fill="black")
-    canvas.create_text((screen_width - 1000) // 2 + 150, (screen_height - 250) // 2 + 50, text="Correct answers:", font=(my_font, 16, "bold"), anchor="center", fill="black")
-    canvas.create_text((screen_width - 1000) // 2 + 150, (screen_height - 250) // 2 + 150, text="Clock game", font=(my_font, 14, "bold"), anchor="center", fill="black")
+    canvas.create_text((screen_width - 1000) // 2 + 150, (screen_height - 250) // 2 - 50, text="Time played:", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill="black")
+    canvas.create_text((screen_width - 1000) // 2 + 150, (screen_height - 250) // 2 + 50, text="Correct answers:", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill="black")
+    canvas.create_text((screen_width - 1000) // 2 + 150, (screen_height - 250) // 2 + 150, text="Clock game", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill="black")
 
     # Statistics for second game
     round_rectangle(canvas, (screen_width - 1000) // 2 + 350, (screen_height - 500) // 2, (screen_width - 1000) // 2 + 650, (screen_height - 500) // 2 + 250, 20, fill="white", outline="darkred", width=4)
-    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 250) // 2 - 50, text="Time played:", font=(my_font, 16, "bold"), anchor="center", fill="black")
-    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 250) // 2 + 50, text="Matched items:", font=(my_font, 16, "bold"), anchor="center", fill="black")
-    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 250) // 2 + 150, text="Furniture game", font=(my_font, 14, "bold"), anchor="center", fill="black")
+    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 250) // 2 - 50, text="Time played:", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill="black")
+    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 250) // 2 + 50, text="Matched items:", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill="black")
+    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 250) // 2 + 150, text="Furniture game", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill="black")
 
     # Statistics for third game
     round_rectangle(canvas, (screen_width - 1000) // 2 + 700, (screen_height - 500) // 2, (screen_width - 1000) // 2 + 1000, (screen_height - 500) // 2 + 250, 20, fill="white", outline="darkred", width=4)
-    canvas.create_text((screen_width - 1000) // 2 + 850, (screen_height - 250) // 2 - 50, text="Time played:", font=(my_font, 16, "bold"), anchor="center", fill="black")
-    canvas.create_text((screen_width - 1000) // 2 + 850, (screen_height - 250) // 2 + 50, text="Puzzle solved:", font=(my_font, 16, "bold"), anchor="center", fill="black")
-    canvas.create_text((screen_width - 1000) // 2 + 850, (screen_height - 250) // 2 + 150, text="Puzzle game", font=(my_font, 14, "bold"), anchor="center", fill="black")
+    canvas.create_text((screen_width - 1000) // 2 + 850, (screen_height - 250) // 2 - 50, text="Time played:", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill="black")
+    canvas.create_text((screen_width - 1000) // 2 + 850, (screen_height - 250) // 2 + 50, text="Puzzle solved:", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill="black")
+    canvas.create_text((screen_width - 1000) // 2 + 850, (screen_height - 250) // 2 + 150, text="Puzzle game", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill="black")
 
     # General statistics
     round_rectangle(canvas, (screen_width - 1000) // 2, (screen_height - 500) // 2 + 370, (screen_width - 1000) // 2 + 1000, (screen_height - 500) // 2 + 620, 20, fill="white", outline="darkred", width=4)
-    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 500) // 2 + 420, text="Lifetime statistics:", font=(my_font, 16, "bold"), anchor="center", fill="black")
-    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 500) // 2 + 470, text="Total time spent learning:", font=(my_font, 16, "bold"), anchor="center", fill="black")
-    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 500) // 2 + 520, text="Words learned:", font=(my_font, 16, "bold"), anchor="center", fill="black")
+    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 500) // 2 + 420, text="Lifetime statistics:", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill="black")
+    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 500) // 2 + 470, text="Total time spent learning:", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill="black")
+    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 500) // 2 + 520, text="Words learned:", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill="black")
 
     # Go back button
     create_back_button(canvas, 15, 15)
