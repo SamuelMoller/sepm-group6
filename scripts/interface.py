@@ -15,7 +15,10 @@ images_dir = normpath(join(root, '..', 'images'))
 
 # Font
 my_font = pyglet.font.add_file(join(fonts_dir, 'Work_Sans', 'WorkSans-Italic-VariableFont_wght.ttf'))
-font_size = int(15)
+font_scale = float(1)
+FONT_SMALL = int(12)
+FONT_NORMAL = int(24)
+FONT_LARGE = int(36)
 
 # Main window
 root = Tk()
@@ -101,19 +104,37 @@ def create_rounded_button(canvas, x, y, width, height, text, command, font):
     return button, text_item
 
 
-def update_font_size(val: int):
-    for _canvas in [main_frame[1], start_frame[1],
-                    profile_frame[1], login_frame[1],
-                    statistics_frame[1], accessibility_frame[1]]:
-        for item in _canvas.find_all():
-            if _canvas.type(item) == 'text':
-                obj = _canvas.itemcget(item, 'font').split()
-                if len(obj) == 3:
-                    _canvas.itemconfig(item, font=(obj[0], val, obj[2]))
-                elif len(obj) == 2:
-                    _canvas.itemconfig(item, font=(obj[0], val))
-                else:
-                    _canvas.itemconfig(item, font=(obj[0], val))
+def scale_font_size(val: str) -> None:
+    def _set(mod: float):
+        global font_scale
+
+        old_font_scale = font_scale
+        font_scale = mod
+        for _canvas in [main_frame[1], start_frame[1],
+                        profile_frame[1], login_frame[1],
+                        statistics_frame[1], accessibility_frame[1]]:
+            for item in _canvas.find_all():
+                if _canvas.type(item) == 'text':
+                    font = _canvas.itemcget(item, 'font').split()
+                    font_size = int(((int(font[1]) / old_font_scale) * font_scale))
+
+                    if len(font) == 3:
+                        _canvas.itemconfig(item, font=(font[0], font_size, font[2]))
+                    elif len(font) == 2:
+                        _canvas.itemconfig(item, font=(font[0], font_size))
+                    else:
+                        _canvas.itemconfig(item, font=(font[0], font_size))
+
+    match val:
+        case "50%": _set(0.5)
+        case "75%": _set(0.75)
+        case "100%": _set(1.0)
+        case "125%": _set(1.25)
+        case "150%": _set(1.5)
+
+
+def set_theme(val: str) -> None:
+    pass
 
 
 def create_back_button(master: Canvas, x: int, y: int):
@@ -333,35 +354,33 @@ def accessibility_menu_table() -> tuple[Frame, Canvas]:
               'y': screen_height // 2}
 
     # Change language
-    # - List of languages
-    # - Button functionality
     round_rectangle(canvas,
                     center['x'] - 700, center['y'] - 350,
                     center['x'] + 700, center['y'] - 50,
                     20, fill="white", outline="darkred", width=4)
     canvas.create_text(center['x'], center['y'] - 300,
-                       text="Change Language", font=(my_font, int(font_size * 1.6), "bold"),
+                       text="Change Language", font=(my_font, FONT_LARGE, "bold"),
                        anchor="center", fill="black")
     create_rounded_button(canvas,
                           center['x'] - 350, center['y'] - 250,
                           width=330, height=75,
                           text="Swedish", command="",
-                          font=(my_font, font_size))
+                          font=(my_font, FONT_NORMAL))
     create_rounded_button(canvas,
                           center['x'] + 20, center['y'] - 250,
                           width=330, height=75,
                           text="Danish", command="",
-                          font=(my_font, font_size))
+                          font=(my_font, FONT_NORMAL))
     create_rounded_button(canvas,
                           center['x'] - 350, center['y'] - 150,
                           width=330, height=75,
                           text="English", command="",
-                          font=(my_font, font_size))
+                          font=(my_font, FONT_NORMAL))
     create_rounded_button(canvas,
                           center['x'] + 20, center['y'] - 150,
                           width=330, height=75,
                           text="Norwegian", command="",
-                          font=(my_font, font_size))
+                          font=(my_font, FONT_NORMAL))
 
     # Resize font
     round_rectangle(canvas,
@@ -369,44 +388,38 @@ def accessibility_menu_table() -> tuple[Frame, Canvas]:
                     center['x'] - 50, center['y'] + 350,
                     20, fill="white", outline="darkred", width=4)
     canvas.create_text(center['x'] - 380, center['y'] + 100,
-                       text="Resize Font", font=(my_font, int(font_size * 1.6), "bold"),
+                       text="Resize Font", font=(my_font, FONT_LARGE, "bold"),
                        anchor="center", fill="black")
-    font_size_slider = Scale(canvas,
-                             from_=12, to=42,
-                             orient=HORIZONTAL,
-                             width=35,
-                             length=450, label="",
-                             font=(my_font, 24, "bold"),
-                             background='white',
-                             highlightbackground='white',
-                             troughcolor='#F0F0F0',
-                             command=lambda val: update_font_size(val))
-    font_size_slider.set(font_size)
-    font_size_slider.place(x=center['x'] - 600,
-                           y=center['y'] + 150)
 
-    # Contrast
-    # - Slider
+    font_size_options = ["50%", "75%", "100%", "125%", "150%"]
+    font_size_setting = StringVar(root, "100%")
+    font_size_dropdown = OptionMenu(canvas,
+                                    font_size_setting,
+                                    *font_size_options,
+                                    command=lambda val: scale_font_size(val))
+    font_size_dropdown.config(width=18, height=1, font=(my_font, FONT_NORMAL, "bold"))
+    font_size_dropdown.place(x=center['x'] - 600,
+                             y=center['y'] + 200)
+
+    # Theme
     round_rectangle(canvas,
                     center['x'] + 50, center['y'] + 50,
                     center['x'] + 700, center['y'] + 350,
                     20, fill="white", outline="darkred", width=4)
     canvas.create_text(center['x'] + 380, center['y'] + 100,
-                       text="Contrast", font=(my_font, int(font_size * 1.6), "bold"),
+                       text="Theme", font=(my_font, FONT_LARGE, "bold"),
                        anchor="center", fill="black")
-    contrast_slider = Scale(canvas,
-                            from_=0, to=100,
-                            orient=HORIZONTAL,
-                            width=35,
-                            length=450, label="",
-                            font=(my_font, int(font_size * 1.6), "bold"),
-                            background='white',
-                            highlightbackground='white',
-                            troughcolor='#F0F0F0',
-                            command=lambda val: print('contrast:', val))
-    contrast_slider.set(50)
-    contrast_slider.place(x=center['x'] + 150,
-                          y=center['y'] + 150)
+
+    theme_options = ["Light", "Dark", "High Contrast"]
+    theme_setting = StringVar(root, "Light")
+    theme_dropdown = OptionMenu(canvas,
+                                theme_setting,
+                                *theme_options,
+                                command=lambda val: set_theme(val))
+    theme_dropdown.config(width=18, height=1, font=(my_font, FONT_NORMAL, "bold"))
+
+    theme_dropdown.place(x=center['x'] + 150,
+                         y=center['y'] + 200)
 
     # Backwards navigation
     create_back_button(canvas, 15, 15)
