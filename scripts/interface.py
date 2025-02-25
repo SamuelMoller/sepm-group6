@@ -21,6 +21,8 @@ FONT_NORMAL = int(24)
 FONT_LARGE = int(36)
 FONT_EXTRA_LARGE = int(50)
 
+# 
+
 # Main window
 root = Tk()
 root.title("Basic Swedish")
@@ -223,8 +225,8 @@ def log_in_session() -> tuple[Frame, Canvas]:
     canvas.place(relx=0.5, rely=0.5, anchor="center")
 
     # Round buttons with exact positions
-    create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 - 200, 600, 200, "Login to session", on_login_click, (my_font, 15))
-    create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 + 50, 600, 200, "Create a new user", on_register_click, (my_font, 15))
+    create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 - 200, 600, 200, "Login to session", on_login_click, (my_font, FONT_NORMAL))
+    create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 + 50, 600, 200, "Create a new user", on_register_click, (my_font, FONT_NORMAL))
 
     return (login_frame, canvas)
 
@@ -237,12 +239,12 @@ def main_menu_table() -> tuple[Frame, Canvas]:
     canvas.place(relx=0.5, rely=0.5, anchor="center")
 
     # Round buttons with exact positions
-    create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 - 200, 600, 75, "Start", on_start_click, (my_font, 15))
-    create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 - 100, 600, 75, "User Profile", on_user_profile_click, (my_font, 15))
-    create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 + 0, 600, 75, "Statistics", on_statistics_click, (my_font, 15))
-    create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 + 100, 600, 75, "Accessibility", on_accessibility_click, (my_font, 15))
+    create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 - 200, 600, 75, "Start", on_start_click, (my_font, FONT_NORMAL))
+    create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 - 100, 600, 75, "User Profile", on_user_profile_click, (my_font, FONT_NORMAL))
+    create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 + 0, 600, 75, "Statistics", on_statistics_click, (my_font, FONT_NORMAL))
+    create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 + 100, 600, 75, "Accessibility", on_accessibility_click, (my_font, FONT_NORMAL))
 
-    create_rounded_button(canvas, screen_width - 160, screen_height - (screen_height - 60), 100, 50, "Log out", on_log_out_click, (my_font, 10))
+    create_rounded_button(canvas, screen_width - 160, screen_height - (screen_height - 60), 100, 50, "Log out", on_log_out_click, (my_font, FONT_SMALL))
 
     return (menu_frame, canvas)
 
@@ -255,9 +257,9 @@ def start_menu_table() -> tuple[Frame, Canvas]:
     canvas.pack(expand=True, ipadx=50, ipady=50)
 
     # Start menu buttons
-    create_rounded_button(canvas, (screen_width - 250)//2 - 300, screen_height//2 - 200, 250, 250, "Clock Game", on_clock_game_click, (my_font, 15))
-    create_rounded_button(canvas, (screen_width - 250)//2, screen_height//2 - 200, 250, 250, "Placeholder", on_placeholder_click, (my_font, 15))
-    create_rounded_button(canvas, (screen_width - 250)//2 + 300, screen_height//2 - 200, 250, 250, "Match the words", on_match_the_words_click, (my_font, 15))
+    create_rounded_button(canvas, (screen_width - 250)//2 - 300, screen_height//2 - 200, 250, 250, "Clock Game", on_clock_game_click, (my_font, FONT_NORMAL))
+    create_rounded_button(canvas, (screen_width - 250)//2, screen_height//2 - 200, 250, 250, "Placeholder", on_placeholder_click, (my_font, FONT_NORMAL))
+    create_rounded_button(canvas, (screen_width - 250)//2 + 300, screen_height//2 - 200, 250, 250, "Match the words", on_match_the_words_click, (my_font, FONT_NORMAL))
 
     # Go back button
     create_back_button(canvas, 15, 15)
@@ -295,8 +297,8 @@ def profile_menu_table() -> tuple[Frame, Canvas]:
                        text="Type of User: Exchange Student", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill="black")
 
     # Statistics and admin button
-    create_rounded_button(canvas, (screen_width - 500) // 2 - 200, screen_height // 2, 900, 75, "My Statistics", on_statistics_click, (my_font, 15))
-    create_rounded_button(canvas, (screen_width - 500) // 2 - 200, screen_height // 2 + 100, 900, 75, "Admin Controls", on_admin_control_click, (my_font, 15))
+    create_rounded_button(canvas, (screen_width - 500) // 2 - 200, screen_height // 2, 900, 75, "My Statistics", on_statistics_click, (my_font, FONT_NORMAL))
+    create_rounded_button(canvas, (screen_width - 500) // 2 - 200, screen_height // 2 + 100, 900, 75, "Admin Controls", on_admin_control_click, (my_font, FONT_NORMAL))
 
     # Go back button
     create_back_button(canvas, 15, 15)
