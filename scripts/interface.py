@@ -21,7 +21,24 @@ FONT_NORMAL = int(24)
 FONT_LARGE = int(36)
 FONT_EXTRA_LARGE = int(50)
 
-# 
+# Themes
+theme = "Light"
+THEMES = {
+    "Light": {
+        "bg": "#F0F0F0",
+        "text": "#000000",
+        "text-h": "#FFFFFF",
+        "button": "#FFFFFF",
+        "button-h": "#800000"
+    },
+    "Dark": {
+        "bg": "#1F1F1F",
+        "text": "#FFFFFF",
+        "text-h": "#000000",
+        "button": "#1F1F1F",
+        "button-h": "#800000"
+    }
+}
 
 # Main window
 root = Tk()
@@ -34,7 +51,7 @@ screen_height = root.winfo_screenheight()
 
 # Window size
 root.geometry(f"{screen_width}x{screen_height}")
-root.configure(background='white')
+root.configure(background=THEMES[theme]["bg"])
 
 
 def login_label():
@@ -84,16 +101,16 @@ def round_rectangle(canvas, x1, y1, x2, y2, radius, **kwargs):
 
 def create_rounded_button(canvas, x, y, width, height, text, command, font):
     """Create round button based on the round_rectangle() feature"""
-    button = round_rectangle(canvas, x, y, x + width, y + height, radius=40, fill="white", outline="#800000", width=6)
-    text_item = canvas.create_text((x + x+width) // 2, (y + y+height) // 2, text=text, font=font, fill="black")
+    button = round_rectangle(canvas, x, y, x + width, y + height, radius=40, fill=THEMES[theme]["button"], outline="#800000", width=6)
+    text_item = canvas.create_text((x + x+width) // 2, (y + y+height) // 2, text=text, font=font, fill=THEMES[theme]["text"])
 
     def on_hover(mouse):
-        canvas.itemconfig(button, fill="#800000")
-        canvas.itemconfig(text_item, fill="white")
+        canvas.itemconfig(button, fill=THEMES[theme]["button-h"])
+        canvas.itemconfig(text_item, fill=THEMES[theme]["text-h"])
 
     def off_hover(mouse):
-        canvas.itemconfig(button, fill="white")
-        canvas.itemconfig(text_item, fill="black")
+        canvas.itemconfig(button, fill=THEMES[theme]["button"])
+        canvas.itemconfig(text_item, fill=THEMES[theme]["text"])
 
     canvas.tag_bind(button, "<Enter>", on_hover)
     canvas.tag_bind(text_item, "<Enter>", on_hover)
@@ -138,7 +155,20 @@ def scale_font_size(val: str) -> None:
 
 
 def set_theme(val: str) -> None:
-    pass
+    global theme
+    theme = val
+
+    root.configure(background=THEMES[theme]["bg"])
+    for _canvas in [main_frame[1], start_frame[1],
+                    profile_frame[1], login_frame[1],
+                    statistics_frame[1], accessibility_frame[1]]:
+        _canvas.config(bg=THEMES[theme]['bg'])
+        for item in _canvas.find_all():
+            match _canvas.type(item):
+                case 'text':
+                    _canvas.itemconfig(item, fill=THEMES[theme]['text'])
+                case 'polygon':
+                    _canvas.itemconfig(item, fill=THEMES[theme]['button'])
 
 
 def create_back_button(master: Canvas, x: int, y: int):
@@ -414,7 +444,7 @@ def accessibility_menu_table() -> tuple[Frame, Canvas]:
                        text="Theme", font=(my_font, FONT_LARGE, "bold"),
                        anchor="center", fill="black")
 
-    theme_options = ["Light", "Dark", "High Contrast"]
+    theme_options = ["Light", "Dark"]
     theme_setting = StringVar(root, "Light")
     theme_dropdown = OptionMenu(canvas,
                                 theme_setting,
