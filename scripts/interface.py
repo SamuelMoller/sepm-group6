@@ -9,9 +9,9 @@ syspath.append(normpath(join(dirname(__file__), '../')))
 
 
 # File paths
-root = dirname(__file__)
-fonts_dir = normpath(join(root, '..', 'fonts'))
-images_dir = normpath(join(root, '..', 'images'))
+root_dir = dirname(__file__)
+fonts_dir = normpath(join(root_dir, '..', 'fonts'))
+images_dir = normpath(join(root_dir, '..', 'images'))
 
 # Font
 my_font = pyglet.font.add_file(join(fonts_dir, 'Work_Sans', 'WorkSans-Italic-VariableFont_wght.ttf'))
@@ -31,6 +31,7 @@ THEMES = {
         "button": "#FFFFFF",
         "button-h": "#800000"
     },
+
     "Dark": {
         "bg": "#1F1F1F",
         "text": "#FFFFFF",
@@ -159,6 +160,18 @@ def set_theme(val: str) -> None:
     theme = val
 
     root.configure(background=THEMES[theme]["bg"])
+
+    # Change UU logo.
+    # Messy because it's not part of any canvas.
+    for e in [x for x in root.children.values() if isinstance(x, Label)]:
+        e.destroy()
+    uu_img = PhotoImage(
+        file=join(images_dir, theme.lower(), 'uu_logo.png')
+    ).subsample(4)  # 1/4th of original image size.
+    uu_img_label = Label(root, image=uu_img, border=0)
+    uu_img_label.place(relx=1, rely=1, anchor="se")
+    uu_img.image = uu_img
+
     for _canvas in [main_frame[1], start_frame[1],
                     profile_frame[1], login_frame[1],
                     statistics_frame[1], accessibility_frame[1]]:
@@ -169,16 +182,25 @@ def set_theme(val: str) -> None:
                     _canvas.itemconfig(item, fill=THEMES[theme]['text'])
                 case 'polygon':
                     _canvas.itemconfig(item, fill=THEMES[theme]['button'])
+                case 'image':
+                    match _canvas.itemcget(item, 'tags'):
+                        case 'back':
+                            back_img = PhotoImage(file=join(images_dir, theme.lower(), 'back.png')).subsample(8)
+                            _canvas.itemconfig(item, image=back_img)
+                            back_img.image = back_img
+                        case 'profile':
+                            profile_img = PhotoImage(file=join(images_dir, theme.lower(), 'profile.png')).subsample(2)
+                            _canvas.itemconfig(item, image=profile_img)
+                            profile_img.image = profile_img
 
 
 def create_back_button(master: Canvas, x: int, y: int):
     back_image = PhotoImage(
-        file=join(images_dir, 'back.png')
-    ).subsample(3)  # 1/3rd of original image size.
-    back_button = Label(master, image=back_image, border=0)
-    back_button.image = back_image  # Keep a reference to avoid garbage collection
-    back_button.place(x=x, y=y, anchor="nw")
-    back_button.bind("<Button-1>", lambda event: go_main_page_click())
+        file=join(images_dir, theme.lower(), 'back.png')
+    ).subsample(8)  # 1/8th of original image size.
+    back_button = master.create_image(x, y, image=back_image, anchor="nw", tags="back")
+    master.tag_bind(back_button, "<Button-1>", lambda event: go_main_page_click())
+    back_image.image = back_image
 
 
 # SWITCH BETWEEN PAGES
@@ -308,13 +330,10 @@ def profile_menu_table() -> tuple[Frame, Canvas]:
     round_rectangle(canvas, (screen_width - 500) // 2 - 200, (screen_height // 2) - 350, (screen_width - 500) // 2 + 700, (screen_height // 2) - 50, 20, fill="white", outline="darkred", width=4)
 
     # Add user icon - this can be replaced by the actual user image later
-    user_icon_img = PhotoImage(file=join(images_dir, 'profile_logo.png'))
+    user_icon_img = PhotoImage(file=join(images_dir, theme.lower(), 'profile.png')).subsample(2)
     # Resize image
-    width = int(user_icon_img.width() * 0.4)
-    height = int(user_icon_img.height() * 0.4)
-    user_icon_img = user_icon_img.subsample(int(user_icon_img.width() / width), int(user_icon_img.height() / height))
     profile_frame.user_icon_img = user_icon_img
-    canvas.create_image((screen_width - 600) // 2 - 25, (screen_height // 2) - 205, image=user_icon_img, anchor="center")
+    canvas.create_image((screen_width - 600) // 2 - 25, (screen_height // 2) - 205, image=user_icon_img, anchor="center", tags="profile")
 
     # User information
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 300,
@@ -489,18 +508,13 @@ statistics_label()
 
 # Show the main menu as default
 login_frame[0].pack(fill="both", expand=True)
-# main_frame[0].pack(fill="both", expand=True)
 
 # Uppsala university logo
-image = PhotoImage(file=join(images_dir, 'uupsala-400-height-1.png'))
-
-# Scale image
-width = int(image.width() * 0.5)
-height = int(image.height() * 0.5)
-image = image.subsample(int(image.width() / width), int(image.height() / height))
-
-# Add image to window - CHANGE WHEN TEACHER PROVIDES A BETTER ONE
-image_label = Label(root, image=image)
-image_label.place(relx=1, rely=1, anchor="se")
+uu_img = PhotoImage(
+    file=join(images_dir, theme.lower(), 'uu_logo.png')
+).subsample(4)  # 1/4th of original image size.
+uu_img_label = Label(root, image=uu_img, border=0)
+uu_img_label.place(relx=1, rely=1, anchor="se")
+uu_img.image = uu_img
 
 root.mainloop()
