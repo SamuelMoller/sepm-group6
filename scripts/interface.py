@@ -157,6 +157,8 @@ def scale_font_size(val: str) -> None:
 
 def set_theme(val: str) -> None:
     global theme
+    if theme == val:
+        return
     theme = val
 
     root.configure(background=THEMES[theme]["bg"])
@@ -165,12 +167,12 @@ def set_theme(val: str) -> None:
     # Messy because it's not part of any canvas.
     for e in [x for x in root.children.values() if isinstance(x, Label)]:
         e.destroy()
-    uu_img = PhotoImage(
+    root.uu_img = PhotoImage(
         file=join(images_dir, theme.lower(), 'uu_logo.png')
     ).subsample(4)  # 1/4th of original image size.
-    uu_img_label = Label(root, image=uu_img, border=0)
-    uu_img_label.place(relx=1, rely=1, anchor="se")
-    uu_img.image = uu_img
+    root.uu_img_label = Label(root, image=root.uu_img, border=0)
+    root.uu_img_label.place(relx=1, rely=1, anchor="se")
+    root.uu_img.image = root.uu_img
 
     for _canvas in [main_frame[1], start_frame[1],
                     profile_frame[1], login_frame[1],
@@ -185,22 +187,24 @@ def set_theme(val: str) -> None:
                 case 'image':
                     match _canvas.itemcget(item, 'tags'):
                         case 'back':
-                            back_img = PhotoImage(file=join(images_dir, theme.lower(), 'back.png')).subsample(8)
-                            _canvas.itemconfig(item, image=back_img)
-                            back_img.image = back_img
+                            _canvas.back_image = PhotoImage(file=join(images_dir, theme.lower(), 'back.png')
+                                                            ).subsample(8)
+                            _canvas.itemconfig(item, image=_canvas.back_image)
+                            _canvas.back_image.image = _canvas.back_image
                         case 'profile':
-                            profile_img = PhotoImage(file=join(images_dir, theme.lower(), 'profile.png')).subsample(2)
-                            _canvas.itemconfig(item, image=profile_img)
-                            profile_img.image = profile_img
+                            _canvas.profile_img = PhotoImage(file=join(images_dir, theme.lower(), 'profile.png')
+                                                             ).subsample(2)
+                            _canvas.itemconfig(item, image=_canvas.profile_img)
+                            _canvas.profile_img.image = _canvas.profile_img
 
 
 def create_back_button(master: Canvas, x: int, y: int):
-    back_image = PhotoImage(
+    master.back_image = PhotoImage(
         file=join(images_dir, theme.lower(), 'back.png')
     ).subsample(8)  # 1/8th of original image size.
-    back_button = master.create_image(x, y, image=back_image, anchor="nw", tags="back")
-    master.tag_bind(back_button, "<Button-1>", lambda event: go_main_page_click())
-    back_image.image = back_image
+    master.back_button = master.create_image(x, y, image=master.back_image, anchor="nw", tags="back")
+    master.tag_bind(master.back_button, "<Button-1>", lambda event: go_main_page_click())
+    master.back_image.image = master.back_image
 
 
 # SWITCH BETWEEN PAGES
@@ -333,7 +337,7 @@ def profile_menu_table() -> tuple[Frame, Canvas]:
     user_icon_img = PhotoImage(file=join(images_dir, theme.lower(), 'profile.png')).subsample(2)
     # Resize image
     profile_frame.user_icon_img = user_icon_img
-    canvas.create_image((screen_width - 600) // 2 - 25, (screen_height // 2) - 205, image=user_icon_img, anchor="center", tags="profile")
+    canvas.profile_img = canvas.create_image((screen_width - 600) // 2 - 25, (screen_height // 2) - 205, image=user_icon_img, anchor="center", tags="profile")
 
     # User information
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 300,
@@ -510,11 +514,11 @@ statistics_label()
 login_frame[0].pack(fill="both", expand=True)
 
 # Uppsala university logo
-uu_img = PhotoImage(
+root.uu_img = PhotoImage(
     file=join(images_dir, theme.lower(), 'uu_logo.png')
 ).subsample(4)  # 1/4th of original image size.
-uu_img_label = Label(root, image=uu_img, border=0)
-uu_img_label.place(relx=1, rely=1, anchor="se")
-uu_img.image = uu_img
+root.uu_img_label = Label(root, image=root.uu_img, border=0)
+root.uu_img_label.place(relx=1, rely=1, anchor="se")
+root.uu_img.image = root.uu_img
 
 root.mainloop()
