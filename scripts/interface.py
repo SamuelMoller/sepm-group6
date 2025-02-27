@@ -157,8 +157,7 @@ def scale_font_size(val: str) -> None:
 
 def set_theme(val: str) -> None:
     global theme
-    if theme == val:
-        return
+    if theme == val: return
     theme = val
 
     root.configure(background=THEMES[theme]["bg"])
@@ -184,23 +183,11 @@ def set_theme(val: str) -> None:
                     _canvas.itemconfig(item, fill=THEMES[theme]['text'])
                 case 'polygon':
                     _canvas.itemconfig(item, fill=THEMES[theme]['button'])
-                case 'image':
-                    match _canvas.itemcget(item, 'tags'):
-                        case 'back':
-                            _canvas.back_image = PhotoImage(file=join(images_dir, theme.lower(), 'back.png')
-                                                            ).subsample(8)
-                            _canvas.itemconfig(item, image=_canvas.back_image)
-                            _canvas.back_image.image = _canvas.back_image
-                        case 'profile':
-                            _canvas.profile_img = PhotoImage(file=join(images_dir, theme.lower(), 'profile.png')
-                                                             ).subsample(2)
-                            _canvas.itemconfig(item, image=_canvas.profile_img)
-                            _canvas.profile_img.image = _canvas.profile_img
 
 
 def create_back_button(master: Canvas, x: int, y: int):
     master.back_image = PhotoImage(
-        file=join(images_dir, theme.lower(), 'back.png')
+        file=join(images_dir, 'back.png')
     ).subsample(8)  # 1/8th of original image size.
     master.back_button = master.create_image(x, y, image=master.back_image, anchor="nw", tags="back")
     master.tag_bind(master.back_button, "<Button-1>", lambda event: go_main_page_click())
@@ -334,8 +321,7 @@ def profile_menu_table() -> tuple[Frame, Canvas]:
     round_rectangle(canvas, (screen_width - 500) // 2 - 200, (screen_height // 2) - 350, (screen_width - 500) // 2 + 700, (screen_height // 2) - 50, 20, fill="white", outline="darkred", width=4)
 
     # Add user icon - this can be replaced by the actual user image later
-    user_icon_img = PhotoImage(file=join(images_dir, theme.lower(), 'profile.png')).subsample(2)
-    # Resize image
+    user_icon_img = PhotoImage(file=join(images_dir, 'profile.png')).subsample(2)
     profile_frame.user_icon_img = user_icon_img
     canvas.profile_img = canvas.create_image((screen_width - 600) // 2 - 25, (screen_height // 2) - 205, image=user_icon_img, anchor="center", tags="profile")
 
