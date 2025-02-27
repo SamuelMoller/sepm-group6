@@ -167,7 +167,7 @@ def set_theme(val: str) -> None:
     for e in [x for x in root.children.values() if isinstance(x, Label)]:
         e.destroy()
     root.uu_img = PhotoImage(
-        file=join(images_dir, theme.lower(), 'uu_logo.png')
+        file=join(images_dir, 'uu_logo_' + theme.lower() + '.png')
     ).subsample(4)  # 1/4th of original image size.
     root.uu_img_label = Label(root, image=root.uu_img, border=0)
     root.uu_img_label.place(relx=1, rely=1, anchor="se")
@@ -501,7 +501,7 @@ login_frame[0].pack(fill="both", expand=True)
 
 # Uppsala university logo
 root.uu_img = PhotoImage(
-    file=join(images_dir, theme.lower(), 'uu_logo.png')
+    file=join(images_dir, 'uu_logo_' + theme.lower() + '.png')
 ).subsample(4)  # 1/4th of original image size.
 root.uu_img_label = Label(root, image=root.uu_img, border=0)
 root.uu_img_label.place(relx=1, rely=1, anchor="se")
