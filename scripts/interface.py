@@ -56,7 +56,7 @@ root.configure(background=THEMES[theme]["bg"])
 
 def login_label():
     """Title on login page"""
-    label = Label(login_frame[0], text="Basic Swedish", font=(my_font, FONT_EXTRA_LARGE, "underline"), bg=THEMES[theme]['bg'], fg='black')
+    label = Label(login_frame[0], text="Basic Swedish", font=(my_font, FONT_EXTRA_LARGE, "underline"), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
     underlabel = Label(login_frame[0], text="Learn by playing", font=(my_font, FONT_LARGE), bg=THEMES[theme]['bg'], fg='black')
     label.place(relx=0.5, rely=0.15, anchor="center")
     underlabel.place(relx=0.5, rely=0.25, anchor="center")
@@ -171,6 +171,13 @@ def set_theme(val: str) -> None:
     root.uu_img_label = Label(root, image=root.uu_img, border=0)
     root.uu_img_label.place(relx=1, rely=1, anchor="se")
     root.uu_img.image = root.uu_img
+
+    for _frame in [main_frame[0], start_frame[0],
+                   profile_frame[0], login_frame[0],
+                   statistics_frame[0], accessibility_frame[0]]:
+        for item in _frame.winfo_children():
+            if isinstance(item, Label):
+                item.config(bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
 
     for _canvas in [main_frame[1], start_frame[1],
                     profile_frame[1], login_frame[1],
