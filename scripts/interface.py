@@ -251,9 +251,9 @@ def on_log_out_click():
 
 def log_in_session() -> tuple[Frame, Canvas]:
     """Create main menu"""
-    login_frame = Frame(root, bg='#F0F0F0')
+    login_frame = Frame(root, bg=THEMES[theme]['bg'])
 
-    canvas = Canvas(login_frame, width=screen_width, height=screen_height, bg='#F0F0F0', highlightthickness=0)
+    canvas = Canvas(login_frame, width=screen_width, height=screen_height, bg=THEMES[theme]['bg'], highlightthickness=0)
     canvas.place(relx=0.5, rely=0.5, anchor="center")
 
     # Round buttons with exact positions
@@ -275,14 +275,14 @@ def on_login_click():
     y_cordinate = int((screen_height / 2) - (popup_height / 2))
 
     popup.geometry(f"{popup_width}x{popup_height}+{x_cordinate}+{y_cordinate}")
-    popup.configure(bg='#F0F0F0')
+    popup.configure(bg=THEMES[theme]['bg'])
     popup.wait_visibility()
     popup.grab_set()  # Focus on popup window until closed
 
     # Username label and entry field
-    username_label = Label(popup, text="Username:", font=(my_font, 16), bg='#F0F0F0')
+    username_label = Label(popup, text="Username:", font=(my_font, FONT_SMALL), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
     username_label.place(relx=0.5, rely=0.3, anchor="center")
-    username_entry = Entry(popup, font=(my_font, 14), width=25)
+    username_entry = Entry(popup, font=(my_font, FONT_SMALL), width=25)
     username_entry.place(relx=0.5, rely=0.4, anchor="center")
 
     # Login button inside the popup
@@ -297,7 +297,7 @@ def on_login_click():
         else:
             username_label.config(text="Incorrect username:", fg="#800000")
 
-    login_btn = Button(popup, text="Login", font=(my_font, 14), command=login_user, bg="#800000", fg="white")
+    login_btn = Button(popup, text="Login", font=(my_font, FONT_SMALL), command=login_user, bg=THEMES[theme]['button-h'], fg="white")
     login_btn.place(relx=0.5, rely=0.55, anchor="center")
 
 
@@ -313,32 +313,32 @@ def on_register_click():
     y_cordinate = int((screen_height / 2) - (popup_height / 2))
 
     popup.geometry(f"{popup_width}x{popup_height}+{x_cordinate}+{y_cordinate}")
-    popup.configure(bg='#F0F0F0')
+    popup.configure(bg=THEMES[theme]['bg'])
     popup.wait_visibility()
     popup.grab_set()  # Focus on popup window until closed
 
     # Input fields
-    username_label = Label(popup, text="Write a username:", font=(my_font, 10))
+    username_label = Label(popup, text="Write a username:", font=(my_font, FONT_SMALL), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
     username_label.place(relx=0.5, rely=0.06, anchor="center")
     username_entry = Entry(popup, font=(my_font, 14), width=25)
     username_entry.place(relx=0.5, rely=0.15, anchor="center")
 
-    name_label = Label(popup, text="Write your name:", font=(my_font, 10))
+    name_label = Label(popup, text="Write your name:", font=(my_font, FONT_SMALL), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
     name_label.place(relx=0.5, rely=0.22, anchor="center")
     name_entry = Entry(popup, font=(my_font, 14), width=25)
     name_entry.place(relx=0.5, rely=0.3, anchor="center")
 
-    surname_label = Label(popup, text="Write your surname:", font=(my_font, 10))
+    surname_label = Label(popup, text="Write your surname:", font=(my_font, FONT_SMALL), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
     surname_label.place(relx=0.5, rely=0.37, anchor="center")
     surname_entry = Entry(popup, font=(my_font, 14), width=25)
     surname_entry.place(relx=0.5, rely=0.45, anchor="center")
 
-    country_label = Label(popup, text="Write your country:", font=(my_font, 10))
+    country_label = Label(popup, text="Write your country:", font=(my_font, FONT_SMALL), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
     country_label.place(relx=0.5, rely=0.52, anchor="center")
     country_entry = Entry(popup, font=(my_font, 14), width=25)
     country_entry.place(relx=0.5, rely=0.6, anchor="center")
 
-    age_label = Label(popup, text="Write your age:", font=(my_font, 10))
+    age_label = Label(popup, text="Write your age:", font=(my_font, FONT_SMALL), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
     age_label.place(relx=0.5, rely=0.67, anchor="center")
     age_entry = Entry(popup, font=(my_font, 14), width=25)
     age_entry.place(relx=0.5, rely=0.75, anchor="center")
@@ -363,15 +363,15 @@ def on_register_click():
 
         user.add_user_profile(user_profile_data)
         popup.destroy()
-    login_btn = Button(popup, text="Register", font=(my_font, 12), command=register_user, bg="#800000", fg="white")
+    login_btn = Button(popup, text="Register", font=(my_font, 12), command=register_user, bg=THEMES[theme]['button-h'], fg="white")
     login_btn.place(relx=0.5, rely=0.85, anchor="center")
 
 
 def main_menu_table() -> tuple[Frame, Canvas]:
     """Create main menu"""
-    menu_frame = Frame(root, bg='#F0F0F0')
+    menu_frame = Frame(root, bg=THEMES[theme]['bg'])
 
-    canvas = Canvas(menu_frame, width=screen_width, height=screen_height, bg='#F0F0F0', highlightthickness=0)
+    canvas = Canvas(menu_frame, width=screen_width, height=screen_height, bg=THEMES[theme]['bg'], highlightthickness=0)
     canvas.place(relx=0.5, rely=0.5, anchor="center")
 
     # Round buttons with exact positions
@@ -387,9 +387,9 @@ def main_menu_table() -> tuple[Frame, Canvas]:
 
 def start_menu_table() -> tuple[Frame, Canvas]:
     """Create start menu"""
-    start_frame = Frame(root, bg='#F0F0F0')
+    start_frame = Frame(root, bg=THEMES[theme]['bg'])
 
-    canvas = Canvas(start_frame, width=screen_width, height=screen_height, bg='#F0F0F0', highlightthickness=0)
+    canvas = Canvas(start_frame, width=screen_width, height=screen_height, bg=THEMES[theme]['bg'], highlightthickness=0)
     canvas.pack(expand=True, ipadx=50, ipady=50)
 
     # Start menu buttons
@@ -405,9 +405,9 @@ def start_menu_table() -> tuple[Frame, Canvas]:
 
 def profile_menu_table() -> tuple[Frame, Canvas]:
     """Profile page"""
-    profile_frame = Frame(root, bg='#F0F0F0')
+    profile_frame = Frame(root, bg=THEMES[theme]['bg'])
 
-    canvas = Canvas(profile_frame, width=screen_width, height=screen_height, bg='#F0F0F0', highlightthickness=0)
+    canvas = Canvas(profile_frame, width=screen_width, height=screen_height, bg=THEMES[theme]['bg'], highlightthickness=0)
     canvas.pack(expand=True, ipadx=50, ipady=50)
 
     # Rectangle for user info
@@ -438,9 +438,9 @@ def profile_menu_table() -> tuple[Frame, Canvas]:
 
 def statistics_menu_table() -> tuple[Frame, Canvas]:
     """Create statistics page"""
-    statistics_frame = Frame(root, bg='#F0F0F0')
+    statistics_frame = Frame(root, bg=THEMES[theme]['bg'])
 
-    canvas = Canvas(statistics_frame, width=screen_width, height=screen_height, bg='#F0F0F0', highlightthickness=0)
+    canvas = Canvas(statistics_frame, width=screen_width, height=screen_height, bg=THEMES[theme]['bg'], highlightthickness=0)
     canvas.pack(expand=True, ipadx=50, ipady=50)
 
     # Statistics for first game
@@ -475,11 +475,11 @@ def statistics_menu_table() -> tuple[Frame, Canvas]:
 
 def accessibility_menu_table() -> tuple[Frame, Canvas]:
     """Initializes the accessibility page."""
-    accessibility_frame = Frame(root, bg='#F0F0F0')
+    accessibility_frame = Frame(root, bg=THEMES[theme]['bg'])
 
     canvas = Canvas(accessibility_frame,
                     width=screen_width, height=screen_height,
-                    bg='#F0F0F0', highlightthickness=0)
+                    bg=THEMES[theme]['bg'], highlightthickness=0)
     canvas.pack(expand=True, ipadx=50, ipady=50)
 
     # Settings
