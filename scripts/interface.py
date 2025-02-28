@@ -20,7 +20,7 @@ FONT_LARGE = int(36)
 FONT_EXTRA_LARGE = int(50)
 
 # Themes
-theme = "Light"
+theme = "Dark"
 THEMES = {
     "Light": {
         "bg": "#F0F0F0",
@@ -56,36 +56,36 @@ root.configure(background=THEMES[theme]["bg"])
 def login_label():
     """Title on login page"""
     label = Label(login_frame[0], text="Basic Swedish", font=(my_font, FONT_EXTRA_LARGE, "underline"), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
-    underlabel = Label(login_frame[0], text="Learn by playing", font=(my_font, FONT_LARGE), bg=THEMES[theme]['bg'], fg='black')
+    underlabel = Label(login_frame[0], text="Learn by playing", font=(my_font, FONT_LARGE), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
     label.place(relx=0.5, rely=0.15, anchor="center")
     underlabel.place(relx=0.5, rely=0.25, anchor="center")
 
 
 def statistics_label():
     """Title on statistics page"""
-    label = Label(statistics_frame[0], text="Statistics", font=(my_font, FONT_EXTRA_LARGE), bg=THEMES[theme]['bg'], fg='black')
-    underlabel = Label(statistics_frame[0], text="Latest game session", font=(my_font, FONT_LARGE), bg=THEMES[theme]['bg'], fg='black')
+    label = Label(statistics_frame[0], text="Statistics", font=(my_font, FONT_EXTRA_LARGE), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
+    underlabel = Label(statistics_frame[0], text="Latest game session", font=(my_font, FONT_LARGE), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
     label.place(relx=0.5, rely=0.15, anchor="center")
     underlabel.place(relx=0.5, rely=0.21, anchor="center")
 
 
 def main_label():
     """Title on main page"""
-    label = Label(main_frame[0], text="Basic Swedish", font=(my_font, FONT_EXTRA_LARGE, "underline"), bg=THEMES[theme]['bg'], fg='black')
-    underlabel = Label(main_frame[0], text="Learn by playing", font=(my_font, FONT_LARGE), bg=THEMES[theme]['bg'], fg='black')
+    label = Label(main_frame[0], text="Basic Swedish", font=(my_font, FONT_EXTRA_LARGE, "underline"), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
+    underlabel = Label(main_frame[0], text="Learn by playing", font=(my_font, FONT_LARGE), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
     label.place(relx=0.5, rely=0.15, anchor="center")
     underlabel.place(relx=0.5, rely=0.25, anchor="center")
 
 
 def start_label():
     """Title on start page"""
-    label = Label(start_frame[0], text="Select a game", font=(my_font, FONT_EXTRA_LARGE), bg=THEMES[theme]['bg'], fg='black')
+    label = Label(start_frame[0], text="Select a game", font=(my_font, FONT_EXTRA_LARGE), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
     label.place(relx=0.5, rely=0.25, anchor="center")
 
 
 def profile_label():
     """Title on start page"""
-    label = Label(profile_frame[0], text="Current user", font=(my_font, FONT_LARGE), bg=THEMES[theme]['bg'], fg='black')
+    label = Label(profile_frame[0], text="Current user", font=(my_font, FONT_LARGE), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
     label.place(relx=0.5, rely=0.10, anchor="center")
 
 
@@ -100,7 +100,7 @@ def round_rectangle(canvas, x1, y1, x2, y2, radius, **kwargs):
 
 def create_rounded_button(canvas, x, y, width, height, text, command, font):
     """Create round button based on the round_rectangle() feature"""
-    button = round_rectangle(canvas, x, y, x + width, y + height, radius=40, fill=THEMES[theme]["button"], outline="#800000", width=6)
+    button = round_rectangle(canvas, x, y, x + width, y + height, radius=40, fill=THEMES[theme]["button"], outline=THEMES[theme]['button-h'], width=6)
     text_item = canvas.create_text((x + x+width) // 2, (y + y+height) // 2, text=text, font=font, fill=THEMES[theme]["text"])
 
     def on_hover(mouse):
@@ -301,9 +301,9 @@ def on_login_click():
             main_frame[0].pack(fill="both", expand=True)
 
         else:
-            username_label.config(text="Incorrect username:", fg="#800000")
+            username_label.config(text="Incorrect username:", fg=THEMES[theme]['button'])
 
-    login_btn = Button(popup, text="Login", font=(my_font, FONT_SMALL), command=login_user, bg=THEMES[theme]['button-h'], fg="white")
+    login_btn = Button(popup, text="Login", font=(my_font, FONT_SMALL), command=login_user, bg=THEMES[theme]['button-h'], fg=THEMES[theme]['text'])
     login_btn.place(relx=0.5, rely=0.55, anchor="center")
 
 
@@ -369,7 +369,7 @@ def on_register_click():
 
         user.add_user_profile(user_profile_data)
         popup.destroy()
-    login_btn = Button(popup, text="Register", font=(my_font, 12), command=register_user, bg=THEMES[theme]['button-h'], fg="white")
+    login_btn = Button(popup, text="Register", font=(my_font, 12), command=register_user, bg=THEMES[theme]['button-h'], fg=THEMES[theme]['text-h'])
     login_btn.place(relx=0.5, rely=0.85, anchor="center")
 
 
@@ -417,7 +417,7 @@ def profile_menu_table() -> tuple[Frame, Canvas]:
     canvas.pack(expand=True, ipadx=50, ipady=50)
 
     # Rectangle for user info
-    round_rectangle(canvas, (screen_width - 500) // 2 - 200, (screen_height // 2) - 350, (screen_width - 500) // 2 + 700, (screen_height // 2) - 50, 20, fill="white", outline="darkred", width=4)
+    round_rectangle(canvas, (screen_width - 500) // 2 - 200, (screen_height // 2) - 350, (screen_width - 500) // 2 + 700, (screen_height // 2) - 50, 20, fill=THEMES[theme]['bg'], outline=THEMES[theme]['button-h'], width=4)
 
     # Add user icon - this can be replaced by the actual user image later
     user_icon_img = PhotoImage(file=join(images_dir, 'profile.png')).subsample(2)
@@ -426,11 +426,11 @@ def profile_menu_table() -> tuple[Frame, Canvas]:
     user_profile = user.get_user_profile()
     # User information
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 300,
-                       text=f"Name: {user_profile['first_name']} {user_profile['last_name']}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill="black")
+                       text=f"Name: {user_profile['first_name']} {user_profile['last_name']}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'])
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 250,
-                       text=f"Age: {user_profile['age']}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill="black")
+                       text=f"Age: {user_profile['age']}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'])
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 200,
-                       text=f"Country: {user_profile['country']}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill="black")
+                       text=f"Country: {user_profile['country']}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'])
 
     # Statistics and admin button
     create_rounded_button(canvas, (screen_width - 500) // 2 - 200, screen_height // 2, 900, 75, "My Statistics", on_statistics_click, (my_font, FONT_NORMAL))
@@ -450,28 +450,28 @@ def statistics_menu_table() -> tuple[Frame, Canvas]:
     canvas.pack(expand=True, ipadx=50, ipady=50)
 
     # Statistics for first game
-    round_rectangle(canvas, (screen_width - 1000) // 2, (screen_height - 500) // 2, (screen_width - 1000) // 2 + 300, (screen_height - 500) // 2 + 250, 20, fill="white", outline="darkred", width=4)
-    canvas.create_text((screen_width - 1000) // 2 + 150, (screen_height - 250) // 2 - 50, text="Time played:", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill="black")
-    canvas.create_text((screen_width - 1000) // 2 + 150, (screen_height - 250) // 2 + 50, text="Correct answers:", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill="black")
-    canvas.create_text((screen_width - 1000) // 2 + 150, (screen_height - 250) // 2 + 150, text="Clock game", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill="black")
+    round_rectangle(canvas, (screen_width - 1000) // 2, (screen_height - 500) // 2, (screen_width - 1000) // 2 + 300, (screen_height - 500) // 2 + 250, 20, fill=THEMES[theme]['bg'], outline="darkred", width=4)
+    canvas.create_text((screen_width - 1000) // 2 + 150, (screen_height - 250) // 2 - 50, text="Time played:", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'])
+    canvas.create_text((screen_width - 1000) // 2 + 150, (screen_height - 250) // 2 + 50, text="Correct answers:", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'])
+    canvas.create_text((screen_width - 1000) // 2 + 150, (screen_height - 250) // 2 + 150, text="Clock game", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'])
 
     # Statistics for second game
-    round_rectangle(canvas, (screen_width - 1000) // 2 + 350, (screen_height - 500) // 2, (screen_width - 1000) // 2 + 650, (screen_height - 500) // 2 + 250, 20, fill="white", outline="darkred", width=4)
-    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 250) // 2 - 50, text="Time played:", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill="black")
-    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 250) // 2 + 50, text="Matched items:", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill="black")
-    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 250) // 2 + 150, text="Furniture game", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill="black")
+    round_rectangle(canvas, (screen_width - 1000) // 2 + 350, (screen_height - 500) // 2, (screen_width - 1000) // 2 + 650, (screen_height - 500) // 2 + 250, 20, fill=THEMES[theme]['bg'], outline="darkred", width=4)
+    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 250) // 2 - 50, text="Time played:", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'])
+    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 250) // 2 + 50, text="Matched items:", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'])
+    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 250) // 2 + 150, text="Furniture game", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'])
 
     # Statistics for third game
-    round_rectangle(canvas, (screen_width - 1000) // 2 + 700, (screen_height - 500) // 2, (screen_width - 1000) // 2 + 1000, (screen_height - 500) // 2 + 250, 20, fill="white", outline="darkred", width=4)
-    canvas.create_text((screen_width - 1000) // 2 + 850, (screen_height - 250) // 2 - 50, text="Time played:", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill="black")
-    canvas.create_text((screen_width - 1000) // 2 + 850, (screen_height - 250) // 2 + 50, text="Puzzle solved:", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill="black")
-    canvas.create_text((screen_width - 1000) // 2 + 850, (screen_height - 250) // 2 + 150, text="Puzzle game", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill="black")
+    round_rectangle(canvas, (screen_width - 1000) // 2 + 700, (screen_height - 500) // 2, (screen_width - 1000) // 2 + 1000, (screen_height - 500) // 2 + 250, 20, fill=THEMES[theme]['bg'], outline="darkred", width=4)
+    canvas.create_text((screen_width - 1000) // 2 + 850, (screen_height - 250) // 2 - 50, text="Time played:", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'])
+    canvas.create_text((screen_width - 1000) // 2 + 850, (screen_height - 250) // 2 + 50, text="Puzzle solved:", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'])
+    canvas.create_text((screen_width - 1000) // 2 + 850, (screen_height - 250) // 2 + 150, text="Puzzle game", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'])
 
     # General statistics
-    round_rectangle(canvas, (screen_width - 1000) // 2, (screen_height - 500) // 2 + 370, (screen_width - 1000) // 2 + 1000, (screen_height - 500) // 2 + 620, 20, fill="white", outline="darkred", width=4)
-    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 500) // 2 + 420, text="Lifetime statistics:", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill="black")
-    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 500) // 2 + 470, text="Total time spent learning:", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill="black")
-    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 500) // 2 + 520, text="Words learned:", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill="black")
+    round_rectangle(canvas, (screen_width - 1000) // 2, (screen_height - 500) // 2 + 370, (screen_width - 1000) // 2 + 1000, (screen_height - 500) // 2 + 620, 20, fill=THEMES[theme]['bg'], outline="darkred", width=4)
+    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 500) // 2 + 420, text="Lifetime statistics:", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'])
+    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 500) // 2 + 470, text="Total time spent learning:", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'])
+    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 500) // 2 + 520, text="Words learned:", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'])
 
     # Go back button
     create_back_button(canvas, 15, 15)
@@ -497,10 +497,10 @@ def accessibility_menu_table() -> tuple[Frame, Canvas]:
     round_rectangle(canvas,
                     center['x'] - 700, center['y'] - 350,
                     center['x'] + 700, center['y'] - 50,
-                    20, fill="white", outline="darkred", width=4)
+                    20, fill=THEMES[theme]['bg'], outline="darkred", width=4)
     canvas.create_text(center['x'], center['y'] - 300,
                        text="Change Language", font=(my_font, FONT_LARGE, "bold"),
-                       anchor="center", fill="black")
+                       anchor="center", fill=THEMES[theme]['text'])
     create_rounded_button(canvas,
                           center['x'] - 350, center['y'] - 250,
                           width=330, height=150,
@@ -516,10 +516,10 @@ def accessibility_menu_table() -> tuple[Frame, Canvas]:
     round_rectangle(canvas,
                     center['x'] - 700, center['y'] + 50,
                     center['x'] - 50, center['y'] + 350,
-                    20, fill="white", outline="darkred", width=4)
+                    20, fill=THEMES[theme]['bg'], outline=THEMES[theme]['button-h'], width=4)
     canvas.create_text(center['x'] - 380, center['y'] + 100,
                        text="Resize Font", font=(my_font, FONT_LARGE, "bold"),
-                       anchor="center", fill="black")
+                       anchor="center", fill=THEMES[theme]['text'])
 
     font_size_options = ["50%", "75%", "100%", "125%", "150%"]
     font_size_setting = StringVar(root, "100%")
@@ -527,7 +527,10 @@ def accessibility_menu_table() -> tuple[Frame, Canvas]:
                                     font_size_setting,
                                     *font_size_options,
                                     command=lambda val: scale_font_size(val))
-    font_size_dropdown.config(width=18, height=1, font=(my_font, FONT_NORMAL, "bold"))
+    font_size_dropdown.config(width=18, height=1, font=(my_font, FONT_NORMAL, "bold"),
+                              bg=THEMES[theme]['button'], fg=THEMES[theme]['text'],
+                              activebackground=THEMES[theme]['button-h'],
+                              activeforeground=THEMES[theme]['text-h'])
     font_size_dropdown.place(x=center['x'] - 600,
                              y=center['y'] + 200)
 
@@ -535,17 +538,20 @@ def accessibility_menu_table() -> tuple[Frame, Canvas]:
     round_rectangle(canvas,
                     center['x'] + 50, center['y'] + 50,
                     center['x'] + 700, center['y'] + 350,
-                    20, fill="white", outline="darkred", width=4)
+                    20, fill=THEMES[theme]['bg'], outline=THEMES[theme]['button-h'], width=4)
     canvas.create_text(center['x'] + 380, center['y'] + 100,
                        text="Theme", font=(my_font, FONT_LARGE, "bold"),
-                       anchor="center", fill="black")
+                       anchor="center", fill=THEMES[theme]['text'])
     theme_options = ["Light", "Dark"]
-    theme_setting = StringVar(root, "Light")
+    theme_setting = StringVar(root, theme)
     theme_dropdown = OptionMenu(canvas,
                                 theme_setting,
                                 *theme_options,
                                 command=lambda val: set_theme(val))
-    theme_dropdown.config(width=18, height=1, font=(my_font, FONT_NORMAL, "bold"))
+    theme_dropdown.config(width=18, height=1, font=(my_font, FONT_NORMAL, "bold"),
+                          bg=THEMES[theme]['button'], fg=THEMES[theme]['text'],
+                          activebackground=THEMES[theme]['button-h'],
+                          activeforeground=THEMES[theme]['text-h'])
     theme_dropdown.place(x=center['x'] + 150,
                          y=center['y'] + 200)
 
