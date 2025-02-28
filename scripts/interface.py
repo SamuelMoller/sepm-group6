@@ -406,23 +406,13 @@ def accessibility_menu_table() -> tuple[Frame, Canvas]:
                        anchor="center", fill="black")
     create_rounded_button(canvas,
                           center['x'] - 350, center['y'] - 250,
-                          width=330, height=75,
+                          width=330, height=150,
                           text="Swedish", command="",
                           font=(my_font, FONT_NORMAL))
     create_rounded_button(canvas,
                           center['x'] + 20, center['y'] - 250,
-                          width=330, height=75,
-                          text="Danish", command="",
-                          font=(my_font, FONT_NORMAL))
-    create_rounded_button(canvas,
-                          center['x'] - 350, center['y'] - 150,
-                          width=330, height=75,
+                          width=330, height=150,
                           text="English", command="",
-                          font=(my_font, FONT_NORMAL))
-    create_rounded_button(canvas,
-                          center['x'] + 20, center['y'] - 150,
-                          width=330, height=75,
-                          text="Norwegian", command="",
                           font=(my_font, FONT_NORMAL))
 
     # Resize font
@@ -452,7 +442,6 @@ def accessibility_menu_table() -> tuple[Frame, Canvas]:
     canvas.create_text(center['x'] + 380, center['y'] + 100,
                        text="Theme", font=(my_font, FONT_LARGE, "bold"),
                        anchor="center", fill="black")
-
     theme_options = ["Light", "Dark"]
     theme_setting = StringVar(root, "Light")
     theme_dropdown = OptionMenu(canvas,
@@ -460,7 +449,6 @@ def accessibility_menu_table() -> tuple[Frame, Canvas]:
                                 *theme_options,
                                 command=lambda val: set_theme(val))
     theme_dropdown.config(width=18, height=1, font=(my_font, FONT_NORMAL, "bold"))
-
     theme_dropdown.place(x=center['x'] + 150,
                          y=center['y'] + 200)
 
