@@ -188,6 +188,11 @@ def set_theme(val: str) -> None:
                     _canvas.itemconfig(item, fill=THEMES[theme]['text'])
                 case 'polygon':
                     _canvas.itemconfig(item, fill=THEMES[theme]['button'])
+        for item in _canvas.winfo_children():
+            if isinstance(item, OptionMenu):
+                item.config(bg=THEMES[theme]['button'], fg=THEMES[theme]['text'],
+                            activebackground=THEMES[theme]['button-h'],
+                            activeforeground=THEMES[theme]['text-h'])
 
 
 def create_back_button(master: Canvas, x: int, y: int):
@@ -299,11 +304,10 @@ def on_login_click():
             popup.destroy()
             login_frame[0].pack_forget()
             main_frame[0].pack(fill="both", expand=True)
-
         else:
-            username_label.config(text="Incorrect username:", fg=THEMES[theme]['button'])
+            username_label.config(text="Incorrect username:", fg=THEMES[theme]['text'])
 
-    login_btn = Button(popup, text="Login", font=(my_font, FONT_SMALL), command=login_user, bg=THEMES[theme]['button-h'], fg=THEMES[theme]['text'])
+    login_btn = Button(popup, text="Login", font=(my_font, FONT_SMALL), command=login_user, bg=THEMES[theme]['button-h'], fg=THEMES[theme]['text-h'])
     login_btn.place(relx=0.5, rely=0.55, anchor="center")
 
 
