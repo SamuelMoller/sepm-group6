@@ -1,12 +1,11 @@
 from tkinter import *
-# from tkinter.font import Font
+from tkinter.font import Font
 import pyglet
 from os.path import join, dirname, normpath
 
 from sys import path as syspath
 syspath.append(normpath(join(dirname(__file__), '../')))
-# from backend import user
-
+from backend import user
 
 # File paths
 root_dir = dirname(__file__)
@@ -48,7 +47,7 @@ screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 
 # UU icon for window
-# root.wm_iconbitmap('images/UU_logo.ico')  # DEBUG: Linux compatibility
+# root.wm_iconbitmap('images/UU_logo.ico')
 
 # Window size
 root.geometry(f"{screen_width}x{screen_height}")
@@ -57,37 +56,37 @@ root.configure(background=THEMES[theme]["bg"])
 
 def login_label():
     """Title on login page"""
-    label = Label(login_frame[0], text="Basic Swedish", font=(my_font, FONT_EXTRA_LARGE, "underline"), fg='black')
-    underlabel = Label(login_frame[0], text="Learn by playing", font=(my_font, FONT_LARGE), fg='black')
+    label = Label(login_frame[0], text="Basic Swedish", font=(my_font, FONT_EXTRA_LARGE, "underline"), bg=THEMES[theme]['bg'], fg='black')
+    underlabel = Label(login_frame[0], text="Learn by playing", font=(my_font, FONT_LARGE), bg=THEMES[theme]['bg'], fg='black')
     label.place(relx=0.5, rely=0.15, anchor="center")
     underlabel.place(relx=0.5, rely=0.25, anchor="center")
 
 
 def statistics_label():
     """Title on statistics page"""
-    label = Label(statistics_frame[0], text="Statistics", font=(my_font, FONT_EXTRA_LARGE), fg='black')
-    underlabel = Label(statistics_frame[0], text="Latest game session", font=(my_font, FONT_LARGE), fg='black')
+    label = Label(statistics_frame[0], text="Statistics", font=(my_font, FONT_EXTRA_LARGE), bg=THEMES[theme]['bg'], fg='black')
+    underlabel = Label(statistics_frame[0], text="Latest game session", font=(my_font, FONT_LARGE), bg=THEMES[theme]['bg'], fg='black')
     label.place(relx=0.5, rely=0.15, anchor="center")
-    underlabel.place(relx=0.5, rely=0.25, anchor="center")
+    underlabel.place(relx=0.5, rely=0.21, anchor="center")
 
 
 def main_label():
     """Title on main page"""
-    label = Label(main_frame[0], text="Basic Swedish", font=(my_font, FONT_EXTRA_LARGE, "underline"), fg='black')
-    underlabel = Label(main_frame[0], text="Learn by playing", font=(my_font, FONT_LARGE), fg='black')
+    label = Label(main_frame[0], text="Basic Swedish", font=(my_font, FONT_EXTRA_LARGE, "underline"), bg=THEMES[theme]['bg'], fg='black')
+    underlabel = Label(main_frame[0], text="Learn by playing", font=(my_font, FONT_LARGE), bg=THEMES[theme]['bg'], fg='black')
     label.place(relx=0.5, rely=0.15, anchor="center")
     underlabel.place(relx=0.5, rely=0.25, anchor="center")
 
 
 def start_label():
     """Title on start page"""
-    label = Label(start_frame[0], text="Select a game", font=(my_font, FONT_EXTRA_LARGE), fg='black')
+    label = Label(start_frame[0], text="Select a game", font=(my_font, FONT_EXTRA_LARGE), bg=THEMES[theme]['bg'], fg='black')
     label.place(relx=0.5, rely=0.25, anchor="center")
 
 
 def profile_label():
     """Title on start page"""
-    label = Label(profile_frame[0], text="Current user", font=(my_font, FONT_LARGE), fg='black')
+    label = Label(profile_frame[0], text="Current user", font=(my_font, FONT_LARGE), bg=THEMES[theme]['bg'], fg='black')
     label.place(relx=0.5, rely=0.10, anchor="center")
 
 
@@ -245,16 +244,6 @@ def on_admin_control_click():
     print("WILL BE IMPLEMENTED")
 
 
-def on_login_click():
-    # CHANGE TO ACTUAL USER INPUT LATER
-    login_frame[0].pack_forget()
-    main_frame[0].pack(fill="both", expand=True)
-
-
-def on_register_click():
-    print("WILL BE IMPLEMENTED")
-
-
 def on_log_out_click():
     main_frame[0].pack_forget()
     login_frame[0].pack(fill="both", expand=True)
@@ -272,6 +261,110 @@ def log_in_session() -> tuple[Frame, Canvas]:
     create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 + 50, 600, 200, "Create a new user", on_register_click, (my_font, FONT_NORMAL))
 
     return (login_frame, canvas)
+
+
+def on_login_click():
+    """Pop-up window for user login"""
+    popup = Toplevel(root)
+    popup.title("Login")
+    popup_width = 500
+    popup_height = 400
+
+    # Center the pop up window
+    x_cordinate = int((screen_width / 2) - (popup_width / 2))
+    y_cordinate = int((screen_height / 2) - (popup_height / 2))
+
+    popup.geometry(f"{popup_width}x{popup_height}+{x_cordinate}+{y_cordinate}")
+    popup.configure(bg='#F0F0F0')
+    popup.wait_visibility()
+    popup.grab_set()  # Focus on popup window until closed
+
+    # Username label and entry field
+    username_label = Label(popup, text="Username:", font=(my_font, 16), bg='#F0F0F0')
+    username_label.place(relx=0.5, rely=0.3, anchor="center")
+    username_entry = Entry(popup, font=(my_font, 14), width=25)
+    username_entry.place(relx=0.5, rely=0.4, anchor="center")
+
+    # Login button inside the popup
+    def login_user():
+        user_profile = user.get_user_profile()
+        username = username_entry.get()
+        if username == user_profile['username']:
+            popup.destroy()
+            login_frame[0].pack_forget()
+            main_frame[0].pack(fill="both", expand=True)
+
+        else:
+            username_label.config(text="Incorrect username:", fg="#800000")
+
+    login_btn = Button(popup, text="Login", font=(my_font, 14), command=login_user, bg="#800000", fg="white")
+    login_btn.place(relx=0.5, rely=0.55, anchor="center")
+
+
+def on_register_click():
+    """Pop-up window for user register"""
+    popup = Toplevel(root)
+    popup.title("Register")
+    popup_width = 500
+    popup_height = 450
+
+    # Center the pop-up window
+    x_cordinate = int((screen_width / 2) - (popup_width / 2))
+    y_cordinate = int((screen_height / 2) - (popup_height / 2))
+
+    popup.geometry(f"{popup_width}x{popup_height}+{x_cordinate}+{y_cordinate}")
+    popup.configure(bg='#F0F0F0')
+    popup.wait_visibility()
+    popup.grab_set()  # Focus on popup window until closed
+
+    # Input fields
+    username_label = Label(popup, text="Write a username:", font=(my_font, 10))
+    username_label.place(relx=0.5, rely=0.06, anchor="center")
+    username_entry = Entry(popup, font=(my_font, 14), width=25)
+    username_entry.place(relx=0.5, rely=0.15, anchor="center")
+
+    name_label = Label(popup, text="Write your name:", font=(my_font, 10))
+    name_label.place(relx=0.5, rely=0.22, anchor="center")
+    name_entry = Entry(popup, font=(my_font, 14), width=25)
+    name_entry.place(relx=0.5, rely=0.3, anchor="center")
+
+    surname_label = Label(popup, text="Write your surname:", font=(my_font, 10))
+    surname_label.place(relx=0.5, rely=0.37, anchor="center")
+    surname_entry = Entry(popup, font=(my_font, 14), width=25)
+    surname_entry.place(relx=0.5, rely=0.45, anchor="center")
+
+    country_label = Label(popup, text="Write your country:", font=(my_font, 10))
+    country_label.place(relx=0.5, rely=0.52, anchor="center")
+    country_entry = Entry(popup, font=(my_font, 14), width=25)
+    country_entry.place(relx=0.5, rely=0.6, anchor="center")
+
+    age_label = Label(popup, text="Write your age:", font=(my_font, 10))
+    age_label.place(relx=0.5, rely=0.67, anchor="center")
+    age_entry = Entry(popup, font=(my_font, 14), width=25)
+    age_entry.place(relx=0.5, rely=0.75, anchor="center")
+
+    # Register button inside the popup
+    def register_user():
+        # IMPLEMENT IN THE INTEGRATION
+        username = username_entry.get()
+        first_name = name_entry.get()
+        last_name = surname_entry.get()
+        country = country_entry.get()
+        age = age_entry.get()
+
+        # Creating a profile for the new user
+        user_profile_data = {
+            "username": username,
+            "first_name": first_name,
+            "last_name": last_name,
+            "country": country,
+            "age": int(age)
+        }
+
+        user.add_user_profile(user_profile_data)
+        popup.destroy()
+    login_btn = Button(popup, text="Register", font=(my_font, 12), command=register_user, bg="#800000", fg="white")
+    login_btn.place(relx=0.5, rely=0.85, anchor="center")
 
 
 def main_menu_table() -> tuple[Frame, Canvas]:
@@ -324,16 +417,14 @@ def profile_menu_table() -> tuple[Frame, Canvas]:
     user_icon_img = PhotoImage(file=join(images_dir, 'profile.png')).subsample(2)
     profile_frame.user_icon_img = user_icon_img
     canvas.profile_img = canvas.create_image((screen_width - 600) // 2 - 25, (screen_height // 2) - 205, image=user_icon_img, anchor="center", tags="profile")
-
+    user_profile = user.get_user_profile()
     # User information
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 300,
-                       text="Name: Your name", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill="black")
+                       text=f"Name: {user_profile['first_name']} {user_profile['last_name']}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill="black")
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 250,
-                       text="Age: 25", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill="black")
+                       text=f"Age: {user_profile['age']}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill="black")
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 200,
-                       text="Country: Sweden", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill="black")
-    canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 140,
-                       text="Type of User: Exchange Student", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill="black")
+                       text=f"Country: {user_profile['country']}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill="black")
 
     # Statistics and admin button
     create_rounded_button(canvas, (screen_width - 500) // 2 - 200, screen_height // 2, 900, 75, "My Statistics", on_statistics_click, (my_font, FONT_NORMAL))
