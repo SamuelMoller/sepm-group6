@@ -1,10 +1,16 @@
 from tkinter import *
 import pyglet
 from os.path import join, dirname, normpath
+from tkinter import messagebox
+
 
 from sys import path as syspath
 syspath.append(normpath(join(dirname(__file__), '../')))
 from backend import user
+from integration_backend import backend_API
+
+###CURRENT USER###
+current_user = None 
 
 # File paths
 root_dir = dirname(__file__)
@@ -298,18 +304,23 @@ def on_login_click():
 
     # Login button inside the popup
     def login_user():
-        user_profile = user.get_user_profile()
+        global current_user, profile_frame  # Lägg till profile_frame som global
         username = username_entry.get()
-        if username == user_profile['username']:
+        user_profile = backend_API.get_user(username)
+
+        if user_profile and 'username' in user_profile and username == user_profile['username']:
+            current_user = username  
             popup.destroy()
             login_frame[0].pack_forget()
             main_frame[0].pack(fill="both", expand=True)
+            
+            profile_frame = profile_menu_table(current_user)
+            profile_label()
         else:
             username_label.config(text="Incorrect username:", fg=THEMES[theme]['text'])
-
+    
     login_btn = Button(popup, text="Login", font=(my_font, FONT_SMALL), command=login_user, bg=THEMES[theme]['button-h'], fg=THEMES[theme]['text-h'])
     login_btn.place(relx=0.5, rely=0.55, anchor="center")
-
 
 def on_register_click():
     """Pop-up window for user register"""
@@ -338,10 +349,10 @@ def on_register_click():
     name_entry = Entry(popup, font=(my_font, 14), width=25)
     name_entry.place(relx=0.5, rely=0.3, anchor="center")
 
-    surname_label = Label(popup, text="Write your surname:", font=(my_font, FONT_SMALL), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
-    surname_label.place(relx=0.5, rely=0.37, anchor="center")
-    surname_entry = Entry(popup, font=(my_font, 14), width=25)
-    surname_entry.place(relx=0.5, rely=0.45, anchor="center")
+    usertype_label = Label(popup, text="Type of student:", font=(my_font, FONT_SMALL), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
+    usertype_label.place(relx=0.5, rely=0.37, anchor="center")
+    usertype_entry = Entry(popup, font=(my_font, 14), width=25)
+    usertype_entry.place(relx=0.5, rely=0.45, anchor="center")
 
     country_label = Label(popup, text="Write your country:", font=(my_font, FONT_SMALL), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
     country_label.place(relx=0.5, rely=0.52, anchor="center")
@@ -355,24 +366,36 @@ def on_register_click():
 
     # Register button inside the popup
     def register_user():
-        # IMPLEMENT IN THE INTEGRATION
         username = username_entry.get()
         first_name = name_entry.get()
-        last_name = surname_entry.get()
+        user_type = usertype_entry.get()
         country = country_entry.get()
         age = age_entry.get()
 
-        # Creating a profile for the new user
-        user_profile_data = {
-            "username": username,
-            "first_name": first_name,
-            "last_name": last_name,
-            "country": country,
-            "age": int(age)
-        }
+        if not username or not first_name or not user_type or not country or not age:
+            error_label = Label(popup, text="All fields are required!", font=(my_font, FONT_SMALL), bg=THEMES[theme]['bg'], fg="red")
+            error_label.place(relx=0.5, rely=0.9, anchor="center")
+            return
+        
+        try:
+            age = int(age)
+        except ValueError:
+            #If age is not valid
+            error_label = Label(popup, text="Invalid age. Please enter a valid number.", font=(my_font, FONT_SMALL), bg=THEMES[theme]['bg'], fg="red")
+            error_label.place(relx=0.5, rely=0.9, anchor="center")
+            return
 
-        user.add_user_profile(user_profile_data)
-        popup.destroy()
+        #Check if username already exist
+        user_profile = backend_API.get_user(username)
+        if user_profile:
+            error_label = Label(popup, text="Username already taken. Please choose another.", font=(my_font, FONT_SMALL), bg=THEMES[theme]['bg'], fg="red")
+            error_label.place(relx=0.5, rely=0.9, anchor="center")
+            return
+        backend_API.create_user(username, real_name=first_name, age=age, country=country, user_type=user_type)
+        success_label = Label(popup, text="User registered successfully!", font=(my_font, FONT_SMALL), bg=THEMES[theme]['bg'], fg="green")
+        success_label.place(relx=0.5, rely=0.9, anchor="center")
+        popup.after(1000, popup.destroy)  
+
     login_btn = Button(popup, text="Register", font=(my_font, 12), command=register_user, bg=THEMES[theme]['button-h'], fg=THEMES[theme]['text-h'])
     login_btn.place(relx=0.5, rely=0.85, anchor="center")
 
@@ -413,7 +436,7 @@ def start_menu_table() -> tuple[Frame, Canvas]:
     return (start_frame, canvas)
 
 
-def profile_menu_table() -> tuple[Frame, Canvas]:
+def profile_menu_table(current_user) -> tuple[Frame, Canvas]:
     """Profile page"""
     profile_frame = Frame(root, bg=THEMES[theme]['bg'])
 
@@ -428,13 +451,21 @@ def profile_menu_table() -> tuple[Frame, Canvas]:
     profile_frame.user_icon_img = user_icon_img
     canvas.profile_img = canvas.create_image((screen_width - 600) // 2 - 25, (screen_height // 2) - 205, image=user_icon_img, anchor="center", tags="profile")
     user_profile = user.get_user_profile()
-    # User information
+    user_new = current_user
+
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 300,
-                       text=f"Name: {user_profile['first_name']} {user_profile['last_name']}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'])
-    canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 250,
-                       text=f"Age: {user_profile['age']}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'])
-    canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 200,
-                       text=f"Country: {user_profile['country']}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'])
+                       text=f"Name: {user_new}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'])
+
+
+    #canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 300,
+    #                   text=f"Name: {user_profile}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'])
+    # User information
+    #canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 300,
+    #                   text=f"Name: {user_profile['first_name']} {user_profile['last_name']}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'])
+    #canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 250,
+    #                   text=f"Age: {user_profile['age']}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'])
+    #canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 200,
+    #                   text=f"Country: {user_profile['country']}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'])
 
     # Statistics and admin button
     create_rounded_button(canvas, (screen_width - 500) // 2 - 200, screen_height // 2, 900, 75, "My Statistics", on_statistics_click, (my_font, FONT_NORMAL))
@@ -579,7 +610,7 @@ def accessibility_menu_table() -> tuple[Frame, Canvas]:
 # Create frames for different pages
 main_frame = main_menu_table()
 start_frame = start_menu_table()
-profile_frame = profile_menu_table()
+#profile_frame = profile_menu_table(current_user)
 login_frame = log_in_session()
 statistics_frame = statistics_menu_table()
 accessibility_frame = accessibility_menu_table()
@@ -587,7 +618,7 @@ accessibility_frame = accessibility_menu_table()
 # Call the titles for the different pages
 main_label()
 start_label()
-profile_label()
+#profile_label()
 login_label()
 statistics_label()
 
