@@ -50,8 +50,6 @@ root.title("Basic Swedish")
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 
-# UU icon for window
-# root.wm_iconbitmap('images/UU_logo.ico')
 
 # Window size
 root.geometry(f"{screen_width}x{screen_height}")
@@ -304,9 +302,17 @@ def on_login_click():
 
     # Login button inside the popup
     def login_user():
-        global current_user, profile_frame  # Lägg till profile_frame som global
+        #Fetch all information 
+        global current_user, profile_frame, user_age, user_country, user_type, user_total_time, user_words_learned, user_fullname
         username = username_entry.get()
-        user_profile = backend_API.get_user(username)
+        user_profile = backend_API.get_user(username) #Username
+        user_fullname = backend_API.get_user(username)["real_name"] #Age of user
+        user_age = backend_API.get_user(username)["age"] #Age of user
+        user_country=backend_API.get_user(username)["country"] #Country 
+        user_type= backend_API.get_user(username)["user_type"] #User type
+        user_total_time = backend_API.get_user(username)["total_time"] #user total time stored
+        user_words_learned = backend_API.get_user(username)["words_learned"] #user words learned stored 
+
 
         if user_profile and 'username' in user_profile and username == user_profile['username']:
             current_user = username  
@@ -450,23 +456,23 @@ def profile_menu_table(current_user) -> tuple[Frame, Canvas]:
     user_icon_img = PhotoImage(file=join(images_dir, 'profile.png')).subsample(2)
     profile_frame.user_icon_img = user_icon_img
     canvas.profile_img = canvas.create_image((screen_width - 600) // 2 - 25, (screen_height // 2) - 205, image=user_icon_img, anchor="center", tags="profile")
-    user_profile = user.get_user_profile()
-    user_new = current_user
 
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 300,
-                       text=f"Name: {user_new}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'])
+                       text=f"Name: {user_fullname}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'])
 
+    canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 250,
+                       text=f"Username: {current_user}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'])
 
-    #canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 300,
-    #                   text=f"Name: {user_profile}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'])
-    # User information
-    #canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 300,
-    #                   text=f"Name: {user_profile['first_name']} {user_profile['last_name']}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'])
-    #canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 250,
-    #                   text=f"Age: {user_profile['age']}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'])
-    #canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 200,
-    #                   text=f"Country: {user_profile['country']}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'])
+    canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 200,
+                       text=f"Age: {user_age}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'])
+    
+    canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 150,
+                       text=f"Country: {user_country}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'])
 
+    canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 100,
+                       text=f"Type of student: {user_type}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'])
+
+    
     # Statistics and admin button
     create_rounded_button(canvas, (screen_width - 500) // 2 - 200, screen_height // 2, 900, 75, "My Statistics", on_statistics_click, (my_font, FONT_NORMAL))
     create_rounded_button(canvas, (screen_width - 500) // 2 - 200, screen_height // 2 + 100, 900, 75, "Admin Controls", on_admin_control_click, (my_font, FONT_NORMAL))
@@ -618,7 +624,6 @@ accessibility_frame = accessibility_menu_table()
 # Call the titles for the different pages
 main_label()
 start_label()
-#profile_label()
 login_label()
 statistics_label()
 
