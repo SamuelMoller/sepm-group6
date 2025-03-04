@@ -3,7 +3,6 @@ import pyglet
 from os.path import join, dirname, normpath
 from tkinter import messagebox
 
-
 from sys import path as syspath
 syspath.append(normpath(join(dirname(__file__), '../')))
 from backend import user
@@ -262,6 +261,7 @@ def on_admin_control_click():
 
 
 def on_log_out_click():
+    current_user = None 
     main_frame[0].pack_forget()
     login_frame[0].pack(fill="both", expand=True)
 
