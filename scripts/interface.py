@@ -41,7 +41,7 @@ THEMES = {
 }
 
 # Localization
-lang = 'sv'
+lang = 'en'
 with open(normpath(join(root_dir, '..', 'loc', 'main_menu.json'))) as f:
     loc = json.load(f)
 
@@ -216,7 +216,6 @@ def set_theme(val: str) -> None:
         for item in _frame.winfo_children():
             if isinstance(item, Label):
                 item.config(bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
-                item.pack()
 
     for _canvas in [main_frame[1], start_frame[1],
                     profile_frame[1], login_frame[1],
@@ -246,7 +245,7 @@ def set_language(val: str) -> None:
                    statistics_frame[0], accessibility_frame[0]]:
         for var in _frame.stringvars:
             var[0].set(loc[lang][var[1]])
-    
+
     # Popup labels
     for var in root.stringvars:
         var[0].set(loc[lang][var[1]])
@@ -260,7 +259,7 @@ def set_language(val: str) -> None:
         for item in _canvas.find_all():
             if _canvas.type(item) == 'text':
                 _canvas.itemconfig(item, text=loc[lang][_canvas.itemcget(item, "tags").split(" ")[0]])
-                match _canvas.itemcget(item, "tags").split(" ")[0]:
+                match _canvas.itemcget(item, "tags").split(" ")[0]:     # Edge case for user profile
                     case "USER-NAME":
                         _canvas.itemconfig(item, text=f"{loc[lang]["USER-NAME"]} {user_profile['first_name']} {user_profile['last_name']}")
                     case "USER-AGE":
