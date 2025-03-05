@@ -379,6 +379,7 @@ def on_login_click():
 
     username_entry = Entry(popup, font=(my_font, FONT_SMALL), width=25)
     username_entry.place(relx=0.5, rely=0.4, anchor="center")
+    username_entry.focus()
 
     # Login button inside the popup
     def login_user(event=None):
