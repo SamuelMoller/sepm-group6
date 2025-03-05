@@ -22,7 +22,7 @@ FONT_LARGE = int(36)
 FONT_EXTRA_LARGE = int(50)
 
 # Themes
-theme = "Light"
+theme = "Dark"
 THEMES = {
     "Light": {
         "bg": "#F0F0F0",
@@ -386,7 +386,7 @@ def on_login_click():
         else:
             username_label.config(text=loc[lang]["LOGIN-ERR"], fg=THEMES[theme]['text'])
 
-    login_btn = Button(popup, text=loc[lang]["LOGIN-BTN"], font=(my_font, FONT_SMALL), command=login_user, bg=THEMES[theme]['button-h'], fg=THEMES[theme]['text-h'])
+    login_btn = Button(popup, text=loc[lang]["LOGIN-BTN"], font=(my_font, FONT_SMALL), command=login_user, bg=THEMES[theme]['button'], fg=THEMES[theme]['text'])
     login_btn.place(relx=0.5, rely=0.55, anchor="center")
 
 
@@ -467,7 +467,7 @@ def on_register_click():
 
         user.add_user_profile(user_profile_data)
         popup.destroy()
-    login_btn = Button(popup, text=loc[lang]["NEWUSER-REG"], font=(my_font, 12), command=register_user, bg=THEMES[theme]['button-h'], fg=THEMES[theme]['text-h'])
+    login_btn = Button(popup, text=loc[lang]["NEWUSER-REG"], font=(my_font, 12), command=register_user, bg=THEMES[theme]['button'], fg=THEMES[theme]['text'])
     login_btn.place(relx=0.5, rely=0.85, anchor="center")
 
 
