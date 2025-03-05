@@ -121,8 +121,8 @@ def start_label():
 
 def profile_label():
     """Title on start page"""
-    label_var = (StringVar(), "USER-CURR")
-    label_var[0].set(loc[lang]["USER-CURR"])
+    label_var = (StringVar(), "USER")
+    label_var[0].set(loc[lang]["USER"])
     profile_frame[0].stringvars.append(label_var)
     label = Label(profile_frame[0], textvariable=label_var[0], font=(my_font, FONT_LARGE), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
     label.place(relx=0.5, rely=0.10, anchor="center")
@@ -706,7 +706,7 @@ def accessibility_menu_table() -> tuple[Frame, Canvas]:
 # Create frames for different pages
 main_frame = main_menu_table()
 start_frame = start_menu_table()
-#profile_frame = profile_menu_table(current_user)
+# profile_frame = profile_menu_table(current_user)
 login_frame = log_in_session()
 statistics_frame = statistics_menu_table()
 accessibility_frame = accessibility_menu_table()
