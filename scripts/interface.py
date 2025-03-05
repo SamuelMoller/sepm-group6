@@ -5,6 +5,7 @@ from os.path import join, dirname, normpath
 from sys import path as syspath
 syspath.append(normpath(join(dirname(__file__), '../')))
 from backend import user
+from main import start_clock_game
 
 # File paths
 root_dir = dirname(__file__)
@@ -240,7 +241,7 @@ def on_accessibility_click():
 
 
 def on_clock_game_click():
-    print("WILL BE IMPLEMENTED")
+    start_clock_game()
 
 
 def on_placeholder_click():
@@ -307,7 +308,7 @@ def on_login_click():
         else:
             username_label.config(text="Incorrect username:", fg=THEMES[theme]['text'])
 
-    login_btn = Button(popup, text="Login", font=(my_font, FONT_SMALL), command=login_user, bg=THEMES[theme]['button-h'], fg=THEMES[theme]['text-h'])
+    login_btn = Button(popup, text="Login", font=(my_font, FONT_SMALL), command=login_user, bg=THEMES[theme]['button'], fg=THEMES[theme]['text'])
     login_btn.place(relx=0.5, rely=0.55, anchor="center")
 
 
@@ -373,7 +374,7 @@ def on_register_click():
 
         user.add_user_profile(user_profile_data)
         popup.destroy()
-    login_btn = Button(popup, text="Register", font=(my_font, 12), command=register_user, bg=THEMES[theme]['button-h'], fg=THEMES[theme]['text-h'])
+    login_btn = Button(popup, text="Register", font=(my_font, 12), command=register_user, bg=THEMES[theme]['button'], fg=THEMES[theme]['text'])
     login_btn.place(relx=0.5, rely=0.85, anchor="center")
 
 
@@ -601,5 +602,8 @@ root.uu_img = PhotoImage(
 root.uu_img_label = Label(root, image=root.uu_img, border=0)
 root.uu_img_label.place(relx=1, rely=1, anchor="se")
 root.uu_img.image = root.uu_img
+
+# Is the main menu paused?
+pause = StringVar()
 
 root.mainloop()
