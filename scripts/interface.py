@@ -305,25 +305,31 @@ def on_login_click():
         #Fetch all information 
         global current_user, profile_frame, user_age, user_country, user_type, user_total_time, user_words_learned, user_fullname
         username = username_entry.get()
-        user_profile = backend_API.get_user(username) #Username
-        user_fullname = backend_API.get_user(username)["real_name"] #Age of user
-        user_age = backend_API.get_user(username)["age"] #Age of user
-        user_country=backend_API.get_user(username)["country"] #Country 
-        user_type= backend_API.get_user(username)["user_type"] #User type
-        user_total_time = backend_API.get_user(username)["total_time"] #user total time stored
-        user_words_learned = backend_API.get_user(username)["words_learned"] #user words learned stored 
+        
+        user_profile = backend_API.get_user(username)  # Attempt to fetch user
 
+        if not user_profile:
+            messagebox.showerror("Login Failed", "Username does not exist.") 
+            return  # Stop execution
 
-        if user_profile and 'username' in user_profile and username == user_profile['username']:
-            current_user = username  
+        # Ensure required keys exist before accessing them
+        user_fullname = user_profile.get("real_name", "Unknown")  # Default value if key is missing
+        user_age = user_profile.get("age", "Unknown")
+        user_country = user_profile.get("country", "Unknown")
+        user_type = user_profile.get("user_type", "Unknown")
+        user_total_time = user_profile.get("total_time", 0)
+        user_words_learned = user_profile.get("words_learned", 0)
+
+        if 'username' in user_profile and username == user_profile['username']:
+            current_user = username
             popup.destroy()
             login_frame[0].pack_forget()
             main_frame[0].pack(fill="both", expand=True)
-            
+
             profile_frame = profile_menu_table(current_user)
             profile_label()
         else:
-            username_label.config(text="Incorrect username:", fg=THEMES[theme]['text'])
+            messagebox.showerror("Login Failed", "Incorrect username.")  
     
     login_btn = Button(popup, text="Login", font=(my_font, FONT_SMALL), command=login_user, bg=THEMES[theme]['button-h'], fg=THEMES[theme]['text-h'])
     login_btn.place(relx=0.5, rely=0.55, anchor="center")
