@@ -1,7 +1,7 @@
 from tkinter import *
 import pyglet
 from os.path import join, dirname, normpath
-from tkinter import messagebox
+# from tkinter import messagebox
 import json
 
 from sys import path as syspath
@@ -9,8 +9,8 @@ syspath.append(normpath(join(dirname(__file__), '../')))
 from backend import user
 from integration_backend import backend_API
 
-###CURRENT USER###
-current_user = None 
+# CURRENT USER
+current_user = None
 from main import start_clock_game
 
 # File paths
@@ -47,9 +47,8 @@ THEMES = {
 }
 
 # Localization
-lang = 'en'
-with open(normpath(join(root_dir, '..', 'loc', 'main_menu.json'))) as f:
-    loc = json.load(f)
+lang = 'sv'
+with open(normpath(join(root_dir, '..', 'loc', 'main_menu.json'))) as f: loc = json.load(f)
 
 # Main window
 root = Tk()
@@ -129,6 +128,7 @@ def profile_label():
     label.place(relx=0.5, rely=0.10, anchor="center")
 
 
+# Tools
 def round_rectangle(canvas, x1, y1, x2, y2, radius, **kwargs):
     """Round triangle buttons. This construction was taken from https://stackoverflow.com/a/44100075/15993687"""
     points = [x1+radius, y1, x1+radius, y1, x2-radius, y1, x2-radius, y1, x2, y1,
@@ -333,7 +333,8 @@ def on_admin_control_click():
 
 
 def on_log_out_click():
-    current_user = None 
+    global current_user
+    current_user = None
     main_frame[0].pack_forget()
     login_frame[0].pack(fill="both", expand=True)
 
@@ -381,24 +382,23 @@ def on_login_click():
 
     # Login button inside the popup
     def login_user():
-        #Fetch all information 
+        # Fetch all information
         global current_user, profile_frame, user_age, user_country, user_type, user_total_time, user_words_learned, user_fullname
         username = username_entry.get()
-        user_profile = backend_API.get_user(username) #Username
-        user_fullname = backend_API.get_user(username)["real_name"] #Age of user
-        user_age = backend_API.get_user(username)["age"] #Age of user
-        user_country=backend_API.get_user(username)["country"] #Country 
-        user_type= backend_API.get_user(username)["user_type"] #User type
-        user_total_time = backend_API.get_user(username)["total_time"] #user total time stored
-        user_words_learned = backend_API.get_user(username)["words_learned"] #user words learned stored 
-
+        user_profile = backend_API.get_user(username)  # Username
+        user_fullname = backend_API.get_user(username)["real_name"]  # Age of user
+        user_age = backend_API.get_user(username)["age"]  # Age of user
+        user_country = backend_API.get_user(username)["country"]  # Country
+        user_type = backend_API.get_user(username)["user_type"]  # User type
+        user_total_time = backend_API.get_user(username)["total_time"]  # user total time stored
+        user_words_learned = backend_API.get_user(username)["words_learned"]  # user words learned stored
 
         if user_profile and 'username' in user_profile and username == user_profile['username']:
             current_user = username  
             popup.destroy()
             login_frame[0].pack_forget()
             main_frame[0].pack(fill="both", expand=True)
-            
+
             profile_frame = profile_menu_table(current_user)
             profile_label()
         else:
@@ -406,6 +406,7 @@ def on_login_click():
 
     login_btn = Button(popup, text=loc[lang]["LOGIN-BTN"], font=(my_font, FONT_SMALL), command=login_user, bg=THEMES[theme]['button'], fg=THEMES[theme]['text'])
     login_btn.place(relx=0.5, rely=0.55, anchor="center")
+
 
 def on_register_click():
     """Pop-up window for user register"""
@@ -440,7 +441,10 @@ def on_register_click():
     name_entry = Entry(popup, font=(my_font, 14), width=25)
     name_entry.place(relx=0.5, rely=0.3, anchor="center")
 
-    usertype_label = Label(popup, text="Type of student:", font=(my_font, FONT_SMALL), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
+    register_type_label_var = (StringVar(), "NEWUSER-TYPE")
+    register_type_label_var[0].set(loc[lang]["NEWUSER-TYPE"])
+    root.stringvars.append(register_type_label_var)
+    usertype_label = Label(popup, textvariable=register_type_label_var[0], font=(my_font, FONT_SMALL), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
     usertype_label.place(relx=0.5, rely=0.37, anchor="center")
     usertype_entry = Entry(popup, font=(my_font, 14), width=25)
     usertype_entry.place(relx=0.5, rely=0.45, anchor="center")
@@ -555,18 +559,17 @@ def profile_menu_table(current_user) -> tuple[Frame, Canvas]:
                        text=f"{loc[lang]["USER-NAME"]} {user_fullname}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'], tags="USER-NAME")
 
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 250,
-                       text=f"Username: {current_user}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'])
+                       text=f"{loc[lang]["USER-CURR"]} {current_user}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'], tags="USER-CURR")
 
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 200,
-                       text=f"Age: {user_age}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'])
-    
+                       text=f"{loc[lang]["USER-AGE"]} {user_age}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'], tags="USER-AGE")
+
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 150,
-                       text=f"{loc[lang]["USER-CNTR"]} {user_country}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'])
+                       text=f"{loc[lang]["USER-CNTR"]} {user_country}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'], tags="USER-CNTR")
 
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 100,
-                       text=f"Type of student: {user_type}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'], tags="USER-CNTR")
+                       text=f"{loc[lang]["USER-TYPE"]} {user_type}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'], tags="USER-TYPE")
 
-    
     # Statistics and admin button
     create_rounded_button(canvas, (screen_width - 500) // 2 - 200, screen_height // 2, 900, 75, loc[lang]["USER-MYSTAT"], on_statistics_click, (my_font, FONT_NORMAL), "USER-MYSTAT")
     create_rounded_button(canvas, (screen_width - 500) // 2 - 200, screen_height // 2 + 100, 900, 75, loc[lang]["USER-ADMIN"], on_admin_control_click, (my_font, FONT_NORMAL), "USER-ADMIN")
