@@ -6,6 +6,7 @@ import json
 from sys import path as syspath
 syspath.append(normpath(join(dirname(__file__), '../')))
 from backend import user
+from main import start_clock_game
 
 # File paths
 root_dir = dirname(__file__)
@@ -313,7 +314,7 @@ def on_accessibility_click():
 
 
 def on_clock_game_click():
-    print("WILL BE IMPLEMENTED")
+    start_clock_game()
 
 
 def on_placeholder_click():
