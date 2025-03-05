@@ -1,4 +1,4 @@
-from Score import Score
+from .Score import Score
 
 class GameState:
     """Component that keeps track of the gamestate"""

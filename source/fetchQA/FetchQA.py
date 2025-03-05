@@ -5,7 +5,7 @@ import json
 BACKEND_URL = ""  # TODO: fill in correct URL
 
 
-def load_questions_temp(file_path='questions.json'):
+def load_questions_temp(file_path='source/fetchQA/questions.json'):
     with open(file_path, "r", encoding="utf-8") as file:
         return json.load(file)
 
