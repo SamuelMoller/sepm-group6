@@ -381,7 +381,7 @@ def on_login_click():
     username_entry.place(relx=0.5, rely=0.4, anchor="center")
 
     # Login button inside the popup
-    def login_user():
+    def login_user(event=None):
         # Fetch all information
         global current_user, profile_frame, user_age, user_country, user_type, user_total_time, user_words_learned, user_fullname
         username = username_entry.get()
@@ -394,7 +394,7 @@ def on_login_click():
         user_words_learned = backend_API.get_user(username)["words_learned"]  # user words learned stored
 
         if user_profile and 'username' in user_profile and username == user_profile['username']:
-            current_user = username  
+            current_user = username
             popup.destroy()
             login_frame[0].pack_forget()
             main_frame[0].pack(fill="both", expand=True)
@@ -406,6 +406,8 @@ def on_login_click():
 
     login_btn = Button(popup, text=loc[lang]["LOGIN-BTN"], font=(my_font, FONT_SMALL), command=login_user, bg=THEMES[theme]['button'], fg=THEMES[theme]['text'])
     login_btn.place(relx=0.5, rely=0.55, anchor="center")
+
+    popup.bind('<Return>', login_user)
 
 
 def on_register_click():
