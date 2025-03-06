@@ -37,6 +37,8 @@ class ClockGame:
         self.root.minsize(600, 400)
         self.root.configure(bg='#FFFFFF')
 
+        root.protocol("WM_DELETE_WINDOW", return_to_main_menu_callback)
+
         # Store the callback function to return to the Main Menu
         self.return_to_main_menu_callback = return_to_main_menu_callback
 

@@ -1,17 +1,19 @@
+# System modules
 from tkinter import *
 import pyglet
 from os.path import join, dirname, normpath
 # from tkinter import messagebox
 import json
 
+# Integration modules
 from sys import path as syspath
 syspath.append(normpath(join(dirname(__file__), '../')))
 from backend import user
 from integration_backend import backend_API
+from main import start_clock_game
 
 # CURRENT USER
 current_user = None
-from main import start_clock_game
 
 # File paths
 root_dir = dirname(__file__)
@@ -27,7 +29,7 @@ FONT_LARGE = int(36)
 FONT_EXTRA_LARGE = int(50)
 
 # Themes
-theme = "Dark"
+theme = "Light"
 THEMES = {
     "Light": {
         "bg": "#F0F0F0",
@@ -47,8 +49,8 @@ THEMES = {
 }
 
 # Localization
-lang = 'sv'
-with open(normpath(join(root_dir, '..', 'loc', 'main_menu.json'))) as f: loc = json.load(f)
+lang = 'en'
+with open(normpath(join(root_dir, '..', 'loc', 'main_menu.json')), encoding="UTF-8") as f: loc = json.load(f)
 
 # Main window
 root = Tk()
@@ -317,7 +319,9 @@ def on_accessibility_click():
 
 
 def on_clock_game_click():
-    start_clock_game()
+    # TODO: Pause the main interface until clock game closes.
+    root.withdraw()
+    start_clock_game(root)
 
 
 def on_placeholder_click():
