@@ -8,9 +8,9 @@ This project is part of the **Software Engineering and Project Management** cour
 - mysql
 - pyglet
 
-### Installation Steps
+### Installation and execution
 1. Clone this repository to your local machine:
    ```bash
-   git clone https://github.com/your-repository-url
+   [git clone https://github.com/your-repository-url](https://github.com/SamuelMoller/sepm-group6.git)
 
-In order to start the application, run **python scripts/interface.py**
+2. In order to start the application, run **python scripts/interface.py**
