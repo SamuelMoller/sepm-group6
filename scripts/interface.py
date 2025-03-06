@@ -27,7 +27,7 @@ FONT_LARGE = int(36)
 FONT_EXTRA_LARGE = int(50)
 
 # Themes
-theme = "Dark"
+theme = "Light"
 THEMES = {
     "Light": {
         "bg": "#F0F0F0",
@@ -47,7 +47,7 @@ THEMES = {
 }
 
 # Localization
-lang = 'sv'
+lang = 'en'
 with open(normpath(join(root_dir, '..', 'loc', 'main_menu.json'))) as f: loc = json.load(f)
 
 # Main window
