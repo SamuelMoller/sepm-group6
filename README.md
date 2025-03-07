@@ -5,11 +5,7 @@ This project is part of the **Software Engineering and Project Management** cour
 ## Application Setup
 
 ### Prerequisites
-Before setting up the application, ensure you have the following installed:
-
-- **Python 3.x**
-- **pip** (Python package manager)
-- **MySQL**
+Before setting up the application, ensure you have the relevant packages installed.
 
 ### 1. Check if Python is Installed
 To verify if Python is installed, open a terminal (or command prompt on Windows) and run the following command:
@@ -25,18 +21,19 @@ python --version
 ```
 
 If Python is not installed, install it using the following:
-- **macOS**:
+**macOS**:
 ```bash
-  brew install python
+brew install python
 ```
-- **Linux**:
-  ```bash
-  sudo apt update
-  sudo apt install python3
-  ```
-- **Windows**: Download and install it from [Python's official website](https://www.python.org/downloads/).
 
-### 2. Check if pip is Installed
+**Linux**:
+```bash
+sudo apt update
+sudo apt install python3
+```
+**Windows**: Download and install it from [Python's official website](https://www.python.org/downloads/).
+
+### 2. Check if pip is installed
 
 ```bash
 # macOS/Linux
@@ -86,16 +83,16 @@ python3 -m tkinter
 
 If not installed, install it using:
 
-- **macOS**:
- ```bash
-  brew install python-tk
- ```
+**macOS**:
+```bash
+ brew install python-tk
+```
 
-- **Linux**:
-  ```bash
-  sudo apt update
-  sudo apt install python3-tk
-  ```
+**Linux**:
+```bash
+sudo apt update
+sudo apt install python3-tk
+```
 - **Windows**: Tkinter should be available by default.
 
 ## Installation and Execution
