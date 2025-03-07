@@ -601,14 +601,9 @@ def statistics_menu_table() -> tuple[Frame, Canvas]:
     canvas = Canvas(statistics_frame, width=screen_width, height=screen_height, bg=THEMES[theme]['bg'], highlightthickness=0)
     canvas.pack(expand=True, ipadx=50, ipady=50)
     
-    user = backend_API.session_manager.get_current_user()
-    words_learned = backend_API.get_words_learned()
-
-    if user is None:
-        total_time = 0
-    else:
-        stats = backend_API.get_cur_user_stats()
-        total_time = stats.get('total_time')
+    stats = backend_API.get_cur_user_stats()
+    total_time = stats.get('total_time')
+    words_learned = stats.get('words_learned')
     
     # Statistics for first game
     round_rectangle(canvas, (screen_width - 1000) // 2, (screen_height - 500) // 2, (screen_width - 1000) // 2 + 300, (screen_height - 500) // 2 + 250, 20, fill=THEMES[theme]['button'], outline="darkred", width=4)
