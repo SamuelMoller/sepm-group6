@@ -10,7 +10,7 @@ from sys import path as syspath
 syspath.append(normpath(join(dirname(__file__), '../')))
 from backend import user
 from integration_backend import backend_API
-from main import start_clock_game
+import ui
 
 # CURRENT USER
 current_user = None
@@ -319,9 +319,14 @@ def on_accessibility_click():
 
 
 def on_clock_game_click():
-    # TODO: Pause the main interface until clock game closes.
+    def _close_clock_game(game_root: Toplevel, main_menu_root: Tk):
+        game_root.destroy()
+        main_menu_root.deiconify()
+
+    clock_game_root = Toplevel()
+    clock_game = ui.ClockGame(clock_game_root, return_to_main_menu_callback=lambda: _close_clock_game(clock_game_root, root))
     root.withdraw()
-    start_clock_game(root)
+    clock_game_root.mainloop()
 
 
 def on_placeholder_click():
@@ -735,6 +740,7 @@ root.uu_img_label = Label(root, image=root.uu_img, border=0)
 root.uu_img_label.place(relx=1, rely=1, anchor="se")
 root.uu_img.image = root.uu_img
 
-root.stringvars = []
+# Safely quit if window is closed.
+root.protocol("WM_DELETE_WINDOW", lambda: quit(0))
 
 root.mainloop()
