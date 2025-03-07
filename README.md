@@ -31,7 +31,7 @@ python3 --version
 
 If Python is not installed, install it using the following:
 
-- **MacOS**:
+- **MacOS**
 ```bash
 brew install python
 ```
@@ -42,7 +42,8 @@ sudo apt update
 sudo apt install python3 -y
  ```
 
-- **Windows**: Download and install it from [Python's official website](https://www.python.org/downloads/).
+- **Windows**
+  *Download and install it from [Python's official website](https://www.python.org/downloads/).*
 
 ### 2.  Verify pip Installation
 To verify if pip is installed, run the following command:
@@ -76,7 +77,7 @@ pip3 --version
 
 If pip is not installed, install it using:
 
-- **MacOS**:
+- **MacOS**
 ```bash
 python3 -m ensurepip --default-pip
 ```
@@ -87,7 +88,7 @@ sudo apt update
 sudo apt install python3-pip -y
 ```
 
-- **Windows**:
+- **Windows**
 ```bash
 python -m ensurepip --default-pip
 ```
@@ -95,34 +96,35 @@ python -m ensurepip --default-pip
 ### 3. Verify Tkinter Installation
 To verify if tkinter is installed, run the following command:
 
-- **MacOS**:
+- **MacOS**
 ```bash
 python3 -m tkinter
 ```
 
-- **Linux(Ubuntu)**:
+- **Linux(Ubuntu)**
 ```bash
 python3 -m tkinter
 ```
 
-- **Windows**:
+- **Windows**
 ```bash
 python -m tkinter
 ```
 
 If not installed, install it using:
 
-- **MacOS**:
+- **MacOS**
  ```bash
 brew install python-tk
  ```
 
-- **Linux(Ubuntu)**:
+- **Linux(Ubuntu)**
  ```bash
 sudo apt update
 sudo apt install python3-tk -y
  ```
-- **Windows**: *For Windows, Tkinter comes pre-installed with standard Python distributions.*
+- **Windows**
+  *For Windows, Tkinter comes pre-installed with standard Python distributions.*
 
 ## Run the application
 
