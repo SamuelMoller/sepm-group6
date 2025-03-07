@@ -1,9 +1,17 @@
 from tkinter import *
 import pyglet
 from os.path import join, dirname, normpath
+from tkinter import messagebox
+import json
 
 from sys import path as syspath
 syspath.append(normpath(join(dirname(__file__), '../')))
+from backend import user
+from integration_backend import backend_API
+
+# CURRENT USER
+current_user = None
+from main import start_clock_game
 
 # File paths
 root_dir = dirname(__file__)
@@ -38,14 +46,16 @@ THEMES = {
     }
 }
 
+# Localization
+lang = 'en'
+with open(normpath(join(root_dir, '..', 'loc', 'main_menu.json'))) as f: loc = json.load(f)
+
 # Main window
 root = Tk()
-root.title("Basic Swedish")
+root.title(loc[lang]["TITLE"])
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 
-# UU icon for window
-# root.wm_iconbitmap('images/UU_logo.ico')
 
 # Window size
 root.geometry(f"{screen_width}x{screen_height}")
@@ -54,40 +64,71 @@ root.configure(background=THEMES[theme]["bg"])
 
 def login_label():
     """Title on login page"""
-    label = Label(login_frame[0], text="Basic Swedish", font=(my_font, FONT_EXTRA_LARGE, "underline"), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
-    underlabel = Label(login_frame[0], text="Learn by playing", font=(my_font, FONT_LARGE), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
+    label_var = (StringVar(), "TITLE")
+    label_var[0].set(loc[lang]["TITLE"])
+    login_frame[0].stringvars.append(label_var)
+    label = Label(login_frame[0], textvariable=label_var[0], font=(my_font, FONT_EXTRA_LARGE, "underline"), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
+
+    underlabel_var = (StringVar(), "TITLESUB")
+    underlabel_var[0].set(loc[lang]["TITLESUB"])
+    login_frame[0].stringvars.append(underlabel_var)
+    underlabel = Label(login_frame[0], textvariable=underlabel_var[0], font=(my_font, FONT_LARGE), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
+
     label.place(relx=0.5, rely=0.15, anchor="center")
     underlabel.place(relx=0.5, rely=0.25, anchor="center")
 
 
 def statistics_label():
     """Title on statistics page"""
-    label = Label(statistics_frame[0], text="Statistics", font=(my_font, FONT_EXTRA_LARGE), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
-    underlabel = Label(statistics_frame[0], text="Latest game session", font=(my_font, FONT_LARGE), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
-    label.place(relx=0.5, rely=0.15, anchor="center")
+    label_var = (StringVar(), "STATS")
+    label_var[0].set(loc[lang]["STATS"])
+    statistics_frame[0].stringvars.append(label_var)
+    label = Label(statistics_frame[0], textvariable=label_var[0], font=(my_font, FONT_EXTRA_LARGE), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
+
+    underlabel_var = (StringVar(), "STATS-LATEST")
+    underlabel_var[0].set(loc[lang]["STATS-LATEST"])
+    statistics_frame[0].stringvars.append(underlabel_var)
+    underlabel = Label(statistics_frame[0], textvariable=underlabel_var[0], font=(my_font, FONT_LARGE), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
+
+    label.place(relx=0.5, rely=0.10, anchor="center")
     underlabel.place(relx=0.5, rely=0.21, anchor="center")
 
 
 def main_label():
     """Title on main page"""
-    label = Label(main_frame[0], text="Basic Swedish", font=(my_font, FONT_EXTRA_LARGE, "underline"), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
-    underlabel = Label(main_frame[0], text="Learn by playing", font=(my_font, FONT_LARGE), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
+    label_var = (StringVar(), "TITLE")
+    label_var[0].set(loc[lang]["TITLE"])
+    main_frame[0].stringvars.append(label_var)
+    label = Label(main_frame[0], textvariable=label_var[0], font=(my_font, FONT_EXTRA_LARGE, "underline"), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
+
+    underlabel_var = (StringVar(), "TITLESUB")
+    underlabel_var[0].set(loc[lang]["TITLESUB"])
+    main_frame[0].stringvars.append(underlabel_var)
+    underlabel = Label(main_frame[0], textvariable=underlabel_var[0], font=(my_font, FONT_LARGE), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
+
     label.place(relx=0.5, rely=0.15, anchor="center")
     underlabel.place(relx=0.5, rely=0.25, anchor="center")
 
 
 def start_label():
     """Title on start page"""
-    label = Label(start_frame[0], text="Select a game", font=(my_font, FONT_EXTRA_LARGE), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
+    label_var = (StringVar(), "START-SEL")
+    label_var[0].set(loc[lang]["START-SEL"])
+    start_frame[0].stringvars.append(label_var)
+    label = Label(start_frame[0], textvariable=label_var[0], font=(my_font, FONT_EXTRA_LARGE), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
     label.place(relx=0.5, rely=0.25, anchor="center")
 
 
 def profile_label():
     """Title on start page"""
-    label = Label(profile_frame[0], text="Current user", font=(my_font, FONT_LARGE), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
+    label_var = (StringVar(), "USER")
+    label_var[0].set(loc[lang]["USER"])
+    profile_frame[0].stringvars.append(label_var)
+    label = Label(profile_frame[0], textvariable=label_var[0], font=(my_font, FONT_LARGE), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
     label.place(relx=0.5, rely=0.10, anchor="center")
 
 
+# Tools
 def round_rectangle(canvas, x1, y1, x2, y2, radius, **kwargs):
     """Round triangle buttons. This construction was taken from https://stackoverflow.com/a/44100075/15993687"""
     points = [x1+radius, y1, x1+radius, y1, x2-radius, y1, x2-radius, y1, x2, y1,
@@ -97,10 +138,10 @@ def round_rectangle(canvas, x1, y1, x2, y2, radius, **kwargs):
     return canvas.create_polygon(points, **kwargs, smooth=True)
 
 
-def create_rounded_button(canvas, x, y, width, height, text, command, font):
+def create_rounded_button(canvas, x, y, width, height, text, command, font, tag):
     """Create round button based on the round_rectangle() feature"""
     button = round_rectangle(canvas, x, y, x + width, y + height, radius=40, fill=THEMES[theme]["button"], outline=THEMES[theme]['button-h'], width=6)
-    text_item = canvas.create_text((x + x+width) // 2, (y + y+height) // 2, text=text, font=font, fill=THEMES[theme]["text"])
+    text_item = canvas.create_text((x + x+width) // 2, (y + y+height) // 2, text=text, font=font, fill=THEMES[theme]["text"], tags=tag)
 
     def on_hover(mouse):
         canvas.itemconfig(button, fill=THEMES[theme]["button-h"])
@@ -128,7 +169,6 @@ def scale_font_size(val: str) -> None:
 
         old_font_scale = font_scale
         font_scale = mod
-        print(f"Old scale: {old_font_scale}\nNew scale: {font_scale}")
         for _canvas in [main_frame[1], start_frame[1],
                         profile_frame[1], login_frame[1],
                         statistics_frame[1], accessibility_frame[1]]:
@@ -153,10 +193,14 @@ def scale_font_size(val: str) -> None:
 
 
 def set_theme(val: str) -> None:
+    match val:
+        case "Ljust": val = "Light"
+        case "Mörkt": val = "Dark"
+
     global theme
     if theme == val: return
-    theme = val
 
+    theme = val
     root.configure(background=THEMES[theme]["bg"])
 
     # Change UU logo.
@@ -192,6 +236,40 @@ def set_theme(val: str) -> None:
                 item.config(bg=THEMES[theme]['button'], fg=THEMES[theme]['text'],
                             activebackground=THEMES[theme]['button-h'],
                             activeforeground=THEMES[theme]['text-h'])
+
+
+def set_language(val: str) -> None:
+    global lang
+    if lang == val: return
+    lang = val
+
+    # Frame labels
+    for _frame in [main_frame[0], start_frame[0],
+                   profile_frame[0], login_frame[0],
+                   statistics_frame[0], accessibility_frame[0]]:
+        for var in _frame.stringvars:
+            var[0].set(loc[lang][var[1]])
+
+    # Popup labels
+    for var in root.stringvars:
+        var[0].set(loc[lang][var[1]])
+
+    # Text objects
+    user_profile = user.get_user_profile()
+    for _canvas in [main_frame[1], start_frame[1],
+                    profile_frame[1], login_frame[1],
+                    statistics_frame[1], accessibility_frame[1]]:
+        _canvas.config(bg=THEMES[theme]['bg'])
+        for item in _canvas.find_all():
+            if _canvas.type(item) == 'text':
+                _canvas.itemconfig(item, text=loc[lang][_canvas.itemcget(item, "tags").split(" ")[0]])
+                match _canvas.itemcget(item, "tags").split(" ")[0]:     # Edge case for user profile
+                    case "USER-NAME":
+                        _canvas.itemconfig(item, text=f"{loc[lang]['USER-NAME']} {user_profile['first_name']} {user_profile['last_name']}")
+                    case "USER-AGE":
+                        _canvas.itemconfig(item, text=f"{loc[lang]['USER-AGE']} {user_profile['age']}")
+                    case "USER-CNTR":
+                        _canvas.itemconfig(item, text=f"{loc[lang]['USER-CNTR']} {user_profile['country']}")
 
 
 def create_back_button(master: Canvas, x: int, y: int):
@@ -239,7 +317,7 @@ def on_accessibility_click():
 
 
 def on_clock_game_click():
-    print("WILL BE IMPLEMENTED")
+    start_clock_game()
 
 
 def on_placeholder_click():
@@ -255,6 +333,8 @@ def on_admin_control_click():
 
 
 def on_log_out_click():
+    global current_user
+    current_user = None
     main_frame[0].pack_forget()
     login_frame[0].pack(fill="both", expand=True)
 
@@ -262,13 +342,14 @@ def on_log_out_click():
 def log_in_session() -> tuple[Frame, Canvas]:
     """Create main menu"""
     login_frame = Frame(root, bg=THEMES[theme]['bg'])
+    login_frame.stringvars = []
 
     canvas = Canvas(login_frame, width=screen_width, height=screen_height, bg=THEMES[theme]['bg'], highlightthickness=0)
     canvas.place(relx=0.5, rely=0.5, anchor="center")
 
     # Round buttons with exact positions
-    create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 - 200, 600, 200, "Login to session", on_login_click, (my_font, FONT_NORMAL))
-    create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 + 50, 600, 200, "Create a new user", on_register_click, (my_font, FONT_NORMAL))
+    create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 - 200, 600, 200, loc[lang]["LOGIN"], on_login_click, (my_font, FONT_NORMAL), "LOGIN")
+    create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 + 50, 600, 200, loc[lang]["NEWUSER"], on_register_click, (my_font, FONT_NORMAL), "NEWUSER")
 
     return (login_frame, canvas)
 
@@ -276,7 +357,7 @@ def log_in_session() -> tuple[Frame, Canvas]:
 def on_login_click():
     """Pop-up window for user login"""
     popup = Toplevel(root)
-    popup.title("Login")
+    popup.title(loc[lang]["LOGIN-BTN"])
     popup_width = 500
     popup_height = 400
 
@@ -290,30 +371,60 @@ def on_login_click():
     popup.grab_set()  # Focus on popup window until closed
 
     # Username label and entry field
-    username_label = Label(popup, text="Username:", font=(my_font, FONT_SMALL), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
+    login_username_label_var = (StringVar(), "LOGIN-USRN")
+    login_username_label_var[0].set(loc[lang]["LOGIN-USRN"])
+    root.stringvars.append(login_username_label_var)
+    username_label = Label(popup, textvariable=login_username_label_var[0], font=(my_font, FONT_SMALL), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
     username_label.place(relx=0.5, rely=0.3, anchor="center")
+
     username_entry = Entry(popup, font=(my_font, FONT_SMALL), width=25)
     username_entry.place(relx=0.5, rely=0.4, anchor="center")
+    username_entry.focus()
 
     # Login button inside the popup
-    def login_user():
-        user_profile = user.get_user_profile()
+
+    def login_user(even=None):
+        #Fetch all information 
+        global current_user, profile_frame, user_age, user_country, user_type, user_total_time, user_words_learned, user_fullname
         username = username_entry.get()
-        if username == user_profile['username']:
+        
+        user_profile = backend_API.get_user(username)  # Attempt to fetch user
+
+        if not user_profile:
+            #username_label.config(text=loc[lang]["LOGIN-ERR"], fg=THEMES[theme]['text'])
+            messagebox.showerror("Login Failed", loc[lang]["LOGIN-ERR"])
+            return  # Stop execution
+
+        # Ensure required keys exist before accessing them
+        user_fullname = user_profile.get("real_name", "Unknown")  # Default value if key is missing
+        user_age = user_profile.get("age", "Unknown")
+        user_country = user_profile.get("country", "Unknown")
+        user_type = user_profile.get("user_type", "Unknown")
+        user_total_time = user_profile.get("total_time", 0)
+        user_words_learned = user_profile.get("words_learned", 0)
+
+        if 'username' in user_profile and username == user_profile['username']:
+            current_user = username
             popup.destroy()
             login_frame[0].pack_forget()
             main_frame[0].pack(fill="both", expand=True)
-        else:
-            username_label.config(text="Incorrect username:", fg=THEMES[theme]['text'])
 
-    login_btn = Button(popup, text="Login", font=(my_font, FONT_SMALL), command=login_user, bg=THEMES[theme]['button-h'], fg=THEMES[theme]['text-h'])
+            profile_frame = profile_menu_table(current_user)
+            profile_label()
+        else:
+            #username_label.config(text=loc[lang]["LOGIN-ERR"], fg=THEMES[theme]['text'])
+            messagebox.showerror("Login Failed", loc[lang]["LOGIN-ERR"])
+
+    login_btn = Button(popup, text=loc[lang]["LOGIN-BTN"], font=(my_font, FONT_SMALL), command=login_user, bg=THEMES[theme]['button'], fg=THEMES[theme]['text'])
     login_btn.place(relx=0.5, rely=0.55, anchor="center")
+
+    popup.bind('<Return>', login_user)
 
 
 def on_register_click():
     """Pop-up window for user register"""
     popup = Toplevel(root)
-    popup.title("Register")
+    popup.title(loc[lang]["NEWUSER-REG"])
     popup_width = 500
     popup_height = 450
 
@@ -327,69 +438,97 @@ def on_register_click():
     popup.grab_set()  # Focus on popup window until closed
 
     # Input fields
-    username_label = Label(popup, text="Write a username:", font=(my_font, FONT_SMALL), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
+    register_username_label_var = (StringVar(), "NEWUSER-USRN")
+    register_username_label_var[0].set(loc[lang]["NEWUSER-USRN"])
+    root.stringvars.append(register_username_label_var)
+    username_label = Label(popup, textvariable=register_username_label_var[0], font=(my_font, FONT_SMALL), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
     username_label.place(relx=0.5, rely=0.06, anchor="center")
     username_entry = Entry(popup, font=(my_font, 14), width=25)
     username_entry.place(relx=0.5, rely=0.15, anchor="center")
 
-    name_label = Label(popup, text="Write your name:", font=(my_font, FONT_SMALL), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
+    register_name_label_var = (StringVar(), "NEWUSER-NAME")
+    register_name_label_var[0].set(loc[lang]["NEWUSER-NAME"])
+    root.stringvars.append(register_name_label_var)
+    name_label = Label(popup, textvariable=register_name_label_var[0], font=(my_font, FONT_SMALL), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
     name_label.place(relx=0.5, rely=0.22, anchor="center")
     name_entry = Entry(popup, font=(my_font, 14), width=25)
     name_entry.place(relx=0.5, rely=0.3, anchor="center")
 
-    surname_label = Label(popup, text="Write your surname:", font=(my_font, FONT_SMALL), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
-    surname_label.place(relx=0.5, rely=0.37, anchor="center")
-    surname_entry = Entry(popup, font=(my_font, 14), width=25)
-    surname_entry.place(relx=0.5, rely=0.45, anchor="center")
+    register_type_label_var = (StringVar(), "NEWUSER-TYPE")
+    register_type_label_var[0].set(loc[lang]["NEWUSER-TYPE"])
+    root.stringvars.append(register_type_label_var)
+    usertype_label = Label(popup, textvariable=register_type_label_var[0], font=(my_font, FONT_SMALL), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
+    usertype_label.place(relx=0.5, rely=0.37, anchor="center")
+    usertype_entry = Entry(popup, font=(my_font, 14), width=25)
+    usertype_entry.place(relx=0.5, rely=0.45, anchor="center")
 
-    country_label = Label(popup, text="Write your country:", font=(my_font, FONT_SMALL), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
+    register_country_label_var = (StringVar(), "NEWUSER-CNTR")
+    register_country_label_var[0].set(loc[lang]["NEWUSER-CNTR"])
+    root.stringvars.append(register_country_label_var)
+    country_label = Label(popup, textvariable=register_country_label_var[0], font=(my_font, FONT_SMALL), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
     country_label.place(relx=0.5, rely=0.52, anchor="center")
     country_entry = Entry(popup, font=(my_font, 14), width=25)
     country_entry.place(relx=0.5, rely=0.6, anchor="center")
 
-    age_label = Label(popup, text="Write your age:", font=(my_font, FONT_SMALL), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
+    register_age_label_var = (StringVar(), "NEWUSER-AGE")
+    register_age_label_var[0].set(loc[lang]["NEWUSER-AGE"])
+    root.stringvars.append(register_age_label_var)
+    age_label = Label(popup, textvariable=register_age_label_var[0], font=(my_font, FONT_SMALL), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
     age_label.place(relx=0.5, rely=0.67, anchor="center")
     age_entry = Entry(popup, font=(my_font, 14), width=25)
     age_entry.place(relx=0.5, rely=0.75, anchor="center")
 
     # Register button inside the popup
     def register_user():
-        # IMPLEMENT IN THE INTEGRATION
         username = username_entry.get()
         first_name = name_entry.get()
-        last_name = surname_entry.get()
+        user_type = usertype_entry.get()
         country = country_entry.get()
         age = age_entry.get()
 
-        # Creating a profile for the new user
-        user_profile_data = {
-            "username": username,
-            "first_name": first_name,
-            "last_name": last_name,
-            "country": country,
-            "age": int(age)
-        }
+        if not username or not first_name or not user_type or not country or not age:
+            error_label = Label(popup, text="All fields are required!", font=(my_font, FONT_SMALL), bg=THEMES[theme]['bg'], fg="red")
+            error_label.place(relx=0.5, rely=0.9, anchor="center")
+            return
+        
+        try:
+            age = int(age)
+        except ValueError:
+            #If age is not valid
+            error_label = Label(popup, text="Invalid age. Please enter a valid number.", font=(my_font, FONT_SMALL), bg=THEMES[theme]['bg'], fg="red")
+            error_label.place(relx=0.5, rely=0.9, anchor="center")
+            return
 
-        user.add_user_profile(user_profile_data)
-        popup.destroy()
-    login_btn = Button(popup, text="Register", font=(my_font, 12), command=register_user, bg=THEMES[theme]['button-h'], fg=THEMES[theme]['text-h'])
+        #Check if username already exist
+        user_profile = backend_API.get_user(username)
+        if user_profile:
+            error_label = Label(popup, text="Username already taken. Please choose another.", font=(my_font, FONT_SMALL), bg=THEMES[theme]['bg'], fg="red")
+            error_label.place(relx=0.5, rely=0.9, anchor="center")
+            return
+        backend_API.create_user(username, real_name=first_name, age=age, country=country, user_type=user_type)
+        success_label = Label(popup, text="User registered successfully!", font=(my_font, FONT_SMALL), bg=THEMES[theme]['bg'], fg="green")
+        success_label.place(relx=0.5, rely=0.9, anchor="center")
+        popup.after(1000, popup.destroy)  
+
+    login_btn = Button(popup, text=loc[lang]["NEWUSER-REG"], font=(my_font, 12), command=register_user, bg=THEMES[theme]['button'], fg=THEMES[theme]['text'])
     login_btn.place(relx=0.5, rely=0.85, anchor="center")
 
 
 def main_menu_table() -> tuple[Frame, Canvas]:
     """Create main menu"""
     menu_frame = Frame(root, bg=THEMES[theme]['bg'])
+    menu_frame.stringvars = []
 
     canvas = Canvas(menu_frame, width=screen_width, height=screen_height, bg=THEMES[theme]['bg'], highlightthickness=0)
     canvas.place(relx=0.5, rely=0.5, anchor="center")
 
     # Round buttons with exact positions
-    create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 - 200, 600, 75, "Start", on_start_click, (my_font, FONT_NORMAL))
-    create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 - 100, 600, 75, "User Profile", on_user_profile_click, (my_font, FONT_NORMAL))
-    create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 + 0, 600, 75, "Statistics", on_statistics_click, (my_font, FONT_NORMAL))
-    create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 + 100, 600, 75, "Accessibility", on_accessibility_click, (my_font, FONT_NORMAL))
+    create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 - 200, 600, 75, loc[lang]["START"], on_start_click, (my_font, FONT_NORMAL), "START")
+    create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 - 100, 600, 75, loc[lang]["USER"], on_user_profile_click, (my_font, FONT_NORMAL), "USER")
+    create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 + 0, 600, 75, loc[lang]["STATS"], on_statistics_click, (my_font, FONT_NORMAL), "STATS")
+    create_rounded_button(canvas, screen_width//2 - 300, screen_height//2 + 100, 600, 75, loc[lang]["ACCESS"], on_accessibility_click, (my_font, FONT_NORMAL), "ACCESS")
 
-    create_rounded_button(canvas, screen_width - 160, screen_height - (screen_height - 60), 100, 50, "Log out", on_log_out_click, (my_font, FONT_SMALL))
+    create_rounded_button(canvas, screen_width - 160, screen_height - (screen_height - 60), 100, 50, loc[lang]["LOGOUT"], on_log_out_click, (my_font, FONT_SMALL), "LOGOUT")
 
     return (menu_frame, canvas)
 
@@ -397,14 +536,15 @@ def main_menu_table() -> tuple[Frame, Canvas]:
 def start_menu_table() -> tuple[Frame, Canvas]:
     """Create start menu"""
     start_frame = Frame(root, bg=THEMES[theme]['bg'])
+    start_frame.stringvars = []
 
     canvas = Canvas(start_frame, width=screen_width, height=screen_height, bg=THEMES[theme]['bg'], highlightthickness=0)
     canvas.pack(expand=True, ipadx=50, ipady=50)
 
     # Start menu buttons
-    create_rounded_button(canvas, (screen_width - 250)//2 - 300, screen_height//2 - 200, 250, 250, "Clock Game", on_clock_game_click, (my_font, FONT_NORMAL))
-    create_rounded_button(canvas, (screen_width - 250)//2, screen_height//2 - 200, 250, 250, "Placeholder", on_placeholder_click, (my_font, FONT_NORMAL))
-    create_rounded_button(canvas, (screen_width - 250)//2 + 300, screen_height//2 - 200, 250, 250, "Match the words", on_match_the_words_click, (my_font, FONT_NORMAL))
+    create_rounded_button(canvas, (screen_width - 250)//2 - 300, screen_height//2 - 200, 250, 250, loc[lang]["START-CLOCK"], on_clock_game_click, (my_font, FONT_NORMAL), "START-CLOCK")
+    create_rounded_button(canvas, (screen_width - 250)//2, screen_height//2 - 200, 250, 250, loc[lang]["START-PAPER"], on_placeholder_click, (my_font, FONT_NORMAL), "START-PAPER")
+    create_rounded_button(canvas, (screen_width - 250)//2 + 300, screen_height//2 - 200, 250, 250, loc[lang]["START-MATCH"], on_match_the_words_click, (my_font, FONT_NORMAL), "START-MATCH")
 
     # Go back button
     create_back_button(canvas, 15, 15)
@@ -412,79 +552,89 @@ def start_menu_table() -> tuple[Frame, Canvas]:
     return (start_frame, canvas)
 
 
-def profile_menu_table() -> tuple[Frame, Canvas]:
+def profile_menu_table(current_user) -> tuple[Frame, Canvas]:
     """Profile page"""
     profile_frame = Frame(root, bg=THEMES[theme]['bg'])
+    profile_frame.stringvars = []
 
     canvas = Canvas(profile_frame, width=screen_width, height=screen_height, bg=THEMES[theme]['bg'], highlightthickness=0)
     canvas.pack(expand=True, ipadx=50, ipady=50)
 
     # Rectangle for user info
-    round_rectangle(canvas, (screen_width - 500) // 2 - 200, (screen_height // 2) - 350, (screen_width - 500) // 2 + 700, (screen_height // 2) - 50, 20, fill=THEMES[theme]['bg'], outline=THEMES[theme]['button-h'], width=4)
+    round_rectangle(canvas, (screen_width - 500) // 2 - 200, (screen_height // 2) - 350, (screen_width - 500) // 2 + 700, (screen_height // 2) - 50, 20, fill=THEMES[theme]['button'], outline=THEMES[theme]['button-h'], width=4)
 
     # Add user icon - this can be replaced by the actual user image later
     user_icon_img = PhotoImage(file=join(images_dir, 'profile.png')).subsample(2)
     profile_frame.user_icon_img = user_icon_img
     canvas.profile_img = canvas.create_image((screen_width - 600) // 2 - 25, (screen_height // 2) - 205, image=user_icon_img, anchor="center", tags="profile")
-    user_profile = user.get_user_profile()
-    # User information
+
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 300,
-                       text=f"Name: {user_profile['first_name']} {user_profile['last_name']}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'])
+                       text=f"{loc[lang]['USER-NAME']} {user_fullname}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'], tags="USER-NAME")
+
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 250,
-                       text=f"Age: {user_profile['age']}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'])
+                       text=f"{loc[lang]['USER-CURR']} {current_user}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'], tags="USER-CURR")
+
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 200,
-                       text=f"Country: {user_profile['country']}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'])
+                       text=f"{loc[lang]['USER-AGE']} {user_age}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'], tags="USER-AGE")
+
+    canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 150,
+                       text=f"{loc[lang]['USER-CNTR']} {user_country}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'], tags="USER-CNTR")
+
+    canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 100,
+                       text=f"{loc[lang]['USER-TYPE']} {user_type}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'], tags="USER-TYPE")
 
     # Statistics and admin button
-    create_rounded_button(canvas, (screen_width - 500) // 2 - 200, screen_height // 2, 900, 75, "My Statistics", on_statistics_click, (my_font, FONT_NORMAL))
-    create_rounded_button(canvas, (screen_width - 500) // 2 - 200, screen_height // 2 + 100, 900, 75, "Admin Controls", on_admin_control_click, (my_font, FONT_NORMAL))
+    create_rounded_button(canvas, (screen_width - 500) // 2 - 200, screen_height // 2, 900, 75, loc[lang]["USER-MYSTAT"], on_statistics_click, (my_font, FONT_NORMAL), "USER-MYSTAT")
+    create_rounded_button(canvas, (screen_width - 500) // 2 - 200, screen_height // 2 + 100, 900, 75, loc[lang]["USER-ADMIN"], on_admin_control_click, (my_font, FONT_NORMAL), "USER-ADMIN")
 
     # Go back button
     create_back_button(canvas, 15, 15)
 
     return (profile_frame, canvas)
 
-
+#Statistics page
 def statistics_menu_table() -> tuple[Frame, Canvas]:
     """Create statistics page"""
     statistics_frame = Frame(root, bg=THEMES[theme]['bg'])
+    statistics_frame.stringvars = []
 
     canvas = Canvas(statistics_frame, width=screen_width, height=screen_height, bg=THEMES[theme]['bg'], highlightthickness=0)
     canvas.pack(expand=True, ipadx=50, ipady=50)
 
     # Statistics for first game
-    round_rectangle(canvas, (screen_width - 1000) // 2, (screen_height - 500) // 2, (screen_width - 1000) // 2 + 300, (screen_height - 500) // 2 + 250, 20, fill=THEMES[theme]['bg'], outline="darkred", width=4)
-    canvas.create_text((screen_width - 1000) // 2 + 150, (screen_height - 250) // 2 - 50, text="Time played:", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'])
-    canvas.create_text((screen_width - 1000) // 2 + 150, (screen_height - 250) // 2 + 50, text="Correct answers:", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'])
-    canvas.create_text((screen_width - 1000) // 2 + 150, (screen_height - 250) // 2 + 150, text="Clock game", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'])
+    round_rectangle(canvas, (screen_width - 1000) // 2, (screen_height - 500) // 2, (screen_width - 1000) // 2 + 300, (screen_height - 500) // 2 + 250, 20, fill=THEMES[theme]['button'], outline="darkred", width=4)
+    canvas.create_text((screen_width - 1000) // 2 + 150, (screen_height - 250) // 2 - 50, text=loc[lang]["STATS-TIME"], font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'], tags="STATS-TIME")
+    canvas.create_text((screen_width - 1000) // 2 + 150, (screen_height - 250) // 2 + 50, text=loc[lang]["STATS-CORR"], font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'], tags="STATS-CORR")
+    canvas.create_text((screen_width - 1000) // 2 + 150, (screen_height - 250) // 2 + 150, text=loc[lang]["STATS-CLOCK"], font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'], tags="STATS-CLOCK")
 
     # Statistics for second game
-    round_rectangle(canvas, (screen_width - 1000) // 2 + 350, (screen_height - 500) // 2, (screen_width - 1000) // 2 + 650, (screen_height - 500) // 2 + 250, 20, fill=THEMES[theme]['bg'], outline="darkred", width=4)
-    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 250) // 2 - 50, text="Time played:", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'])
-    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 250) // 2 + 50, text="Matched items:", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'])
-    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 250) // 2 + 150, text="Furniture game", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'])
+    round_rectangle(canvas, (screen_width - 1000) // 2 + 350, (screen_height - 500) // 2, (screen_width - 1000) // 2 + 650, (screen_height - 500) // 2 + 250, 20, fill=THEMES[theme]['button'], outline="darkred", width=4)
+    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 250) // 2 - 50, text=loc[lang]["STATS-TIME"], font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'], tags="STATS-TIME")
+    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 250) // 2 + 50, text=loc[lang]["STATS-MATCHED"], font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'], tags="STATS-MATCHED")
+    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 250) // 2 + 150, text=loc[lang]["STATS-PAPER"], font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'], tags="STATS-PAPER")
 
     # Statistics for third game
-    round_rectangle(canvas, (screen_width - 1000) // 2 + 700, (screen_height - 500) // 2, (screen_width - 1000) // 2 + 1000, (screen_height - 500) // 2 + 250, 20, fill=THEMES[theme]['bg'], outline="darkred", width=4)
-    canvas.create_text((screen_width - 1000) // 2 + 850, (screen_height - 250) // 2 - 50, text="Time played:", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'])
-    canvas.create_text((screen_width - 1000) // 2 + 850, (screen_height - 250) // 2 + 50, text="Puzzle solved:", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'])
-    canvas.create_text((screen_width - 1000) // 2 + 850, (screen_height - 250) // 2 + 150, text="Puzzle game", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'])
+    round_rectangle(canvas, (screen_width - 1000) // 2 + 700, (screen_height - 500) // 2, (screen_width - 1000) // 2 + 1000, (screen_height - 500) // 2 + 250, 20, fill=THEMES[theme]['button'], outline="darkred", width=4)
+    canvas.create_text((screen_width - 1000) // 2 + 850, (screen_height - 250) // 2 - 50, text=loc[lang]["STATS-TIME"], font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'], tags="STATS-TIME")
+    canvas.create_text((screen_width - 1000) // 2 + 850, (screen_height - 250) // 2 + 50, text=loc[lang]["STATS-SOLVED"], font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'], tags="STATS-SOLVED")
+    canvas.create_text((screen_width - 1000) // 2 + 850, (screen_height - 250) // 2 + 150, text=loc[lang]["STATS-MATCH"], font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'], tags="STATS-MATCH")
 
     # General statistics
-    round_rectangle(canvas, (screen_width - 1000) // 2, (screen_height - 500) // 2 + 370, (screen_width - 1000) // 2 + 1000, (screen_height - 500) // 2 + 620, 20, fill=THEMES[theme]['bg'], outline="darkred", width=4)
-    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 500) // 2 + 420, text="Lifetime statistics:", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'])
-    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 500) // 2 + 470, text="Total time spent learning:", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'])
-    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 500) // 2 + 520, text="Words learned:", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'])
+    round_rectangle(canvas, (screen_width - 1000) // 2, (screen_height - 500) // 2 + 370, (screen_width - 1000) // 2 + 1000, (screen_height - 500) // 2 + 620, 20, fill=THEMES[theme]['button'], outline="darkred", width=4)
+    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 500) // 2 + 420, text=loc[lang]["STATS-LIFETIME"], font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'], tags="STATS-LIFETIME")
+    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 500) // 2 + 470, text=loc[lang]["STATS-TOTALTIME"], font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'], tags="STATS-TOTALTIME")
+    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 500) // 2 + 520, text=loc[lang]["STATS-LEARNED"], font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'], tags="STATS-LEARNED")
 
     # Go back button
     create_back_button(canvas, 15, 15)
 
-    return (statistics_frame, canvas)
+    return statistics_frame, canvas
 
 
 def accessibility_menu_table() -> tuple[Frame, Canvas]:
     """Initializes the accessibility page."""
     accessibility_frame = Frame(root, bg=THEMES[theme]['bg'])
+    accessibility_frame.stringvars = []
 
     canvas = Canvas(accessibility_frame,
                     width=screen_width, height=screen_height,
@@ -492,7 +642,6 @@ def accessibility_menu_table() -> tuple[Frame, Canvas]:
     canvas.pack(expand=True, ipadx=50, ipady=50)
 
     # Settings
-    DEBUG = 0
     center = {'x': screen_width // 2,
               'y': screen_height // 2}
 
@@ -502,18 +651,20 @@ def accessibility_menu_table() -> tuple[Frame, Canvas]:
                     center['x'] + 700, center['y'] - 50,
                     20, fill=THEMES[theme]['bg'], outline="darkred", width=4)
     canvas.create_text(center['x'], center['y'] - 300,
-                       text="Change Language", font=(my_font, FONT_LARGE, "bold"),
-                       anchor="center", fill=THEMES[theme]['text'])
+                       text=loc[lang]["ACCESS-CHANGE"], font=(my_font, FONT_LARGE, "bold"),
+                       anchor="center", fill=THEMES[theme]['text'], tags="ACCESS-CHANGE")
     create_rounded_button(canvas,
                           center['x'] - 350, center['y'] - 250,
                           width=330, height=150,
-                          text="Swedish", command="",
-                          font=(my_font, FONT_NORMAL))
+                          text=loc[lang]["ACCESS-CHANGE-SE"], command=lambda: set_language("sv"),
+                          font=(my_font, FONT_NORMAL),
+                          tag="ACCESS-CHANGE-SE")
     create_rounded_button(canvas,
                           center['x'] + 20, center['y'] - 250,
                           width=330, height=150,
-                          text="English", command="",
-                          font=(my_font, FONT_NORMAL))
+                          text=loc[lang]["ACCESS-CHANGE-EN"], command=lambda: set_language("en"),
+                          font=(my_font, FONT_NORMAL),
+                          tag="ACCESS-CHANGE-EN")
 
     # Resize font
     round_rectangle(canvas,
@@ -521,8 +672,8 @@ def accessibility_menu_table() -> tuple[Frame, Canvas]:
                     center['x'] - 50, center['y'] + 350,
                     20, fill=THEMES[theme]['bg'], outline=THEMES[theme]['button-h'], width=4)
     canvas.create_text(center['x'] - 380, center['y'] + 100,
-                       text="Resize Font", font=(my_font, FONT_LARGE, "bold"),
-                       anchor="center", fill=THEMES[theme]['text'])
+                       text=loc[lang]["ACCESS-RESIZE"], font=(my_font, FONT_LARGE, "bold"),
+                       anchor="center", fill=THEMES[theme]['text'], tags="ACCESS-RESIZE")
 
     font_size_options = ["50%", "75%", "100%", "125%", "150%"]
     font_size_setting = StringVar(root, "100%")
@@ -534,7 +685,7 @@ def accessibility_menu_table() -> tuple[Frame, Canvas]:
                               bg=THEMES[theme]['button'], fg=THEMES[theme]['text'],
                               activebackground=THEMES[theme]['button-h'],
                               activeforeground=THEMES[theme]['text-h'])
-    font_size_dropdown.place(x=center['x'] - 600,
+    font_size_dropdown.place(x=center['x'] - 650,
                              y=center['y'] + 200)
 
     # Theme
@@ -543,10 +694,11 @@ def accessibility_menu_table() -> tuple[Frame, Canvas]:
                     center['x'] + 700, center['y'] + 350,
                     20, fill=THEMES[theme]['bg'], outline=THEMES[theme]['button-h'], width=4)
     canvas.create_text(center['x'] + 380, center['y'] + 100,
-                       text="Theme", font=(my_font, FONT_LARGE, "bold"),
-                       anchor="center", fill=THEMES[theme]['text'])
-    theme_options = ["Light", "Dark"]
-    theme_setting = StringVar(root, theme)
+                       text=loc[lang]["ACCESS-THEME"], font=(my_font, FONT_LARGE, "bold"),
+                       anchor="center", fill=THEMES[theme]['text'], tags="ACCESS-THEME")
+    theme_options = [loc[lang]["ACCESS-THEME-LIGHT"],
+                     loc[lang]["ACCESS-THEME-DARK"]]
+    theme_setting = StringVar(root, loc[lang]["ACCESS-THEME-LIGHT"]) if theme == "Light" else StringVar(root, loc[lang]["ACCESS-THEME-DARK"])
     theme_dropdown = OptionMenu(canvas,
                                 theme_setting,
                                 *theme_options,
@@ -555,22 +707,11 @@ def accessibility_menu_table() -> tuple[Frame, Canvas]:
                           bg=THEMES[theme]['button'], fg=THEMES[theme]['text'],
                           activebackground=THEMES[theme]['button-h'],
                           activeforeground=THEMES[theme]['text-h'])
-    theme_dropdown.place(x=center['x'] + 150,
+    theme_dropdown.place(x=center['x'] + 100,
                          y=center['y'] + 200)
 
     # Backwards navigation
     create_back_button(canvas, 15, 15)
-
-    # DEBUG: CenterX, CenterY
-    if DEBUG:
-        round_rectangle(canvas,
-                        center['x'] - 1, 0,
-                        center['x'] + 1, screen_height,
-                        1, fill='red', outline='red', width=1)
-        round_rectangle(canvas,
-                        0, center['y'] - 1,
-                        screen_width, center['y'] + 1,
-                        1, fill='red', outline='red', width=1)
 
     return (accessibility_frame, canvas)
 
@@ -578,7 +719,7 @@ def accessibility_menu_table() -> tuple[Frame, Canvas]:
 # Create frames for different pages
 main_frame = main_menu_table()
 start_frame = start_menu_table()
-profile_frame = profile_menu_table()
+# profile_frame = profile_menu_table(current_user)
 login_frame = log_in_session()
 statistics_frame = statistics_menu_table()
 accessibility_frame = accessibility_menu_table()
@@ -586,7 +727,6 @@ accessibility_frame = accessibility_menu_table()
 # Call the titles for the different pages
 main_label()
 start_label()
-profile_label()
 login_label()
 statistics_label()
 
@@ -600,5 +740,7 @@ root.uu_img = PhotoImage(
 root.uu_img_label = Label(root, image=root.uu_img, border=0)
 root.uu_img_label.place(relx=1, rely=1, anchor="se")
 root.uu_img.image = root.uu_img
+
+root.stringvars = []
 
 root.mainloop()
