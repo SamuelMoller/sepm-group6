@@ -200,6 +200,21 @@ def scale_font_size(val: str) -> None:
                     else:   # Error handling
                         _canvas.itemconfig(item, font=(font[0], font_size))
 
+        for _frame in [main_frame[0], start_frame[0],
+                       profile_frame[0], login_frame[0],
+                       statistics_frame[0], accessibility_frame[0]]:
+            for item in _frame.winfo_children():
+                if isinstance(item, Label):
+                    font = item.cget('font').split(" ")
+                    font_size = int(((int(font[1]) / old_font_scale) * font_scale))
+
+                    if len(font) == 3:  # Bold fonts
+                        item.config(font=(font[0], font_size, font[2]))
+                    elif len(font) == 2:    # Normal fonts
+                        item.config(font=(font[0], font_size))
+                    else:   # Error handling
+                        item.config(font=(font[0], font_size))
+
     match val:
         case "50%": _set(0.5)
         case "75%": _set(0.75)
