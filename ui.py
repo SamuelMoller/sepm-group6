@@ -6,7 +6,7 @@ try:
     from tkinter import font as tkFont
     from PIL import ImageFont, Image, ImageTk
     import os
-    from level1_ui import Level1UI 
+    from levels.level1_ui import Level1UI
     modules_loaded = True
 except ImportError as e:
     print(f"Error: {e}")
@@ -25,12 +25,6 @@ class ClockGame:
         self.root.geometry("800x600") # Width & height
         self.root.minsize(600, 400) # Minimum width & height
         self.root.configure(bg='#FFFFFF')
-
-        if not modules_loaded:
-            messagebox.showerror("Missing Dependencies", 
-                "Required modules are missing.")
-            self.root.destroy()
-            return
         
         # Initialize attributes
         self.bg_image = None
@@ -39,7 +33,14 @@ class ClockGame:
         self.last_height = 600  # Store last height to avoid redundant resizing
 
         # Store the callback function to return to the Main Menu
+        self.root.protocol("WM_DELETE_WINDOW", return_to_main_menu_callback)
         self.return_to_main_menu_callback = return_to_main_menu_callback
+
+        if not modules_loaded:
+            messagebox.showerror("Missing Dependencies",
+                "Required modules are missing.")
+            self.return_to_main_menu_callback()
+            return
 
         # Attempt to load and register the custom font
         self.custom_font_family = self.load_custom_font(FONT_PATH, 14)
