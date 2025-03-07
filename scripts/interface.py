@@ -685,7 +685,7 @@ def accessibility_menu_table() -> tuple[Frame, Canvas]:
                               bg=THEMES[theme]['button'], fg=THEMES[theme]['text'],
                               activebackground=THEMES[theme]['button-h'],
                               activeforeground=THEMES[theme]['text-h'])
-    font_size_dropdown.place(x=center['x'] - 600,
+    font_size_dropdown.place(x=center['x'] - 650,
                              y=center['y'] + 200)
 
     # Theme
@@ -707,7 +707,7 @@ def accessibility_menu_table() -> tuple[Frame, Canvas]:
                           bg=THEMES[theme]['button'], fg=THEMES[theme]['text'],
                           activebackground=THEMES[theme]['button-h'],
                           activeforeground=THEMES[theme]['text-h'])
-    theme_dropdown.place(x=center['x'] + 150,
+    theme_dropdown.place(x=center['x'] + 100,
                          y=center['y'] + 200)
 
     # Backwards navigation
