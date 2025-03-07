@@ -6,7 +6,10 @@ try:
     from tkinter import font as tkFont
     from PIL import ImageFont, Image, ImageTk
     import os
-    from levels.level1_ui import Level1UI
+    from levels.level1_ui import Level1UI 
+    from levels.level2_ui import Level2UI 
+    from levels.level3_ui import Level3UI 
+
     modules_loaded = True
 except ImportError as e:
     print(f"Error: {e}")
@@ -25,6 +28,12 @@ class ClockGame:
         self.root.geometry("800x600") # Width & height
         self.root.minsize(600, 400) # Minimum width & height
         self.root.configure(bg='#FFFFFF')
+
+        if not modules_loaded:
+            messagebox.showerror("Missing Dependencies", 
+                "Required modules are missing.")
+            self.root.destroy()
+            return
         
         # Initialize attributes
         self.bg_image = None
@@ -206,7 +215,10 @@ class ClockGame:
         # Load Level 1 UI
         if level == 1:
             self.current_level_ui = Level1UI(self.root, self.back_to_menu)
-        # Update this to handle level 2 & 3 too when you have created such! :)
+        elif level == 2:
+            self.current_level_ui = Level2UI(self.root, self.back_to_menu)
+        elif level == 3:
+            self.current_level_ui = Level3UI(self.root, self.back_to_menu)
         else:
             messagebox.showinfo("Info", f"Level {level} is not yet implemented.")
 
