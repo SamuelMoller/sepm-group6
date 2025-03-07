@@ -238,7 +238,11 @@ def get_cur_user_stats() -> dict:
         
         if current_user is None:
             print("Error: No user is logged in")
-            return
+            stats = {
+            'total_time': 0,
+            'words_learned': 0
+        }
+            return stats
         
         query = "SELECT total_time, words_learned FROM users WHERE username = ?"
 
