@@ -17,12 +17,18 @@ To verify if Python is installed, open a terminal (or command prompt on Windows)
 ```bash
 # macOS/Linux
 python3 --version
+```
 
+```bash
 # Windows
 python --version
 ```
+
 If Python is not installed, install it using the following:
-- **macOS**: `brew install python`
+- **macOS**:
+```bash
+  brew install python
+```
 - **Linux**:
   ```bash
   sudo apt update
@@ -35,15 +41,20 @@ If Python is not installed, install it using the following:
 ```bash
 # macOS/Linux
 pip3 --version
+```
 
+```bash
 # Windows
 pip --version
 ```
+
 If pip is not installed, install it using:
 ```bash
 # macOS/Linux
 python3 -m ensurepip --upgrade
+```
 
+```bash
 # Windows
 python -m ensurepip --upgrade
 ```
@@ -53,22 +64,33 @@ python -m ensurepip --upgrade
 ```bash
 # macOS/Linux
 mysql --version
+```
 
+```bash
 # Windows
 mysql --version
 ```
+
 If MySQL is not installed, install it using:
+
 ```bash
 pip install mysql-connector-python
 ```
 
 ### 4. Check if Tkinter is Installed
 To check if `tkinter` is installed, run:
+
 ```bash
 python3 -m tkinter
 ```
+
 If not installed, install it using:
-- **macOS**: `brew install python-tk`
+
+- **macOS**:
+ ```bash
+  brew install python-tk
+ ```
+
 - **Linux**:
   ```bash
   sudo apt update
