@@ -432,14 +432,14 @@ def on_login_click():
     # Login button inside the popup
 
     def login_user(even=None):
-        #Fetch all information 
+        # Fetch all information
         global current_user, profile_frame, user_age, user_country, user_type, user_total_time, user_words_learned, user_fullname
         username = username_entry.get()
-        
+
         user_profile = backend_API.get_user(username)  # Attempt to fetch user
 
         if not user_profile:
-            #username_label.config(text=loc[lang]["LOGIN-ERR"], fg=THEMES[theme]['text'])
+            # username_label.config(text=loc[lang]["LOGIN-ERR"], fg=THEMES[theme]['text'])
             messagebox.showerror("Login Failed", loc[lang]["LOGIN-ERR"])
             return  # Stop execution
 
@@ -460,7 +460,7 @@ def on_login_click():
             profile_frame = profile_menu_table(current_user)
             profile_label()
         else:
-            #username_label.config(text=loc[lang]["LOGIN-ERR"], fg=THEMES[theme]['text'])
+            # username_label.config(text=loc[lang]["LOGIN-ERR"], fg=THEMES[theme]['text'])
             messagebox.showerror("Login Failed", loc[lang]["LOGIN-ERR"])
 
     login_btn = Button(popup, text=loc[lang]["LOGIN-BTN"], font=(my_font, FONT_SMALL), command=login_user, bg=THEMES[theme]['button'], fg=THEMES[theme]['text'])
@@ -640,7 +640,8 @@ def profile_menu_table(current_user) -> tuple[Frame, Canvas]:
 
     return (profile_frame, canvas)
 
-#Statistics page
+
+# Statistics page
 def statistics_menu_table() -> tuple[Frame, Canvas]:
     """Create statistics page"""
     statistics_frame = Frame(root, bg=THEMES[theme]['bg'])
