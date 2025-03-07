@@ -2,13 +2,13 @@
 
 This project is part of the **Software Engineering and Project Management** course at **Uppsala University**. It focuses on developing the user interface (UI) for a Swedish learning game designed to help users learn Swedish interactively. This repository contains the code related to the Swedish Learning Game application, where users can practice Swedish through various levels and challenges.
 
-## Application Setup
+## Application Setup and Execution
 
 ### Prerequisites
 Before setting up the application, ensure you have the relevant packages installed.
 
-### 1. Check if Python is Installed
-To verify if Python is installed, open a terminal (or command prompt on Windows) and run the following command:
+### 1. Verify Python installation
+To verify if Python is installed, run the following command:
 
 ```bash
 # macOS/Linux
@@ -25,16 +25,19 @@ If Python is not installed, install it using the following:
 - **macOS**:
   ```bash
   brew install python
+  ```
+
+- **Linux**
+ ```bash
+sudo apt update
+sudo apt install python3
+
  ```
 
-- **Linux**:
- ```bash
- sudo apt update
- sudo apt install python3
- ```
 - **Windows**: Download and install it from [Python's official website](https://www.python.org/downloads/).
 
-### 2. Check if pip is installed
+### 2.  Verify pip Installation
+To verify if pip is installed, run the following command:
 
 ```bash
 # macOS/Linux
@@ -58,26 +61,8 @@ python3 -m ensurepip --upgrade
 python -m ensurepip --upgrade
 ```
 
-### 3. Check if MySQL is Installed
-
-```bash
-# macOS/Linux
-mysql --version
-```
-
-```bash
-# Windows
-mysql --version
-```
-
-If MySQL is not installed, install it using:
-
-```bash
-pip install mysql-connector-python
-```
-
-### 4. Check if Tkinter is Installed
-To check if `tkinter` is installed, run:
+### 3. Verify Tkinter Installation
+To verify if tkinter is installed, run the following command:
 
 ```bash
 python3 -m tkinter
@@ -95,17 +80,17 @@ If not installed, install it using:
  sudo apt update
  sudo apt install python3-tk
  ```
-- **Windows**: Tkinter should be available by default.
+- **Windows**: : "For Windows, Tkinter comes pre-installed with standard Python distributions.
 
-## Installation and Execution
+## Run the application
 
-1. Clone this repository to your local machine:
-   ```bash
-   git clone https://github.com/SamuelMoller/sepm-group6.git
-   ```
+# Clone this repository
+git clone https://github.com/SamuelMoller/sepm-group6.git
 
-2. Navigate to the project directory and start the application:
-   ```bash
-   python scripts/interface.py
-   ```
+# Install dependencies
+pip install -r requirements.txt
+
+# Start the application
+python scripts/interface.py
+
 
