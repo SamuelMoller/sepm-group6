@@ -55,12 +55,12 @@ root = Tk()
 root.title(loc[lang]["TITLE"])
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
+root.state('zoomed')  
 
 
 # Window size
 root.geometry(f"{screen_width}x{screen_height}")
 root.configure(background=THEMES[theme]["bg"])
-
 
 def login_label():
     """Title on login page"""
