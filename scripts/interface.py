@@ -357,13 +357,15 @@ def on_accessibility_click():
     accessibility_frame[0].pack(fill="both", expand=True)
 
 
-def on_clock_game_click():
+def on_clock_game_click(): 
+
     def _close_clock_game(game_root: Toplevel, main_menu_root: Tk):
         game_root.destroy()
         main_menu_root.deiconify()
 
     clock_game_root = Toplevel()
     root.clock_game = ui.ClockGame(clock_game_root, return_to_main_menu_callback=lambda: _close_clock_game(clock_game_root, root))
+    clock_game_root.state('zoomed') 
     root.withdraw()
     clock_game_root.mainloop()
 
