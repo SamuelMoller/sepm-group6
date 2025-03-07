@@ -367,6 +367,7 @@ def on_clock_game_click():
     clock_game_root = Toplevel()
     root.clock_game = ui.ClockGame(clock_game_root, return_to_main_menu_callback=lambda: _close_clock_game(clock_game_root, root))
     root.withdraw()
+    clock_game_root.state('zoomed')  
     clock_game_root.mainloop()
 
 
