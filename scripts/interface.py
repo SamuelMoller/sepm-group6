@@ -740,6 +740,9 @@ root.uu_img_label = Label(root, image=root.uu_img, border=0)
 root.uu_img_label.place(relx=1, rely=1, anchor="se")
 root.uu_img.image = root.uu_img
 
+# StringVars for root.
+root.stringvars = []
+
 # Safely quit if window is closed.
 root.protocol("WM_DELETE_WINDOW", lambda: quit(0))
 
