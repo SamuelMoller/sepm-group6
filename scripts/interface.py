@@ -2,7 +2,7 @@
 from tkinter import *
 import pyglet
 from os.path import join, dirname, normpath
-# from tkinter import messagebox
+from tkinter import messagebox
 import json
 
 # Integration modules
@@ -49,7 +49,7 @@ THEMES = {
 }
 
 # Localization
-lang = 'sv'
+lang = 'en'
 with open(normpath(join(root_dir, '..', 'loc', 'main_menu.json')), encoding="UTF-8") as f: loc = json.load(f)
 
 # Main window
@@ -57,7 +57,6 @@ root = Tk()
 root.title(loc[lang]["TITLE"])
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
-
 
 # Window size
 root.geometry(f"{screen_width}x{screen_height}")
@@ -92,7 +91,7 @@ def statistics_label():
     statistics_frame[0].stringvars.append(underlabel_var)
     underlabel = Label(statistics_frame[0], textvariable=underlabel_var[0], font=(my_font, FONT_LARGE), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
 
-    label.place(relx=0.5, rely=0.15, anchor="center")
+    label.place(relx=0.5, rely=0.10, anchor="center")
     underlabel.place(relx=0.5, rely=0.21, anchor="center")
 
 
@@ -296,9 +295,9 @@ def set_language(val: str) -> None:
                 _canvas.itemconfig(item, text=loc[lang][_canvas.itemcget(item, "tags").split(" ")[0]])
                 match _canvas.itemcget(item, "tags").split(" ")[0]:     # Edge case for user profile
                     case "USER-NAME":
-                        _canvas.itemconfig(item, text=f"{loc[lang]["USER-NAME"]} {user_profile['first_name']} {user_profile['last_name']}")
+                        _canvas.itemconfig(item, text=f"{loc[lang]['USER-NAME']} {user_profile['first_name']} {user_profile['last_name']}")
                     case "USER-AGE":
-                        _canvas.itemconfig(item, text=f"{loc[lang]["USER-AGE"]} {user_profile['age']}")
+                        _canvas.itemconfig(item, text=f"{loc[lang]['USER-AGE']} {user_profile['age']}")
                     case "USER-CNTR":
                         _canvas.itemconfig(item, text=f"{loc[lang]["USER-CNTR"]} {user_profile['country']}")
 
@@ -431,19 +430,28 @@ def on_login_click():
     username_entry.focus()
 
     # Login button inside the popup
-    def login_user(event=None):
-        # Fetch all information
+
+    def login_user(even=None):
+        #Fetch all information 
         global current_user, profile_frame, user_age, user_country, user_type, user_total_time, user_words_learned, user_fullname
         username = username_entry.get()
-        user_profile = backend_API.get_user(username)  # Username
-        user_fullname = backend_API.get_user(username)["real_name"]  # Age of user
-        user_age = backend_API.get_user(username)["age"]  # Age of user
-        user_country = backend_API.get_user(username)["country"]  # Country
-        user_type = backend_API.get_user(username)["user_type"]  # User type
-        user_total_time = backend_API.get_user(username)["total_time"]  # user total time stored
-        user_words_learned = backend_API.get_user(username)["words_learned"]  # user words learned stored
+        
+        user_profile = backend_API.get_user(username)  # Attempt to fetch user
 
-        if user_profile and 'username' in user_profile and username == user_profile['username']:
+        if not user_profile:
+            #username_label.config(text=loc[lang]["LOGIN-ERR"], fg=THEMES[theme]['text'])
+            messagebox.showerror("Login Failed", loc[lang]["LOGIN-ERR"])
+            return  # Stop execution
+
+        # Ensure required keys exist before accessing them
+        user_fullname = user_profile.get("real_name", "Unknown")  # Default value if key is missing
+        user_age = user_profile.get("age", "Unknown")
+        user_country = user_profile.get("country", "Unknown")
+        user_type = user_profile.get("user_type", "Unknown")
+        user_total_time = user_profile.get("total_time", 0)
+        user_words_learned = user_profile.get("words_learned", 0)
+
+        if 'username' in user_profile and username == user_profile['username']:
             current_user = username
             popup.destroy()
             login_frame[0].pack_forget()
@@ -452,7 +460,8 @@ def on_login_click():
             profile_frame = profile_menu_table(current_user)
             profile_label()
         else:
-            username_label.config(text=loc[lang]["LOGIN-ERR"], fg=THEMES[theme]['text'])
+            #username_label.config(text=loc[lang]["LOGIN-ERR"], fg=THEMES[theme]['text'])
+            messagebox.showerror("Login Failed", loc[lang]["LOGIN-ERR"])
 
     login_btn = Button(popup, text=loc[lang]["LOGIN-BTN"], font=(my_font, FONT_SMALL), command=login_user, bg=THEMES[theme]['button'], fg=THEMES[theme]['text'])
     login_btn.place(relx=0.5, rely=0.55, anchor="center")
@@ -608,19 +617,19 @@ def profile_menu_table(current_user) -> tuple[Frame, Canvas]:
     canvas.profile_img = canvas.create_image((screen_width - 600) // 2 - 25, (screen_height // 2) - 205, image=user_icon_img, anchor="center", tags="profile")
 
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 300,
-                       text=f"{loc[lang]["USER-NAME"]} {user_fullname}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'], tags="USER-NAME")
+                       text=f"{loc[lang]['USER-NAME']} {user_fullname}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'], tags="USER-NAME")
 
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 250,
-                       text=f"{loc[lang]["USER-CURR"]} {current_user}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'], tags="USER-CURR")
+                       text=f"{loc[lang]['USER-CURR']} {current_user}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'], tags="USER-CURR")
 
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 200,
-                       text=f"{loc[lang]["USER-AGE"]} {user_age}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'], tags="USER-AGE")
+                       text=f"{loc[lang]['USER-AGE']} {user_age}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'], tags="USER-AGE")
 
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 150,
-                       text=f"{loc[lang]["USER-CNTR"]} {user_country}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'], tags="USER-CNTR")
+                       text=f"{loc[lang]['USER-CNTR']} {user_country}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'], tags="USER-CNTR")
 
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 100,
-                       text=f"{loc[lang]["USER-TYPE"]} {user_type}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'], tags="USER-TYPE")
+                       text=f"{loc[lang]['USER-TYPE']} {user_type}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'], tags="USER-TYPE")
 
     # Statistics and admin button
     create_rounded_button(canvas, (screen_width - 500) // 2 - 200, screen_height // 2, 900, 75, loc[lang]["USER-MYSTAT"], on_statistics_click, (my_font, FONT_NORMAL), "USER-MYSTAT")
@@ -631,7 +640,7 @@ def profile_menu_table(current_user) -> tuple[Frame, Canvas]:
 
     return (profile_frame, canvas)
 
-
+#Statistics page
 def statistics_menu_table() -> tuple[Frame, Canvas]:
     """Create statistics page"""
     statistics_frame = Frame(root, bg=THEMES[theme]['bg'])
@@ -667,7 +676,7 @@ def statistics_menu_table() -> tuple[Frame, Canvas]:
     # Go back button
     create_back_button(canvas, 15, 15)
 
-    return (statistics_frame, canvas)
+    return statistics_frame, canvas
 
 
 def accessibility_menu_table() -> tuple[Frame, Canvas]:
@@ -724,7 +733,7 @@ def accessibility_menu_table() -> tuple[Frame, Canvas]:
                               bg=THEMES[theme]['button'], fg=THEMES[theme]['text'],
                               activebackground=THEMES[theme]['button-h'],
                               activeforeground=THEMES[theme]['text-h'])
-    font_size_dropdown.place(x=center['x'] - 600,
+    font_size_dropdown.place(x=center['x'] - 650,
                              y=center['y'] + 200)
 
     # Theme
