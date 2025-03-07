@@ -1,17 +1,21 @@
+# System modules
 from tkinter import *
 import pyglet
 from os.path import join, dirname, normpath
 from tkinter import messagebox
 import json
 
+# Integration modules
 from sys import path as syspath
 syspath.append(normpath(join(dirname(__file__), '../')))
 from backend import user
 from integration_backend import backend_API
+import ui
+from WordSearch.gui import launch_puzzle_game
+
 
 # CURRENT USER
 current_user = None
-from main import start_clock_game
 
 # File paths
 root_dir = dirname(__file__)
@@ -27,7 +31,7 @@ FONT_LARGE = int(36)
 FONT_EXTRA_LARGE = int(50)
 
 # Themes
-theme = "Dark"
+theme = "Light"
 THEMES = {
     "Light": {
         "bg": "#F0F0F0",
@@ -47,20 +51,19 @@ THEMES = {
 }
 
 # Localization
-lang = 'sv'
-with open(normpath(join(root_dir, '..', 'loc', 'main_menu.json'))) as f: loc = json.load(f)
+lang = 'en'
+with open(normpath(join(root_dir, '..', 'loc', 'main_menu.json')), encoding="UTF-8") as f: loc = json.load(f)
 
 # Main window
 root = Tk()
 root.title(loc[lang]["TITLE"])
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
-
+root.state('zoomed')  
 
 # Window size
 root.geometry(f"{screen_width}x{screen_height}")
 root.configure(background=THEMES[theme]["bg"])
-
 
 def login_label():
     """Title on login page"""
@@ -90,7 +93,7 @@ def statistics_label():
     statistics_frame[0].stringvars.append(underlabel_var)
     underlabel = Label(statistics_frame[0], textvariable=underlabel_var[0], font=(my_font, FONT_LARGE), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
 
-    label.place(relx=0.5, rely=0.15, anchor="center")
+    label.place(relx=0.5, rely=0.10, anchor="center")
     underlabel.place(relx=0.5, rely=0.21, anchor="center")
 
 
@@ -163,6 +166,20 @@ def create_rounded_button(canvas, x, y, width, height, text, command, font, tag)
     return button, text_item
 
 
+def create_dropdown(canvas, x: int, y: int, options: list, stringvar: StringVar, command):
+    dropdown = OptionMenu(canvas,
+                          stringvar,
+                          *options,
+                          command=command)
+    dropdown.config(width=18, height=1, font=(my_font, FONT_NORMAL, "bold"),
+                    bg=THEMES[theme]['button'], fg=THEMES[theme]['text'],
+                    activebackground=THEMES[theme]['button-h'],
+                    activeforeground=THEMES[theme]['text-h'])
+    dropdown.place(x=x,
+                   y=y)
+    return dropdown
+
+
 def scale_font_size(val: str) -> None:
     def _set(mod: float):
         global font_scale
@@ -183,6 +200,21 @@ def scale_font_size(val: str) -> None:
                         _canvas.itemconfig(item, font=(font[0], font_size))
                     else:   # Error handling
                         _canvas.itemconfig(item, font=(font[0], font_size))
+
+        for _frame in [main_frame[0], start_frame[0],
+                       profile_frame[0], login_frame[0],
+                       statistics_frame[0], accessibility_frame[0]]:
+            for item in _frame.winfo_children():
+                if isinstance(item, Label):
+                    font = item.cget('font').split(" ")
+                    font_size = int(((int(font[1]) / old_font_scale) * font_scale))
+
+                    if len(font) == 3:  # Bold fonts
+                        item.config(font=(font[0], font_size, font[2]))
+                    elif len(font) == 2:    # Normal fonts
+                        item.config(font=(font[0], font_size))
+                    else:   # Error handling
+                        item.config(font=(font[0], font_size))
 
     match val:
         case "50%": _set(0.5)
@@ -266,10 +298,24 @@ def set_language(val: str) -> None:
                 match _canvas.itemcget(item, "tags").split(" ")[0]:     # Edge case for user profile
                     case "USER-NAME":
                         _canvas.itemconfig(item, text=f"{loc[lang]['USER-NAME']} {user_profile['first_name']} {user_profile['last_name']}")
+                        _canvas.itemconfig(item, text=f"{loc[lang]['USER-NAME']} {user_profile['first_name']} {user_profile['last_name']}")
                     case "USER-AGE":
+                        _canvas.itemconfig(item, text=f"{loc[lang]['USER-AGE']} {user_profile['age']}")
                         _canvas.itemconfig(item, text=f"{loc[lang]['USER-AGE']} {user_profile['age']}")
                     case "USER-CNTR":
                         _canvas.itemconfig(item, text=f"{loc[lang]['USER-CNTR']} {user_profile['country']}")
+                        _canvas.itemconfig(item, text=f"{loc[lang]['USER-CNTR']} {user_profile['country']}")
+
+    # Theme dropdown
+    accessibility_frame[0].theme_options = [loc[lang]["ACCESS-THEME-LIGHT"],
+                                            loc[lang]["ACCESS-THEME-DARK"]]
+    accessibility_frame[0].theme_setting = StringVar(root, accessibility_frame[0].theme_options[0]) if theme == "Light" else StringVar(root, accessibility_frame[0].theme_options[1])
+    accessibility_frame[0].theme_dropdown.destroy()
+    accessibility_frame[0].theme_dropdown = create_dropdown(accessibility_frame[1],
+                                                            x=screen_width // 2 + 100, y=screen_height // 2 + 200,
+                                                            options=accessibility_frame[0].theme_options,
+                                                            stringvar=accessibility_frame[0].theme_setting,
+                                                            command=lambda val: set_theme(val))
 
 
 def create_back_button(master: Canvas, x: int, y: int):
@@ -317,7 +363,15 @@ def on_accessibility_click():
 
 
 def on_clock_game_click():
-    start_clock_game()
+    def _close_clock_game(game_root: Toplevel, main_menu_root: Tk):
+        game_root.destroy()
+        main_menu_root.deiconify()
+
+    clock_game_root = Toplevel()
+    root.clock_game = ui.ClockGame(clock_game_root, return_to_main_menu_callback=lambda: _close_clock_game(clock_game_root, root))
+    root.withdraw()
+    clock_game_root.state('zoomed')  
+    clock_game_root.mainloop()
 
 
 def on_placeholder_click():
@@ -325,7 +379,8 @@ def on_placeholder_click():
 
 
 def on_match_the_words_click():
-    print("WILL BE IMPLEMENTED")
+    launch_puzzle_game()
+    
 
 
 def on_admin_control_click():
@@ -490,16 +545,16 @@ def on_register_click():
             error_label = Label(popup, text="All fields are required!", font=(my_font, FONT_SMALL), bg=THEMES[theme]['bg'], fg="red")
             error_label.place(relx=0.5, rely=0.9, anchor="center")
             return
-        
+
         try:
             age = int(age)
         except ValueError:
-            #If age is not valid
+            # If age is not valid
             error_label = Label(popup, text="Invalid age. Please enter a valid number.", font=(my_font, FONT_SMALL), bg=THEMES[theme]['bg'], fg="red")
             error_label.place(relx=0.5, rely=0.9, anchor="center")
             return
 
-        #Check if username already exist
+        # Check if username already exist
         user_profile = backend_API.get_user(username)
         if user_profile:
             error_label = Label(popup, text="Username already taken. Please choose another.", font=(my_font, FONT_SMALL), bg=THEMES[theme]['bg'], fg="red")
@@ -508,7 +563,7 @@ def on_register_click():
         backend_API.create_user(username, real_name=first_name, age=age, country=country, user_type=user_type)
         success_label = Label(popup, text="User registered successfully!", font=(my_font, FONT_SMALL), bg=THEMES[theme]['bg'], fg="green")
         success_label.place(relx=0.5, rely=0.9, anchor="center")
-        popup.after(1000, popup.destroy)  
+        popup.after(1000, popup.destroy)
 
     login_btn = Button(popup, text=loc[lang]["NEWUSER-REG"], font=(my_font, 12), command=register_user, bg=THEMES[theme]['button'], fg=THEMES[theme]['text'])
     login_btn.place(relx=0.5, rely=0.85, anchor="center")
@@ -632,7 +687,7 @@ def statistics_menu_table() -> tuple[Frame, Canvas]:
     # Go back button
     create_back_button(canvas, 15, 15)
 
-    return (statistics_frame, canvas)
+    return statistics_frame, canvas
 
 
 def accessibility_menu_table() -> tuple[Frame, Canvas]:
@@ -689,7 +744,7 @@ def accessibility_menu_table() -> tuple[Frame, Canvas]:
                               bg=THEMES[theme]['button'], fg=THEMES[theme]['text'],
                               activebackground=THEMES[theme]['button-h'],
                               activeforeground=THEMES[theme]['text-h'])
-    font_size_dropdown.place(x=center['x'] - 600,
+    font_size_dropdown.place(x=center['x'] - 650,
                              y=center['y'] + 200)
 
     # Theme
@@ -700,19 +755,12 @@ def accessibility_menu_table() -> tuple[Frame, Canvas]:
     canvas.create_text(center['x'] + 380, center['y'] + 100,
                        text=loc[lang]["ACCESS-THEME"], font=(my_font, FONT_LARGE, "bold"),
                        anchor="center", fill=THEMES[theme]['text'], tags="ACCESS-THEME")
-    theme_options = [loc[lang]["ACCESS-THEME-LIGHT"],
-                     loc[lang]["ACCESS-THEME-DARK"]]
-    theme_setting = StringVar(root, loc[lang]["ACCESS-THEME-LIGHT"]) if theme == "Light" else StringVar(root, loc[lang]["ACCESS-THEME-DARK"])
-    theme_dropdown = OptionMenu(canvas,
-                                theme_setting,
-                                *theme_options,
-                                command=lambda val: set_theme(val))
-    theme_dropdown.config(width=18, height=1, font=(my_font, FONT_NORMAL, "bold"),
-                          bg=THEMES[theme]['button'], fg=THEMES[theme]['text'],
-                          activebackground=THEMES[theme]['button-h'],
-                          activeforeground=THEMES[theme]['text-h'])
-    theme_dropdown.place(x=center['x'] + 150,
-                         y=center['y'] + 200)
+    accessibility_frame.theme_options = [loc[lang]["ACCESS-THEME-LIGHT"],
+                                         loc[lang]["ACCESS-THEME-DARK"]]
+    accessibility_frame.theme_setting = StringVar(root, accessibility_frame.theme_options[0]) if theme == "Light" else StringVar(root, accessibility_frame.theme_options[1])
+    accessibility_frame.theme_dropdown = create_dropdown(canvas, x=center['x'] + 100, y=center['y'] + 200,
+                                                         options=accessibility_frame.theme_options, stringvar=accessibility_frame.theme_setting,
+                                                         command=lambda val: set_theme(val))
 
     # Backwards navigation
     create_back_button(canvas, 15, 15)
@@ -745,6 +793,10 @@ root.uu_img_label = Label(root, image=root.uu_img, border=0)
 root.uu_img_label.place(relx=1, rely=1, anchor="se")
 root.uu_img.image = root.uu_img
 
+# StringVars for root.
 root.stringvars = []
+
+# Safely quit if window is closed.
+root.protocol("WM_DELETE_WINDOW", lambda: quit(0))
 
 root.mainloop()
