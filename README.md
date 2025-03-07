@@ -23,15 +23,14 @@ python --version
 If Python is not installed, install it using the following:
 
 - **macOS**:
-  ```bash
+```bash
 brew install python
-  ```
+```
 
 - **Linux**
- ```bash
+```bash
 sudo apt update
 sudo apt install python3
-
  ```
 
 - **Windows**: Download and install it from [Python's official website](https://www.python.org/downloads/).
