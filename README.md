@@ -10,19 +10,19 @@ Before setting up the application, ensure you have the relevant packages install
 ### 1. Verify Python installation
 To verify if Python is installed, run the following command:
 
+- **MacOS/Linux**
 ```bash
-# macOS/Linux
 python3 --version
 ```
 
+- **Windows**
 ```bash
-# Windows
 python --version
 ```
 
 If Python is not installed, install it using the following:
 
-- **macOS**:
+- **MacOS**:
 ```bash
 brew install python
 ```
@@ -38,19 +38,19 @@ sudo apt install python3
 ### 2.  Verify pip Installation
 To verify if pip is installed, run the following command:
 
+- **MacOS/Linux**
 ```bash
-# macOS/Linux
 pip3 --version
 ```
 
+- **Windows**
 ```bash
-# Windows
 pip --version
 ```
 
 If pip is not installed, install it using:
 
-- **macOS/Linux**:
+- **MacOS/Linux**:
 ```bash
 python3 -m ensurepip --upgrade
 ```
@@ -69,7 +69,7 @@ python3 -m tkinter
 
 If not installed, install it using:
 
-- **macOS**:
+- **MacOS**:
  ```bash
   brew install python-tk
  ```
@@ -79,17 +79,22 @@ If not installed, install it using:
  sudo apt update
  sudo apt install python3-tk
  ```
-- **Windows**: : "For Windows, Tkinter comes pre-installed with standard Python distributions.
+- **Windows**: *For Windows, Tkinter comes pre-installed with standard Python distributions.*
 
 ## Run the application
 
 ### Clone this repository
+```bash
 git clone https://github.com/SamuelMoller/sepm-group6.git
+```
 
 ### Install dependencies
+```bash
 pip install -r requirements.txt
+```
 
 ### Start the application
+```bash
 python scripts/interface.py
-
+```
 
