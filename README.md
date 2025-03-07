@@ -1,4 +1,4 @@
-# Swedish Learning Game UI
+# Swedish Learning Game 
 
 This project is part of the **Software Engineering and Project Management** course at **Uppsala University**. It focuses on developing the user interface (UI) for a Swedish learning game designed to help users learn Swedish interactively. This repository contains the code related to the Swedish Learning Game application, where users can practice Swedish through various levels and challenges.
 
