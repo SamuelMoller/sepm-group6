@@ -4,7 +4,6 @@ from os.path import join, dirname, normpath
 
 from sys import path as syspath
 syspath.append(normpath(join(dirname(__file__), '../')))
-from backend import user
 
 # File paths
 root_dir = dirname(__file__)
@@ -20,7 +19,7 @@ FONT_LARGE = int(36)
 FONT_EXTRA_LARGE = int(50)
 
 # Themes
-theme = "Dark"
+theme = "Light"
 THEMES = {
     "Light": {
         "bg": "#F0F0F0",
