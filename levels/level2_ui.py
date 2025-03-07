@@ -5,7 +5,7 @@ from game_logic_connector import GameLogicConnector
 import random
 import os
 
-class Level1UI:
+class Level2UI:
 
     def __init__(self, root, back_to_menu_callback):
         self.root = root

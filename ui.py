@@ -6,9 +6,9 @@ try:
     from tkinter import font as tkFont
     from PIL import ImageFont, Image, ImageTk
     import os
-    from levels.level1_ui import Level1UI 
-    from levels.level2_ui import Level2UI 
-    from levels.level3_ui import Level3UI 
+    from levels.level1_ui import Level1UI
+    from levels.level2_ui import Level2UI
+    from levels.level3_ui import Level3UI
 
     modules_loaded = True
 except ImportError as e:
@@ -28,12 +28,6 @@ class ClockGame:
         self.root.geometry("800x600") # Width & height
         self.root.minsize(600, 400) # Minimum width & height
         self.root.configure(bg='#FFFFFF')
-
-        if not modules_loaded:
-            messagebox.showerror("Missing Dependencies", 
-                "Required modules are missing.")
-            self.root.destroy()
-            return
         
         # Initialize attributes
         self.bg_image = None
@@ -41,15 +35,13 @@ class ClockGame:
         self.last_width = 800  # Store last width to avoid redundant resizing
         self.last_height = 600  # Store last height to avoid redundant resizing
 
-        root.protocol("WM_DELETE_WINDOW", return_to_main_menu_callback)
-
         # Store the callback function to return to the Main Menu
         self.root.protocol("WM_DELETE_WINDOW", return_to_main_menu_callback)
         self.return_to_main_menu_callback = return_to_main_menu_callback
 
         if not modules_loaded:
             messagebox.showerror("Missing Dependencies",
-                "Required modules are missing.")
+                                 "Required modules are missing.")
             self.return_to_main_menu_callback()
             return
 
