@@ -751,7 +751,7 @@ def accessibility_menu_table() -> tuple[Frame, Canvas]:
     accessibility_frame.theme_options = [loc[lang]["ACCESS-THEME-LIGHT"],
                                          loc[lang]["ACCESS-THEME-DARK"]]
     accessibility_frame.theme_setting = StringVar(root, accessibility_frame.theme_options[0]) if theme == "Light" else StringVar(root, accessibility_frame.theme_options[1])
-    accessibility_frame.theme_dropdown = create_dropdown(canvas, x=center['x'] + 150, y=center['y'] + 200,
+    accessibility_frame.theme_dropdown = create_dropdown(canvas, x=center['x'] + 100, y=center['y'] + 200,
                                                          options=accessibility_frame.theme_options, stringvar=accessibility_frame.theme_setting,
                                                          command=lambda val: set_theme(val))
 
