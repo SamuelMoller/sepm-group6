@@ -24,7 +24,7 @@ If Python is not installed, install it using the following:
 
 - **macOS**:
   ```bash
-  brew install python
+brew install python
   ```
 
 - **Linux**
@@ -84,13 +84,13 @@ If not installed, install it using:
 
 ## Run the application
 
-# Clone this repository
+### Clone this repository
 git clone https://github.com/SamuelMoller/sepm-group6.git
 
-# Install dependencies
+### Install dependencies
 pip install -r requirements.txt
 
-# Start the application
+### Start the application
 python scripts/interface.py
 
 
