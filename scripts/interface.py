@@ -27,7 +27,7 @@ FONT_LARGE = int(36)
 FONT_EXTRA_LARGE = int(50)
 
 # Themes
-theme = "Light"
+theme = "Dark"
 THEMES = {
     "Light": {
         "bg": "#F0F0F0",
@@ -47,7 +47,7 @@ THEMES = {
 }
 
 # Localization
-lang = 'en'
+lang = 'sv'
 with open(normpath(join(root_dir, '..', 'loc', 'main_menu.json'))) as f: loc = json.load(f)
 
 # Main window
@@ -90,7 +90,7 @@ def statistics_label():
     statistics_frame[0].stringvars.append(underlabel_var)
     underlabel = Label(statistics_frame[0], textvariable=underlabel_var[0], font=(my_font, FONT_LARGE), bg=THEMES[theme]['bg'], fg=THEMES[theme]['text'])
 
-    label.place(relx=0.5, rely=0.15, anchor="center")
+    label.place(relx=0.5, rely=0.10, anchor="center")
     underlabel.place(relx=0.5, rely=0.21, anchor="center")
 
 
@@ -265,11 +265,11 @@ def set_language(val: str) -> None:
                 _canvas.itemconfig(item, text=loc[lang][_canvas.itemcget(item, "tags").split(" ")[0]])
                 match _canvas.itemcget(item, "tags").split(" ")[0]:     # Edge case for user profile
                     case "USER-NAME":
-                        _canvas.itemconfig(item, text=f"{loc[lang]["USER-NAME"]} {user_profile['first_name']} {user_profile['last_name']}")
+                        _canvas.itemconfig(item, text=f"{loc[lang]['USER-NAME']} {user_profile['first_name']} {user_profile['last_name']}")
                     case "USER-AGE":
-                        _canvas.itemconfig(item, text=f"{loc[lang]["USER-AGE"]} {user_profile['age']}")
+                        _canvas.itemconfig(item, text=f"{loc[lang]['USER-AGE']} {user_profile['age']}")
                     case "USER-CNTR":
-                        _canvas.itemconfig(item, text=f"{loc[lang]["USER-CNTR"]} {user_profile['country']}")
+                        _canvas.itemconfig(item, text=f"{loc[lang]['USER-CNTR']} {user_profile['country']}")
 
 
 def create_back_button(master: Canvas, x: int, y: int):
@@ -569,19 +569,19 @@ def profile_menu_table(current_user) -> tuple[Frame, Canvas]:
     canvas.profile_img = canvas.create_image((screen_width - 600) // 2 - 25, (screen_height // 2) - 205, image=user_icon_img, anchor="center", tags="profile")
 
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 300,
-                       text=f"{loc[lang]["USER-NAME"]} {user_fullname}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'], tags="USER-NAME")
+                       text=f"{loc[lang]['USER-NAME']} {user_fullname}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'], tags="USER-NAME")
 
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 250,
-                       text=f"{loc[lang]["USER-CURR"]} {current_user}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'], tags="USER-CURR")
+                       text=f"{loc[lang]['USER-CURR']} {current_user}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'], tags="USER-CURR")
 
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 200,
-                       text=f"{loc[lang]["USER-AGE"]} {user_age}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'], tags="USER-AGE")
+                       text=f"{loc[lang]['USER-AGE']} {user_age}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'], tags="USER-AGE")
 
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 150,
-                       text=f"{loc[lang]["USER-CNTR"]} {user_country}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'], tags="USER-CNTR")
+                       text=f"{loc[lang]['USER-CNTR']} {user_country}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'], tags="USER-CNTR")
 
     canvas.create_text((screen_width - 600) // 2 + 175, (screen_height // 2) - 100,
-                       text=f"{loc[lang]["USER-TYPE"]} {user_type}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'], tags="USER-TYPE")
+                       text=f"{loc[lang]['USER-TYPE']} {user_type}", font=(my_font, FONT_SMALL, "bold"), anchor="w", fill=THEMES[theme]['text'], tags="USER-TYPE")
 
     # Statistics and admin button
     create_rounded_button(canvas, (screen_width - 500) // 2 - 200, screen_height // 2, 900, 75, loc[lang]["USER-MYSTAT"], on_statistics_click, (my_font, FONT_NORMAL), "USER-MYSTAT")
@@ -592,7 +592,7 @@ def profile_menu_table(current_user) -> tuple[Frame, Canvas]:
 
     return (profile_frame, canvas)
 
-
+#Statistics page
 def statistics_menu_table() -> tuple[Frame, Canvas]:
     """Create statistics page"""
     statistics_frame = Frame(root, bg=THEMES[theme]['bg'])
@@ -600,30 +600,34 @@ def statistics_menu_table() -> tuple[Frame, Canvas]:
 
     canvas = Canvas(statistics_frame, width=screen_width, height=screen_height, bg=THEMES[theme]['bg'], highlightthickness=0)
     canvas.pack(expand=True, ipadx=50, ipady=50)
-
+    
+    stats = backend_API.get_cur_user_stats()
+    total_time = stats.get('total_time')
+    words_learned = stats.get('words_learned')
+    
     # Statistics for first game
     round_rectangle(canvas, (screen_width - 1000) // 2, (screen_height - 500) // 2, (screen_width - 1000) // 2 + 300, (screen_height - 500) // 2 + 250, 20, fill=THEMES[theme]['button'], outline="darkred", width=4)
-    canvas.create_text((screen_width - 1000) // 2 + 150, (screen_height - 250) // 2 - 50, text=loc[lang]["STATS-TIME"], font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'], tags="STATS-TIME")
-    canvas.create_text((screen_width - 1000) // 2 + 150, (screen_height - 250) // 2 + 50, text=loc[lang]["STATS-CORR"], font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'], tags="STATS-CORR")
-    canvas.create_text((screen_width - 1000) // 2 + 150, (screen_height - 250) // 2 + 150, text=loc[lang]["STATS-CLOCK"], font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'], tags="STATS-CLOCK")
+    canvas.create_text((screen_width - 1000) // 2 + 150, (screen_height - 250) // 2 - 50, text=f"{loc[lang]['STATS-TIME']}{' ' + 'N/A'}", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'], tags="STATS-TIME")
+    canvas.create_text((screen_width - 1000) // 2 + 150, (screen_height - 250) // 2 + 50, text=f"{loc[lang]['STATS-CORR']}{' ' + 'N/A'}", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'], tags="STATS-CORR")
+    canvas.create_text((screen_width - 1000) // 2 + 150, (screen_height - 250) // 2 + 150, text=loc[lang]['STATS-CLOCK'], font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'], tags="STATS-CLOCK")
 
     # Statistics for second game
     round_rectangle(canvas, (screen_width - 1000) // 2 + 350, (screen_height - 500) // 2, (screen_width - 1000) // 2 + 650, (screen_height - 500) // 2 + 250, 20, fill=THEMES[theme]['button'], outline="darkred", width=4)
-    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 250) // 2 - 50, text=loc[lang]["STATS-TIME"], font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'], tags="STATS-TIME")
-    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 250) // 2 + 50, text=loc[lang]["STATS-MATCHED"], font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'], tags="STATS-MATCHED")
+    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 250) // 2 - 50, text=f"{loc[lang]['STATS-TIME']}{' ' + 'N/A'}", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'], tags="STATS-TIME")
+    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 250) // 2 + 50, text=f"{loc[lang]['STATS-MATCHED']}{' ' + 'N/A'}", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'], tags="STATS-MATCHED")
     canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 250) // 2 + 150, text=loc[lang]["STATS-PAPER"], font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'], tags="STATS-PAPER")
 
     # Statistics for third game
     round_rectangle(canvas, (screen_width - 1000) // 2 + 700, (screen_height - 500) // 2, (screen_width - 1000) // 2 + 1000, (screen_height - 500) // 2 + 250, 20, fill=THEMES[theme]['button'], outline="darkred", width=4)
-    canvas.create_text((screen_width - 1000) // 2 + 850, (screen_height - 250) // 2 - 50, text=loc[lang]["STATS-TIME"], font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'], tags="STATS-TIME")
-    canvas.create_text((screen_width - 1000) // 2 + 850, (screen_height - 250) // 2 + 50, text=loc[lang]["STATS-SOLVED"], font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'], tags="STATS-SOLVED")
+    canvas.create_text((screen_width - 1000) // 2 + 850, (screen_height - 250) // 2 - 50, text=f"{loc[lang]['STATS-TIME']}{' ' + 'N/A'}", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'], tags="STATS-TIME")
+    canvas.create_text((screen_width - 1000) // 2 + 850, (screen_height - 250) // 2 + 50, text=f"{loc[lang]['STATS-SOLVED']}{' ' + 'N/A'}", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'], tags="STATS-SOLVED")
     canvas.create_text((screen_width - 1000) // 2 + 850, (screen_height - 250) // 2 + 150, text=loc[lang]["STATS-MATCH"], font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'], tags="STATS-MATCH")
 
     # General statistics
     round_rectangle(canvas, (screen_width - 1000) // 2, (screen_height - 500) // 2 + 370, (screen_width - 1000) // 2 + 1000, (screen_height - 500) // 2 + 620, 20, fill=THEMES[theme]['button'], outline="darkred", width=4)
     canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 500) // 2 + 420, text=loc[lang]["STATS-LIFETIME"], font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'], tags="STATS-LIFETIME")
-    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 500) // 2 + 470, text=loc[lang]["STATS-TOTALTIME"], font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'], tags="STATS-TOTALTIME")
-    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 500) // 2 + 520, text=loc[lang]["STATS-LEARNED"], font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'], tags="STATS-LEARNED")
+    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 500) // 2 + 470, text=f"{loc[lang]['STATS-TOTALTIME']}{total_time}", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'], tags="STATS-TOTALTIME")
+    canvas.create_text((screen_width - 1000) // 2 + 500, (screen_height - 500) // 2 + 520, text=f"{loc[lang]['STATS-LEARNED']}{words_learned}", font=(my_font, FONT_SMALL, "bold"), anchor="center", fill=THEMES[theme]['text'], tags="STATS-LEARNED")
 
     # Go back button
     create_back_button(canvas, 15, 15)
